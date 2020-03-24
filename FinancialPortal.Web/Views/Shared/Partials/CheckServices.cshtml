@@ -1,0 +1,222 @@
+﻿@using FinancialPortal.Web.Models.DataTransferObjects
+@model FinancialPortal.Web.Models.DataTransferObjects.HeartBeatDto
+
+@{
+    HeartBeatDto gatewayApi = (HeartBeatDto)Model.ServiceStatusHeartBeatResults.Single();
+}
+
+<main id="app" class="jw-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Service Status Summary</h2>
+                        <h3>Overall Status: @Model.OverallStatus</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-box @Model.HeaderColour" data-mh="info-box">
+                    <div class="info-box__top">
+                        <div class="info-box__heading">
+                            <div class="info-box__text">
+                                <h4>@Html.Encode(Model.ServiceName)</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box__body">
+                        <ul>
+                            <li>
+                                My Run Time:
+                                <span>@Html.Encode(Model.RunningElapsedTime.ToString(@"hh\:mm\:ss\.ff"))</span>
+                            </li>
+                            <li>
+                                Round Trip Time:
+                                <span>@Html.Encode(Model.FriendlyDisplayElapsedTime)</span>
+                            </li>
+                            <li>
+                                Status:
+                                <span>@Html.Encode(Model.Status)</span>
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.Details))
+                            {
+                                <li>
+                                    Details:
+                                    <span>@Html.Encode(Model.Details)</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="info-box @gatewayApi.HeaderColour" data-mh="info-box">
+                    <div class="info-box__top">
+                        <div class="info-box__heading">
+                            <div class="info-box__text">
+                                <h4>@Html.Encode(gatewayApi.ServiceName)</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box__body">
+                        <ul>
+                            <li>
+                                My Run Time:
+                                <span>@Html.Encode(gatewayApi.RunningElapsedTime.ToString(@"hh\:mm\:ss\.ff"))</span>
+                            </li>
+                            <li>
+                                Round Trip Time:
+                                <span>@Html.Encode(gatewayApi.FriendlyDisplayElapsedTime)</span>
+                            </li>
+                            <li>
+                                Status:
+                                <span>@Html.Encode(gatewayApi.Status)</span>
+                            </li>
+                            @if (!string.IsNullOrEmpty(gatewayApi.Details))
+                            {
+                                <li>
+                                    Details:
+                                    <span>@Html.Encode(gatewayApi.Details)</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            @foreach (var serviceResults in gatewayApi.ServiceStatusHeartBeatResults)
+            {
+                @*<div class="col-md-4">*@
+                if (serviceResults.ChildHeartBeat != null)
+                {
+                    <div class="col-md-4">
+
+                        <div class="info-box @serviceResults.HeaderColour" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4>@Html.Encode(serviceResults.ServiceName)</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>
+                                        My Run Time:
+                                        <span>@Html.Encode(serviceResults.RunningElapsedTime.ToString(@"hh\:mm\:ss\.ff"))</span>
+                                    </li>
+                                    <li>
+                                        Round Trip Time:
+                                        <span>@Html.Encode(serviceResults.FriendlyDisplayElapsedTime)</span>
+                                    </li>
+                                    <li>
+                                        Status:
+                                        <span>@Html.Encode(serviceResults.Status)</span>
+                                    </li>
+                                    @if (!string.IsNullOrEmpty(serviceResults.Details))
+                                {
+                                    <li>
+                                        Details:
+                                        <span>@Html.Encode(serviceResults.Details)</span>
+                                    </li>
+                                }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+            @foreach (var serviceResults in gatewayApi.ServiceStatusHeartBeatResults)
+            {
+                if (serviceResults.ChildHeartBeat != null)
+                {
+                    <div class="col-md-4">
+                        <div class="info-box @serviceResults.ChildHeartBeat.HeaderColour" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4>@Html.Encode(serviceResults.ChildHeartBeat.ServiceName)</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>
+                                        My Run Time:
+                                        <span>@Html.Encode(serviceResults.ChildHeartBeat.RunningElapsedTime.ToString(@"hh\:mm\:ss\.ff"))</span>
+                                    </li>
+                                    <li>
+                                        Round Trip Time:
+                                        <span>@Html.Encode(serviceResults.ChildHeartBeat.FriendlyDisplayElapsedTime)</span>
+                                    </li>
+                                    <li>
+                                        Status:
+                                        <span>@Html.Encode(serviceResults.ChildHeartBeat.Status)</span>
+                                    </li>
+                                    @if (!string.IsNullOrEmpty(serviceResults.ChildHeartBeat.Details))
+                                    {
+                                        <li>
+                                            Details:
+                                            <span>@Html.Encode(serviceResults.ChildHeartBeat.Details)</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            @foreach (var serviceResults in gatewayApi.ServiceStatusHeartBeatResults)
+            {
+                @*<div class="col-md-4">*@
+                if (serviceResults.ChildHeartBeat == null)
+                {
+                    <div class="col-md-6">
+
+                        <div class="info-box @serviceResults.HeaderColour" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4>@Html.Encode(serviceResults.ServiceName)</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>
+                                        My Run Time:
+                                        <span>@Html.Encode(serviceResults.RunningElapsedTime.ToString(@"hh\:mm\:ss\.ff"))</span>
+                                    </li>
+                                    <li>
+                                        Round Trip Time:
+                                        <span>@Html.Encode(serviceResults.FriendlyDisplayElapsedTime)</span>
+                                    </li>
+                                    <li>
+                                        Status:
+                                        <span>@Html.Encode(serviceResults.Status)</span>
+                                    </li>
+                                    @if (!string.IsNullOrEmpty(serviceResults.Details))
+                                {
+                                    <li>
+                                        Details:
+                                        <span>@Html.Encode(serviceResults.Details)</span>
+                                    </li>
+                                }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+        </div>
+
+    </div>
+
+</main>

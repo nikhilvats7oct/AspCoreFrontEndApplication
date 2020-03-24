@@ -1,0 +1,117 @@
+﻿@model FinancialPortal.Web.ViewModels.LoginVm
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewData.ModelState.Any(x => x.Key == string.Empty))
+{
+    <div class="notification notification--error js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Oops</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>@Html.Raw(Model.NotificationMessage)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.SessionTimeout != null && ViewBag.SessionTimeout)
+{
+    <div class="notification notification--error js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Oops</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>Your session timed out or you have accessed a secure page without logging in, or passing data protection checks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2><b>Manage your account online</b></h2>
+                    <div class="form__element form__element--row">
+                        <a asp-controller="MyAccounts" asp-action="Index" class="btn btn--primary">Log in <i class="jw-icon-arrow"></i></a>
+                        <a asp-controller="Register" asp-action="Index" class="btn btn--outline">Register</a>
+
+                        <br /><br />
+                        <p>
+                            The first step to getting sorted is registering to manage My Account. This is your own online payment account which you can log in to and track payments, check your balance and review your budget.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="content-wrapper content-wrapper--off-white">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-12">
+                        <div class="content__block content__block--off-white">
+                            <h2><b>Make a one-off payment without logging in</b></h2>
+                            <p>You don't need login or have an online account to make a one-off payment</p>
+                            <p>To make a one-off payment you will need:</p>
+                            <ol>
+                                <li>Your Account reference number <a href="#reference-number-modal" data-modal="#reference-number-modal" data-modal-type="inline">What's this?</a></li>
+                                <li>Your date of birth</li>
+                                <li>Your Postcode</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="d-none col-12 d-lg-block">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-12">
+                        <div class="content__block">
+                            <a href="@Url.Action("Index", "DataProtection")" class="btn btn--secondary">Make a one-off payment</a>
+                        </div>
+
+                        <partial name="Partials/LowellReferenceLocation" />
+                    </div>
+                    <partial name="Partials/LowellReferenceLocation" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="benefits">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="benefits">
+                    <h2>Benefits of having an online account</h2>
+                    <ul>
+                        <li>- Use our budget calculator to work out what you can afford</li>
+                        <li>- Setup a repayment plan on your own terms</li>
+                        <li>- Check and amend your payment plan whenever you want</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 benefits--register">
+                <a asp-controller="Register" asp-action="Index" class="btn btn--primary">
+                    Register
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

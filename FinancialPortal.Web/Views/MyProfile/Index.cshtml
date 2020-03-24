@@ -1,0 +1,91 @@
+﻿@using FinancialPortal.Web.Settings
+@model FinancialPortal.Web.ViewModels.MyProfileVm
+@inject PortalSetting PortalSetting
+
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>My profile</h2>
+                    <p class="highlight">
+                        If your details have changed, please <a target="_blank" href="@PortalSetting.TalkToUsUrl">talk to us</a> and we’ll be happy to help.
+                    </p>
+
+                    <hr />
+
+                    <form asp-controller="MyProfile" asp-action="ProfileRedirect">
+                        <div class="content__block__accordion js-field-parent">
+                            <p class="content__block__accordion__heading">Email address:</p>
+                            <p class="content__block__accordion__label">@Model.CustomerEmail</p>
+                            <button type="submit" class="content__block__accordion__button btn btn--link d-none d-sm-inline-flex mb-5">Change</button>
+                            <button type="submit" class="btn btn--primary d-block d-sm-none w-50">Change</button>
+                        </div>
+                    </form>
+                    <hr class="mt-5" />
+
+                    @if (Model.EnableContactPreferences)
+                    {
+                        <form asp-controller="MyProfile" asp-action="MobileNumber">
+                            <div class="content__block__accordion js-field-parent">
+                                <p class="content__block__accordion__heading">Mobile:</p>
+                                <p class="content__block__accordion__label">@Model.ContactPreferencesVm.MobileNumber</p>
+                                <input type="hidden" asp-for="@Model.ContactPreferencesVm.MobileNumber" />
+                                <input type="hidden" asp-for="@Model.ContactPreferencesVm.AllowContactByEmail" />
+                                <input type="hidden" asp-for="@Model.ContactPreferencesVm.AllowContactBySms" />
+                                <input type="hidden" asp-for="@Model.ContactPreferencesVm.LowellReference" />
+                                <button type="submit" class="content__block__accordion__button btn btn--link d-none d-sm-inline-flex mb-5">Change</button>
+                                <button type="submit" class="btn btn--primary d-block d-sm-none w-50">Change</button>
+                            </div>
+                        </form>
+                        <hr class="mt-5" />
+                    }
+
+                    <form asp-controller="MyProfile" asp-action="PasswordRedirect">
+                        <div class="content__block__accordion js-field-parent">
+                            <p class="content__block__accordion__heading">Password: </p>
+                            <button type="submit" class="btn btn--link d-none d-sm-inline-flex">Change</button>
+                            <button type="submit" class="btn btn--primary d-block d-sm-none w-50">Change</button>
+                        </div>
+                    </form>
+                    <hr class="mt-5" />
+
+                    @if (Model.EnableContactPreferences)
+                    {
+                        <form asp-controller="MyProfile" asp-action="ContactPreferences" class="form">
+                            <p class="content__block__accordion__heading">Contact Preferences:</p>
+
+                            <div class="checkbox-wrapper checkbox-wrapper--noneditable">
+                                <input type="checkbox" asp-for="@Model.ContactPreferencesVm.AllowContactBySms"  disabled/> 
+                                <div class="custom-checkbox"></div>
+                                <label>SMS</label>
+                            </div>
+
+                            <div class="checkbox-wrapper checkbox-wrapper--noneditable">
+                                <input type="checkbox" asp-for="@Model.ContactPreferencesVm.AllowContactByEmail"  disabled/> 
+                                <div class="custom-checkbox"></div>
+                                <label>Email</label>
+                            </div>
+
+                            <input type="hidden" asp-for="@Model.ContactPreferencesVm.MobileNumber" />
+                            <input type="hidden" asp-for="@Model.ContactPreferencesVm.AllowContactBySms" />
+                            <input type="hidden" asp-for="@Model.ContactPreferencesVm.AllowContactByEmail" />
+                            <input type="hidden" asp-for="@Model.ContactPreferencesVm.LowellReference" />
+
+                            <div class="mt-5">
+                                <button type="submit" class="btn btn--link d-none d-sm-inline-flex">Change</button>
+                                <button type="submit" class="btn btn--primary d-block d-sm-none w-50">Change</button>
+                            </div>
+                        </form>
+                        <hr class="mt-5" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

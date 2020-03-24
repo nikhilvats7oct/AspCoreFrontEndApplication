@@ -1,0 +1,22 @@
+.info-card {
+    @include card-styling($body-mb: 10px);
+    display: flex;
+    flex-direction: column;
+
+    &__image {
+        margin-bottom: 20px;
+    }
+
+    &__sub-heading {
+        color: $brand-primary;
+        font-size: 1.4rem;
+        line-height: 1.8rem;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    &__cta {
+        margin-top: auto;
+    }
+}

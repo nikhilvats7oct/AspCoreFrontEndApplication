@@ -1,0 +1,26 @@
+﻿@model FinancialPortal.Web.ViewModels.RegisterVm
+@{
+    ViewBag.Title = "Registration Complete";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Last step</h2>
+                    <p>We’ve sent you an activation email. Open it and click the link to complete your registration. It might take a few minutes to come through.</p>
+                    <p>If it doesn’t arrive in ten minutes, please click below to resend it. If that doesn’t work, check your spam folder. Or maybe you mistyped your email address. If you did, you’ll need to <a href="@Url.Action("Index", "Register")">register again</a>.</p>
+                    @using (Html.BeginForm("ResendRegistrationEmail", "Register", FormMethod.Post, new { @class = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.LowellReference)
+                        @Html.HiddenFor(m => m.EmailAddress)
+                        @Html.HiddenFor(m => m.CallbackUrl)
+                        <button type="submit" class="btn btn--primary">Resend activation link <i class="jw-icon-arrow"></i></button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

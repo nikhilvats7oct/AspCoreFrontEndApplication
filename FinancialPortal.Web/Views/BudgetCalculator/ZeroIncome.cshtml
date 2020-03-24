@@ -1,0 +1,50 @@
+﻿@using FinancialPortal.Web.Settings
+
+@inject PortalSetting PortalSetting
+@inject CmsEndpoints CmsEndpoints
+
+@model FinancialPortal.Web.ViewModels.IncomeVm
+@{
+    ViewBag.Title = "Zero Income Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="content-wrapper">
+            <div class="content__block">
+                <h2>MyBudget Error</h2>
+                <p>
+                    Based on the figures you gave us, we can see you're not currently receiving any income.<br />
+                    Why not <a target="_blank" href="@CmsEndpoints.TalkToUs">talk to us</a> and we can help you work out how to move forward?
+                    You may call us at <a href="tel:0333-556 555">0333 556 555</a> between 8:00am - 8:00pm on Mondays through Fridays or between 8:00am - 2:00pm on Saturdays.
+                </p>
+
+                <p>
+                    Alternatively, for free confidential and impartial advice why not try one of thsese independent organisations:
+                </p>
+
+                <p>
+                    <a href="@CmsEndpoints.StepChangeLink" target="_blank">Stepchange Debt Charity</a> on 0800 138 1111, or
+                    <a href="@CmsEndpoints.NationalDebtLine" target="_blank"> National Debtline</a> on 0800 808 4000.
+                </p>
+
+                <p>
+                    If you would still like to make a payment, please click the link below.                 
+                </p>
+
+            </div>
+        </div>
+    </div>
+    <div class="row pt-0">
+        <div class="content-wrapper pt-0">
+            <div class="content__block">
+
+                <a asp-controller="MyAccounts" asp-action="Index" class="btn btn--primary">
+                    Return to My Accounts <i class="jw-icon-arrow"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

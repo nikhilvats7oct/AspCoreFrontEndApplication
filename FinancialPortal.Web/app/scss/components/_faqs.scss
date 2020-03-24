@@ -1,0 +1,123 @@
+.faq {
+    overflow: hidden;
+    margin-bottom: 40px;
+
+    &__heading {
+        margin-bottom: 10px;
+
+        > .faq__title {
+            background-color: #eeeeee;
+            padding: 15px 35px;
+            cursor: pointer;
+
+            @include media-breakpoint-down(md) {
+                padding-left: 20px;
+            }
+        }
+
+        > .faq__body {
+            background-color: #f5f5f5;
+        }
+    }
+
+    &__title {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        line-height: 1.4;
+        line-height: 2.2rem;
+        color: $brand-primary-aa;
+        cursor: pointer;
+        outline-offset: -4px;
+
+        .jw-icon-arrow {
+            font-size: 1.4rem;
+            line-height: 1.4;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        span {
+            margin-left: 10px;
+            line-height: 1.4;
+        }
+
+        &--active {
+            .jw-icon-arrow {
+                transform: rotateZ(90deg);
+            }
+        }
+    }
+
+    &__body {
+        padding: 20px 0;
+        display: none;
+
+        &__content {
+            padding: 0 15px;
+
+            .rich-text:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+
+        > .faq__wrapper {
+            margin-bottom: 10px;
+
+            // 1 Layer Deep
+            > .faq__title {
+                padding-left: 50px;
+
+                + .faq__body .faq__body__content {
+                    padding-left: 70px;
+
+                    @include media-breakpoint-down(md) {
+                        padding-left: 15px;
+                    }
+                }
+
+                @include media-breakpoint-down(md) {
+                    padding-left: 20px;
+                    padding-right: 15px;
+                }
+            }
+
+            > .faq__body--active {
+                padding-bottom: 10px;
+            }
+            // END 1 Layer
+
+            // Multiple Layers Deep
+            &:last-of-type,
+            &:only-child {
+                margin-bottom: 0;
+
+                > .faq__body--active {
+                    padding-bottom: 0;
+                }
+            }
+
+            .faq__wrapper {
+                > .faq__title {
+                    padding-left: 75px;
+
+                    + .faq__body .faq__body__content {
+                        padding-left: 95px;
+
+                        @include media-breakpoint-down(md) {
+                            padding-left: 15px;
+                        }
+                    }
+
+                    span {
+                        color: $brand-grey;
+                    }
+
+                    @include media-breakpoint-down(md) {
+                        padding-left: 35px;
+                    }
+                }
+            }
+            // END Multiple Layers Deep
+        }
+    }
+}

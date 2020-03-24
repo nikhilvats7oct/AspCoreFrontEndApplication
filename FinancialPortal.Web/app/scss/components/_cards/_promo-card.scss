@@ -1,0 +1,62 @@
+.promo-card {
+    @include card-styling($font-color: white);
+
+    &__bg {
+        height: 450px;
+
+        @include media-breakpoint-down(sm) {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+    }
+
+    &__content {
+        padding: 55px 20px 55px 100px;
+
+        @include media-breakpoint-up(md) {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 0 28px 28px 0;
+            min-width: 400px;
+            max-width: 50%;
+        }
+
+        @include media-breakpoint-down(lg) {
+            padding: 35px 20px 35px 50px;
+        }
+
+        @include media-breakpoint-down(md) {
+            padding: 25px 0px 25px 50px;
+        }
+
+        @include media-breakpoint-down(md) {
+            padding: 30px 25px;
+        }
+    }
+
+    &__heading {
+        width: 70%;
+        margin-bottom: 30px;
+        font-size: 3.2rem;
+        line-height: 3.6rem;
+
+        @include media-breakpoint-down(md) {
+            width: 60%;
+            margin-bottom: 20px;
+            font-size: 2.8rem;
+            line-height: 3.2rem;
+        }
+
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+            font-size: 2.6rem;
+            line-height: 3.0rem;
+        }
+    }
+
+    &__cta {
+        display: inline-flex;
+    }
+}

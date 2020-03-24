@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Token Expired";
+}
+
+<div class="notification notification--error js-notification">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="notification__message">
+                    <div class="notification__message__heading">
+                        <p>Oops</p>
+                    </div>
+                    <div class="notification__message__body">
+                        <p>Activation link has expired<br/> To register your account, please select the register button below</p>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>New to Lowell</h2>
+                    <p>Register here to access your account today, when you register you will be able to complete a budget calculator, setup a payment plan or make a one off payment.</p>
+                    <a href="@Url.Action("Index", "Register")" class="btn btn--primary">
+                        Register
+                        <i class="jw-icon-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

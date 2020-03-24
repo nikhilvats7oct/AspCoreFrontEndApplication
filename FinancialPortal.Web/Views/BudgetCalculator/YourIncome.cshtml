@@ -1,0 +1,205 @@
+﻿@model FinancialPortal.Web.ViewModels.IncomeVm
+@{
+    ViewBag.Title = "Your Income";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    IEnumerable<SelectListItem> frequencies = new List<SelectListItem>
+    {
+        new SelectListItem{Text = "Monthly", Value = "monthly", Selected = true },
+        new SelectListItem{Text = "Weekly", Value = "weekly"},
+        new SelectListItem{Text = "Fortnightly", Value = "fortnightly"},
+        new SelectListItem{Text = "Every 4 weeks", Value = "4week"},
+    };
+}
+
+@if (Model.PartialSavedEvent && Model.PartialSavedIAndE)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Budget calculator saved</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>Are you sure you want to quit your session? We’ll save this information so you can come back anytime in the next 30 days to complete your budget assessment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="notification notification--error js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Oops</p>
+                        </div>
+                        <div class="notification__message__body">
+                            @foreach (var modelState in ViewData.ModelState.Values.Select(x => x.Errors).FirstOrDefault())
+                            {
+                                <p>@modelState.ErrorMessage</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+    @using (Html.BeginForm("YourIncome", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form js-budget-calc" }))
+    {
+        <div class="js-income">
+            <input type="hidden" name="earnings" value="@Model.Earning.Amount" />
+            <input type="hidden" name="earnings_term" value="@Model.Earning.Frequency" />
+
+            <input type="hidden" name="benefits" value="@Model.BenefitsAndTaxCredits.Amount" />
+            <input type="hidden" name="benefits_term" value="@Model.BenefitsAndTaxCredits.Frequency" />
+
+            <input type="hidden" name="pensions" value="@Model.Pension.Amount" />
+            <input type="hidden" name="pensions_term" value="@Model.Pension.Frequency" />
+
+            <input type="hidden" name="other" value="@Model.Other.Amount" />
+            <input type="hidden" name="other_term" value="@Model.Other.Frequency" />
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-10 col-lg-7">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Your income</h2>
+                        <p>Tell us more about the income coming into your home. <br /><span class="highlight">If anything doesn’t apply to you, leave it blank.</span></p>
+                        <div class="step">
+                            <div class="step__number step__number--active">1</div>
+                            <div class="step__number step__number--active">2</div>
+                            <div class="step__number">3</div>
+                            <div class="step__number">4</div>
+                        </div>
+
+                        <div class="form__element form__element--2row">
+                            <div class="form__element__info">
+                                <label for="earnings">Earnings after tax has been deducted</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>
+                                    <strong>Earnings: </strong>If you’re self-employed, please give us an average figure after tax.
+                                    If you’re employed, ask your finance department for this figure, or check your
+                                    P60. It’s issued at the end of every tax year. Usually April 1st.
+                                </p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Earning.Amount, new { @class = "js-payment-input", type = "text", name = "earnings", id = "earnings", placeholder = "0.00", autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Earning.Frequency, frequencies, new { name = "earnings-select", id = "earnings-select", @class = "js-select" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                @Html.ValidationMessageFor(m => m.Earning.Amount)
+                                @Html.ValidationMessageFor(m => m.Earning.Frequency)
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row">
+                            <div class="form__element__info">
+                                <label for="benefits">Benefits and tax credits</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p><strong>Benefits and tax credits:</strong> This can include Job Seekers Allowance, Universal Credit, Working Tax Credit, Child Tax Credit, Child Benefit, ESA/Statutory Sick Pay, Disability Benefit, Carers </p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.BenefitsAndTaxCredits.Amount, new { @class = "js-payment-input", type = "text", name = "benefits", id = "benefits", placeholder = "0.00", autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.BenefitsAndTaxCredits.Frequency, frequencies, new { name = "benefits-select", id = "benefits-select", @class = "js-select" })
+
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                @Html.ValidationMessageFor(m => m.BenefitsAndTaxCredits.Amount)
+                                @Html.ValidationMessageFor(m => m.BenefitsAndTaxCredits.Frequency)
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row">
+                            <label for="pensions">Pensions</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Pension.Amount, new { @class = "js-payment-input", type = "text", name = "pensions", id = "pensions", placeholder = "0.00", autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Pension.Frequency, frequencies, new { name = "pensions-select", id = "pensions-select", @class = "js-select" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                @Html.ValidationMessageFor(m => m.Pension.Amount)
+                                @Html.ValidationMessageFor(m => m.Pension.Frequency)
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row">
+                            <div class="form__element__info">
+                                <label for="other">Other income</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p><strong>Other income:</strong> This can include child maintenance, child support, income from lodgers/non dependants, student loans and grants.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Other.Amount, new { @class = "js-payment-input", type = "text", name = "other", id = "other", placeholder = "0.00", autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Other.Frequency, frequencies, new { name = "other-select", id = "other-select", @class = "js-select" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                @Html.ValidationMessageFor(m => m.Other.Amount)
+                                @Html.ValidationMessageFor(m => m.Other.Frequency)
+                            </div>
+                        </div>
+                        <div class="form__element form__element--row form__element--button">
+                            <button type="submit" name="submit" class="btn btn--primary">Next <i class="jw-icon-arrow"></i></button>
+                            @if (Model.EnabledPartialSave)
+                            {
+                                <button type="submit" name="submit" class="btn btn--primary" value="saveforlater">Save for Later</button>
+                            }
+                            @Html.ActionLink("Back", "HouseholdStatus", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] },new { @class = "btn btn--link" })
+                        </div>
+
+                        @if (Model.PartialSavedEvent && Model.HasErrorPartialSavedIAndE)
+                        {
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p style="color:red;font-weight:bold;">Sorry, we were unable to save your budget details, please try again.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,44 @@
+﻿@using System.Configuration
+@using FinancialPortal.Web.Models.DataTransferObjects
+@using FinancialPortal.Web.Settings
+@using Microsoft.Extensions.Configuration
+@model FinancialPortal.Web.ViewModels.ReturnToFormVm
+@inject PortalSetting PortalSetting
+@{
+    ViewBag.Title = "Cancel Payment";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Are you sure you want to cancel?</h2>
+                    <p>If you have a question about something or need a little help, why not speak to one of our team before you cancel? Maybe we can put your mind at rest.</p>
+                    <p>You can <a target="_blank" href="@PortalSetting.TalkToUsUrl">talk to us</a> or call us on 0333 556 5550.</p>
+                    <div class="row">
+                        <div class="col-12 col-lg-10 d-flex flex-column flex-md-row justify-content-between align-items-center">
+                            @using (Html.BeginForm("Index", "PaymentCancelled", FormMethod.Post))
+                            {
+                            <input type="hidden" name="@nameof(PaymentCancelledDto.PaymentStateType)" value="@Model.StateType" />
+                            <input type="hidden" name="@nameof(PaymentCancelledDto.PaymentState)" value="@Model.State" />
+                            <button type="submit" class="btn btn--secondary">
+                                Cancel payment
+                                <i class="jw-icon-arrow"></i>
+                            </button>
+                            }
+
+                            @using (Html.BeginForm(Model.ReturnActionName, Model.ReturnControllerName, new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post))
+                            {
+                            @* State of data entry form to be submitted - will result in round-trip of data to originating form *@
+                            <input type="hidden" name="@Model.StateFieldName" value="@Model.State" />
+
+                            <button type="submit" class="btn btn--primary">Continue payment<i class="jw-icon-arrow"></i></button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+// Font settings
+$base-font: "FS Matthew Web", Verdana, Arial, sans-serif;
+
+// Colours
+$standard-white: #ffffff;
+
+$brand-primary: #FE5000;
+$brand-primary-darker: #CB490D;
+$brand-primary-darker-hover: #Ad3e0b;
+$brand-secondary: #CB490D;
+$brand-primary-aa: #FFDCCC;
+$brand-primary-20p: #ffdccc;
+$brand-grey: #434A4F;
+$brand-grey-hover: darken(#313a3e, 5%);
+
+$brand-off-blue: #dae2e3;
+
+$brand-yellow: #ffae42;
+$brand-green: #A6CE42;
+$brand-teal: #4CC0AD;
+$brand-blue: #36A9D0;
+$brand-skyblue: #86CBE3;
+$brand-grey: #696E72;
+$brand-pattern-blue:#CFEAF4;
+
+$brand-new-grey: #434a4f;
+$brand-new-grey-10p: #f6f6f6;
+$brand-new-grey-30p: #c7c9ca;
+$brand-new-grey-20p: #d9dbdc;
+$brand-new-grey-80p: #696e72;
+$brand-new-grey-85p: #12587b;
+$brand-new-grey-90p: #3c4c56;
+
+$brand-new-blue:#86cbe3;
+$brand-new-blue-60p:#b6e0ee;
+$brand-new-blue-30p: #5e8e9f;
+$brand-new-blue-40p: #cfeaf4;
+$brand-new-blue-80p: #9ed5e9;
+
+$brand-new-purple:#5367a6;
+$brand-new-purple-10p: #ddecff;
+
+
+
+$brand-logo-color: #0C2C65;
+
+$error-red: #ba1c1c;
+$negative-background: #CB490D;
+
+$colour-map: (
+	('primary', $brand-primary)
+	('dark-blue', $brand-logo-color)
+	('yellow', $brand-yellow)
+	('green', $brand-green)
+   	('grey', $brand-grey)
+	('sky-blue', $brand-skyblue)
+	('pattern-blue', $brand-pattern-blue)
+);
+
+$padding-large-vertical: 10px !default;
+$padding-large-horizontal: 16px !default;
+
+$padding-small-vertical: 5px !default;
+$padding-small-horizontal: 10px !default;
+
+$padding-xs-vertical: 1px !default;
+$padding-xs-horizontal: 5px !default;
+
+$font-size-base-bt: 14px !default;
+$font-size-large: ceil(($font-size-base-bt * 1.25)) !default; // ~18px
+$font-size-small: ceil(($font-size-base-bt * .85)) !default; // ~12px
+
+$line-height-large: 1.3333333 !default; // extra decimals for Win 8.1 Chrome
+$line-height-small: 1.5 !default;
+
+$border-radius-base: 4px !default;
+$border-radius-large: 6px !default;
+$border-radius-small: 3px !default;
+
+// Allows for customizing button radius independently from global border radius
+$btn-border-radius-base: $border-radius-base !default;
+$btn-border-radius-large: $border-radius-large !default;
+$btn-border-radius-small: $border-radius-small !default;
+

@@ -1,0 +1,71 @@
+﻿@using System.Globalization
+@model FinancialPortal.Web.ViewModels.OpenWrksSuccessVm
+@{
+    ViewData["Title"] = "OpenWrks - Success";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="content-wrapper">
+            <div class="content__block mb-0 pb-0">
+                <h2>The Summary of your budget is on its way.</h2>
+                <p>Please keep this page open, while OpenWrks is delivering your information.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row p-0 mt-0">
+        <div class="col-12 p-0">
+            <div class="content-wrapper pt-0">
+                <div class="content__block">
+                    <div class="success-container">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        $('.failure-container').hide();
+
+        $(function() {
+            var postData = {};
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SaveBudget", "OpenWrks")',
+                headers: {
+                    'X-Trace-Id' : '@Model.OccurrenceId'
+                },
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(postData),
+                dataType: 'json',
+                success: function (data) {
+
+                    console.log(data);
+
+                    if (data.success) {
+                      
+                        window.location.href =
+                            '@Url.Action("BudgetSummary", "BudgetCalculator", new {id = @Model.LowellFinancialAccountSurrogateKey})';
+                    }
+                    else {
+                        window.location.href =
+                        '@Url.Action("Error", "OpenWrks")' + '?occurrenceId=' + data.occurrenceId;
+                    }
+                },
+                error: function(err) {
+                    console.log('Error!');
+                    console.log(err);
+
+                    window.location.href =
+                        '@Url.Action("Error", "OpenWrks")' + '?occurrenceId=' + data.occurrenceId;
+                }
+            });
+        });
+    </script>
+}
+
+

@@ -1,0 +1,45 @@
+﻿@model FinancialPortal.Web.ViewModels.PaymentOptionsVm
+
+<!-- Displayed in main body -->
+
+<div class="container">
+
+    @if (@Model.ExcludedAccountMessage != null)
+    {
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="info-box" data-mh="info-box">
+                    <div class="info-box__top">
+                        <div class="info-box__heading">
+                            <div class="info-box__icon">
+                                <div>
+                                    <i class="jw-icon-caution"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4>Account Message</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box__body">
+                        <p>@Model.ExcludedAccountMessage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.WithLowellSolicitors)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="content__block">
+                    <a class="btn btn--arrow" href="@Model.LowellSolicitorsRedirectLink">
+                        Go to Lowell Solicitors <i class="jw-icon-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

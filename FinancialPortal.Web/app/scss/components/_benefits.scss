@@ -1,0 +1,36 @@
+﻿.benefits {
+    width: 100%;
+    padding: 40px;
+    background-color: $brand-primary-20p;
+    color: $brand-new-grey;
+
+    ul {
+        padding: 0px;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    a {
+        border-color: white;
+        color: white;
+    }
+
+    &--register {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+
+        a {border-color:transparent !important;}
+    }
+
+    @include media-breakpoint-down(sm) {
+        padding: 20px 0;
+
+        &--register {
+            padding: 20px 20px;
+        }
+    }
+}

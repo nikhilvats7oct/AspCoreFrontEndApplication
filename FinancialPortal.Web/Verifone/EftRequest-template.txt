@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<eftrequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<merchant>
+<merchantid>{systemid}</merchantid>
+<systemguid>{systemguid}</systemguid>
+</merchant>
+<merchantreference>{merchantreference}</merchantreference>
+{returnurlxml}
+<template><merchanttemplateid>{merchanttemplateid}</merchanttemplateid><languagetemplateid>{languagetemplateid}</languagetemplateid>
+</template>
+<capturemethod>12</capturemethod>
+<processingidentifier>1</processingidentifier>
+<accountid>{accountid}</accountid>
+<transactionvalue>{transactionvalue}</transactionvalue>
+<authcode />
+{tokenidxml}
+<tokenexpirationdate>{tokenexpirationdate}</tokenexpirationdate>
+<registertoken>{registertoken}</registertoken>
+<starpan />
+<allowedpaymentschemes>{allowedpaymentschemes}</allowedpaymentschemes>
+<allowedpaymentmethods>1</allowedpaymentmethods>
+<description>{description}</description>
+<showorderconfirmation>false</showorderconfirmation>
+<showpaymentresult>true</showpaymentresult>
+<customer>
+<firstname>{firstname}</firstname>
+<lastname>{lastname}</lastname>
+<email>{email}</email>
+<address>
+<address1>{address1}</address1>
+<postcode>{postcode}</postcode>
+<address2>{address2}</address2>
+<town>{town}</town>
+<county></county>
+<country>United Kingdom</country>
+<countrycode>826</countrycode>
+</address>
+<basket>
+<totalamount>{totalamount}</totalamount>
+<shippingamount>0.0</shippingamount>
+<vatamount>0.0</vatamount>
+<basketitems>
+<basketitem>
+<productname>{productname}</productname>
+<productcode>{productcode}</productcode>
+<quantity>1</quantity>
+<unitamount>{totalamount}</unitamount>
+<lineamount>{totalamount}</lineamount>
+<vatrate>0</vatrate>
+<vatamount>0</vatamount>
+</basketitem>
+</basketitems>
+</basket>
+<deliveryedit>false</deliveryedit>
+</customer>
+<processCPC>false</processCPC>
+<hideBillingDetails>true</hideBillingDetails>
+<hideDeliveryDetails>true</hideDeliveryDetails>
+<hidepaymentresultsuccess>true</hidepaymentresultsuccess>
+<enableUpdateToken>false</enableUpdateToken>
+<enableRedFraudCheck>false</enableRedFraudCheck>
+{payerauthxml}
+</eftrequest>

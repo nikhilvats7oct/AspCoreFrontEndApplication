@@ -1,0 +1,29 @@
+.pull-out {
+    color: white;
+    padding: 30px;
+    position: relative;
+    z-index: 1;
+    transform: translateX(150%);
+    transition: transform 0.5s ease;
+
+    &:before {
+        content: '';
+        background-color: $brand-primary;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 9999px;
+        z-index: -1;
+        border-radius: 28px 0 0 28px;
+    }
+
+    &--show {
+        transform: translateX(0);
+        transition-delay: 1.5s;
+    }
+
+    a {
+        color: white;
+    }
+}

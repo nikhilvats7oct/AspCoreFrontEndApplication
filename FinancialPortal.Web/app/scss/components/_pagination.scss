@@ -1,0 +1,108 @@
+.pagination {    
+    @include list-style-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__item {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        border: 1px solid $brand-new-grey;
+        color: $brand-new-grey;
+        transition: all 0.3s ease-in-out;
+        margin: 0 5px;
+
+        a {
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            color: $brand-grey;
+            border-radius: inherit;
+            background-color: transparent;
+        }
+
+        &:hover {
+            color: white;
+            border-color: $brand-primary-darker;
+            background-color: $brand-primary-darker;
+            
+            a {
+                color: white;
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+            width: 33px;
+            height: 33px;
+        }
+
+        &--disabled {
+            color: #aaaaaa;
+            border-color: #aaaaaa;
+
+            &:hover {
+                border-color:#aaaaaa;
+                color: #aaaaaa;
+                background-color: transparent;
+                cursor: not-allowed;
+
+                a {
+                    color: inherit;
+                }
+            }
+        }
+
+        &--active {
+            color: white;
+            border-color: $brand-primary-darker;
+            background-color: $brand-primary-darker;
+
+            a {
+                color: white;
+            }
+        }
+
+        &--dots {
+            border: 0;
+            margin: 0;
+
+            &:hover {
+                background-color: transparent;
+                color: #aaaaaa;
+            }
+        }
+    }
+
+    &__page {
+        &-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width: 100%;
+        }
+    }
+
+    &__prev, 
+    &__next {
+        border-radius: 8px;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    &__prev {
+        transform: rotateZ(180deg);
+        transform-origin: center;
+        margin-right: auto;
+    }
+
+    &__next {
+        margin-left: auto;
+    }
+
+}

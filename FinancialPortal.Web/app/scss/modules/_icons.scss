@@ -1,0 +1,143 @@
+.jw-icon,
+[class^="jw-icon-"],
+[class*=" jw-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'lowell-icons' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    color: inherit;
+    vertical-align: middle;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.jw-icon {
+    &-thumbs-up:before {
+        content: "\e90c";
+        color: inherit;
+    }
+
+    &-at-sign:before {
+        content: "\e90b";
+        color: inherit;
+    }
+
+    &-phone:before {
+        content: "\e90d";
+        color: inherit;
+    }
+
+    &-email {
+        font-weight: bold;
+
+        &:before {
+            content: "\e90e";
+            color: inherit;
+        }
+    }
+
+    &-thumbs-down:before {
+        content: "\e90f";
+        color: inherit;
+    }
+
+    &-pdf:before {
+        content: "\e90a";
+        color: inherit;
+    }
+
+    &-hamburger:before {
+        content: "\e909";
+        color: inherit;
+    }
+
+    &-arrow:before {
+        content: "\e901";
+        color: inherit;
+    }
+
+    &-arrow-down:before {
+        content: "\e900";
+        color: inherit;
+    }
+
+    &-cross:before {
+        content: "\e902";
+        color: inherit;
+    }
+
+    &-info:before {
+        content: "\e903";
+        color: inherit;
+    }
+
+    &-info-lg:before {
+        content: "\e903";
+        color: inherit;
+        font-size: 2rem;
+    }
+
+    &-person:before {
+        content: "\e904";
+        color: inherit;
+    }
+
+    &-tick:before {
+        content: "\e905";
+        color: inherit;
+    }
+
+    &-pin:before {
+        content: "\e906";
+        color: inherit;
+    }
+
+    &-search:before {
+        content: "\e907";
+        color: inherit;
+    }
+
+    &-caution:before {
+        content: "\e908";
+        color: inherit;
+    }
+}
+
+.fontawesome-icon,
+[class^="fontawesome-icon-"],
+[class*=" fontawesome-icon-"] {
+    font-family: 'fa-regular-400' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    color: inherit;
+    vertical-align: middle;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fontawesome-icon {
+    &-envelope:before {
+        content: "\f0e0";
+        color: inherit;
+    }
+
+    &-envelope-open:before {
+        content: "\f2b6";
+        color: inherit;
+    }
+
+    &-arrow-alt-circle-down:before {
+        content: "\f358";
+        color: inherit;
+    }
+}

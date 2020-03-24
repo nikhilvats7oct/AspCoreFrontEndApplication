@@ -1,0 +1,274 @@
+﻿@using FinancialPortal.Web.Helpers
+@using FinancialPortal.Web.Models.DataTransferObjects
+@using FinancialPortal.Web.Settings
+@using Newtonsoft.Json;
+@inject PortalSetting PortalSetting
+@inject CmsEndpoints CmsEndpoints
+
+@model FinancialPortal.Web.ViewModels.BudgetSummaryVm
+
+
+@{
+    ViewBag.Title = "BudgetSummary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.IsSaved)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Saved!</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>Your budget details have now been saved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="container">
+    <div class="js-chart-settings">
+        <input type="hidden" name="outcome" value="@(Model.DisposableIncome < 0 ? "negative" : Model.DisposableIncome <= 50  ? "unaffordable" : "affordable")" />
+        <input type="hidden" name="income-total" value="@Model.IncomeTotal" />
+        <input type="hidden" name="outgoing-total" value="@Model.TotalExpenditure" />
+        <input type="hidden" name="monthly-spare" value="@Math.Abs(Model.DisposableIncome)" />
+        <div class="js-chart-settings-income">
+            <input type="hidden" name="salary" value="@Model.Salary" />
+            <input type="hidden" name="benefits" value="@Model.Benefits" />
+            <input type="hidden" name="pension" value="@Model.Pension" />
+            <input type="hidden" name="other" value="@Model.Other" />
+        </div>
+        <div class="js-chart-settings-outgoings">
+            <input type="hidden" name="household" value="@Model.HouseholdBills" />
+            <input type="hidden" name="expenditure" value="@Model.Expenditure" />
+            <input type="hidden" name="leftover" value="@Model.DisposableIncome" />
+        </div>
+    </div>
+    <form class="form">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-7">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Summary of your budget</h2>
+
+                        @if (Model.DisposableIncome <= 50 && Model.PriorityBillsInArrears)
+                        {
+
+                            <p>Based on the figures you gave us, we can see you’re spending more than you receive or are behind with priority bills. Why not <a target="_blank" href="@PortalSetting.TalkToUsUrl">talk to us</a> and we can help you work out how to move forward.</p>
+                        }
+
+                        else if (Model.DisposableIncome > 50 && Model.PriorityBillsInArrears)
+                        {
+                            <p>You are currently behind with priority bills we do recommend that priority bills are dealt with first. If you’re worried about your debts, please follow the links below to access further information regarding free debt advice</p>
+                        }
+                        else if (Model.DisposableIncome > 50)
+                        {
+                            <p>
+                                You can make payments of up to <span class="highlight js-spare-money bold">&#163;@Model.DisposableIncome</span>
+                                per <span class="js-money-frequency">month</span>! <br />If you are unsure about making a
+                                payment then please <a target="_blank" href="@CmsEndpoints.TalkToUs">contact us</a>
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-5">
+                <div class="chart js-chart">
+                    <div class="chart-legend"></div>
+                    <canvas id="myChart" width="400" height="400" style="margin-top: 9rem !important;"></canvas>
+
+                    <div class="chart__info @(Model.DisposableIncome <= 50 ? "chart__info--negative" : "")  js-chart-info">
+                        <div class="chart__heading js-chart-heading">
+                            Left over Funds
+                        </div>
+                        <div class="chart__price js-chart-price">
+                            @string.Format("{0:c}", Model.DisposableIncome)
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 offset-lg-1">
+                <div class="content-wrapper content-wrapper--padding-reset">
+                    <div class="content__block content__block--budget-heading">
+                        <div class="select-wrapper">
+                            <select name="dropdown" id="dropdown" class="js-select-style-only-no-search js-budget-frequency">
+                                <option value="weekly">Weekly</option>
+                                <option value="fortnightly">Fortnightly</option>
+                                <option value="monthly" selected>Monthly</option>
+                                <option value="every 4 weeks">Every 4 weeks</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="info-box-wrapper">
+                        <div class="info-box info-box--sidebar info-box--summary mb-2" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4>Source:</h4>
+                                    </div>
+                                </div>
+                                <div class="info-box__highlight">
+                                    <p><span class="js-income-total">@Model.BudgetSource</span></p>
+                                </div>
+                            </div>
+                            <hr/>
+                                <div class="info-box__top">
+                                    <div class="info-box__heading">
+                                        <div class="info-box__text">
+                                            <h4>Income total:</h4>
+                                        </div>
+                                    </div>
+                                    <div class="info-box__highlight">
+                                        <p><span class="js-income-total">&#163;@Model.IncomeTotal</span></p>
+                                    </div>
+                                </div>
+                                <div class="info-box__body">
+                                    <ul>
+                                        <li>Salary: <span class="js-income-salary">&#163;@Model.Salary</span></li>
+                                        <li>Benefits: <span class="js-income-benefits">&#163;@Model.Benefits</span></li>
+                                        <li>Pension: <span class="js-income-pensions">&#163;@Model.Pension</span></li>
+                                        <li>Other: <span class="js-income-other">&#163;@Model.Other</span></li>
+                                    </ul>
+                                </div>
+                                <hr />
+                                <div class="info-box__top">
+                                    <div class="info-box__heading">
+                                        <div class="info-box__text">
+                                            <h4>Outgoings total:</h4>
+                                        </div>
+                                    </div>
+                                    <div class="info-box__highlight">
+                                        <p><span class="js-outgoings-total">&#163;@Model.TotalExpenditure</span></p>
+                                    </div>
+                                </div>
+                                <div class="info-box__body">
+                                    <ul>
+                                        <li class="legend">
+                                            <div class="legend__label">
+                                                <span class="legend__box legend__box--sky-blue"></span>
+                                                <span>Priority bills:</span>
+                                            </div>
+                                            <span class="js-outgoings-household">&#163;@Model.HouseholdBills</span>
+                                        </li>
+                                        <li class="legend">
+                                            <div class="legend__label">
+                                                <span class="legend__box legend__box--grey"></span>
+                                                <span>Expenditure:</span>
+                                            </div>
+                                            <span class="js-outgoings-expenditure">&#163;@Model.Expenditure</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <hr />
+
+                                <div class="info-box__top info-box__top--single">
+                                    <div class="info-box__heading">
+                                        <div class="info-box__text legend">
+                                            <div class="legend__label">
+                                                <span class="legend__box @(Model.DisposableIncome <= 50 ? "legend__box--negative" : "legend__box--pattern-blue")"></span>
+                                                <h4>Leftover Funds:</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info-box__highlight">
+                                        <p><span class="js-outgoings-leftover"></span> per <span class="js-money-frequency">month</span></p>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div class="info-box__top info-box__top--single justify-content-end">
+                                    @if (Model.DisposableIncome <= 50)
+                                    {
+                                        <p class="grey">Based on the figures you gave us, we can see you’re spending more than you receive. Why not <a href="@CmsEndpoints.StepChangeLink">talk to us</a> and we can help you work out how to move forward.</p>
+                                        <p class="grey">For free, confidential and impartial advice why not try one of these independent organisations. Call <a href="@CmsEndpoints.StepChangeLink" target="_blank">StepChange Debt Charity</a> on 0800 138 1111, or <a href="@CmsEndpoints.NationalDebtLine" target="_blank">National Debtline</a> on 0808 808 4000.<br /><br /> If you’d still like to make a payment click below.</p>
+                                    }
+                                    else if (Model.PriorityBillsInArrears)
+                                    {
+                                        <p class="grey">For free, confidential and impartial advice why not try one of these independent organisations. Call <a href="@CmsEndpoints.StepChangeLink" target="_blank">StepChange Debt Charity</a> on 0800 138 1111, or <a href="@CmsEndpoints.NationalDebtLine" target="_blank">National Debtline</a> on 0808 808 4000.<br /><br /> If you’d still like to make a payment click below.</p>
+                                    }
+
+                                    @if (!Model.ExternallyLaunched)
+                                    {
+                                        @Html.ActionLink("My Accounts", "Index", "MyAccounts", null, new { @class = "btn btn--primary" })
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="mb-3">
+                        @Html.ActionLink("Change amounts", "YourIncome", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] })
+                    </div>
+
+                    <div class="content__block pt-1">
+                        <div class="row">
+
+                            @if (Model.ExternallyLaunched)
+                            {
+                                <div class="form__element form__element--button mb-1 col-md-6">
+                                    @Html.ActionLink("Make a Payment", "Index", "Home", new { }, new { @class = "btn btn--primary" })
+                                </div>
+                                <div class="form__element form__element--button mb-1 col-md-6 align-content-end">
+                                    <a href="@CmsEndpoints.HomePage">Lowell.co.uk</a>
+                                </div>
+                            }
+                            else
+                            {
+                                @if (Model.AnonUser)
+                                {
+                                    <div class="form__element form__element--button mb-1 col-md-6">
+                                        @Html.ActionLink("Save details", "Save", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] }, new { @class = "btn btn--primary" })
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+
+                    <br>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section scripts
+{
+    @if (Model != null)
+    {
+        GtmEvent gtmEvent = new GtmEvent()
+        {
+            employment_status = Model.EmploymentStatus,
+            housing_status = Model.HousingStatus,
+            guid = Model.LoggedInUserId,
+            gtm_event = "BudgetCalculator",
+            step = "6 - Continued to Make a Payment",
+            user_status = String.IsNullOrEmpty(Model.LoggedInUserId) ? "Not Logged In" : "Logged In",
+            monthly_income = Model.IncomeTotal,
+            monthly_expenses = Model.TotalExpenditure,
+            monthly_disposable_income = Model.DisposableIncome
+        };
+
+        gtmEvent.account_ref = String.IsNullOrEmpty(gtmEvent.account_ref) ? null : HashData.Sha256(gtmEvent.account_ref, PortalSetting.ShaSalt);
+        gtmEvent.guid = String.IsNullOrEmpty(gtmEvent.guid) ? null : HashData.Sha256(gtmEvent.guid, PortalSetting.ShaSalt);
+
+        <script>
+            $(function () {
+                $('#btnMakePayment').click(function () {
+                    dataLayer.push(@Html.Raw(JsonConvert.SerializeObject(gtmEvent, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore })));
+                });
+            });
+        </script>
+    }
+}

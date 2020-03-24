@@ -1,0 +1,51 @@
+﻿@using FinancialPortal.Web.Extensions
+@using FinancialPortal.Web.Services.Interfaces
+@using FinancialPortal.Web.Settings
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.DependencyInjection
+@using Microsoft.Extensions.Logging
+@inject IdentitySetting IdentitySetting
+@inject IHttpContextAccessor HttpContextAccessor;
+@inject IDistributedTokenProvider DistributedTokenProvider;
+
+@{
+    ViewData["Title"] = "My profile";
+
+    var requestBaseUrl = "";
+    var dat = "dat";
+    var identityUrl = IdentitySetting.Authority + "/account/manage";
+
+    try
+    {
+        requestBaseUrl = HttpContextAccessor.HttpContext.GetUrl();
+        dat = await DistributedTokenProvider.GetDistributedTokenId();
+    }
+    catch (Exception exception)
+    {
+        var logger = HttpContextAccessor.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
+
+        logger?.LogError(exception, "An unknown error has occurred while getting request base url or access token in the _ProfileRedirect.cshtml razor view.");
+
+        requestBaseUrl = "UNKNOWN";
+    }
+}
+
+<div>
+    <i class="fa fa-spinner fa-spin"></i>
+
+    Redirecting....
+</div>
+
+<form action="@identityUrl" method="post" hidden="" id="ProfileRedirectForm">
+    <input type="hidden" name="dat" value="@dat"/>
+    <input type="hidden" name="redirect_uri" value="@requestBaseUrl/MyProfile"/>
+    <button class="btn btn-link text-dark text-left" type="submit">Change email</button>
+</form>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#ProfileRedirectForm').submit();
+        });
+    </script>
+}

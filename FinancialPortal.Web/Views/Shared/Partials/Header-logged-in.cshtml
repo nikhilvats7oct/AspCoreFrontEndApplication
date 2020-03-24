@@ -1,0 +1,51 @@
+@inject FinancialPortal.Web.Services.Interfaces.IUnreadDocumentsService Service
+
+<header class="header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-6 col-md-3 col-lg-2 logo-container">
+                <a href="@Url.Action("Index", "MyAccounts")" class="header__logo-wrapper">
+                    <img class="header__logo" src="~/images/logos/lowell-logo-white-red.png" alt="Lowell Logo" />
+                </a>
+            </div>
+            <div class="d-none d-md-flex col-md-7 offset-md-2 offset-lg-3 justify-content-end">
+                @{
+
+                    bool hasUnReadDoc = await Service.HasUnreadDocuments();
+                    var iconClass = hasUnReadDoc ? "fontawesome-icon-envelope unread-document" : "";
+                    string iconString = $"<i class={iconClass}></i>";
+
+                    <div class="header__more">
+                        <nav>
+                            <ul>
+                                <li><a class="@(ViewContext.RouteData.Values["Controller"].ToString() == "MyAccounts" ? "active" : "")" href="@Url.Action("Index", "MyAccounts")">My Accounts</a></li>
+                                <li><a class="@(ViewContext.RouteData.Values["Controller"].ToString() == "MyDocuments" ? "active" : "")" href="@Url.Action("Index", "MyDocuments")">My Documents @Html.Raw(iconString)</a></li>
+                                <li><a class="@(ViewContext.RouteData.Values["Controller"].ToString() == "MyProfile" ? "active" : "")" href="@Url.Action("Index", "MyProfile")">My Profile</a></li>
+                                <li>@Html.ActionLink("Log Out", "Logout", "Logout")</li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            </div>
+            <div class="col-6 d-md-none d-lg-none">
+                <div class="header__mobile-options">
+                    <div class="hamburger">
+                        <i class="jw-icon-hamburger"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="mobile-header">
+    <nav class="mobile-header__nav">
+        <div class="container">
+            <ul>
+                <li><a class="active" href="@Url.Action("Index", "MyAccounts")">My Accounts</a></li>
+                <li><a id="btnMyProfile" href="@Url.Action("Index", "MyDocuments")">My Documents @Html.Raw(iconString)</a></li>
+                <li><a id="btnMyProfile" href="@Url.Action("Index", "MyProfile")">My Profile</a></li>
+                <li>@Html.ActionLink("Log out", "Logout", "Logout")</li>
+            </ul>
+        </div>
+    </nav>
+</div>

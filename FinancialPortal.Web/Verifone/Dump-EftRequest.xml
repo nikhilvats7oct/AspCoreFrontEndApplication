@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<eftrequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <merchant>
+    <merchantid>1000001060</merchantid>
+    <systemguid>2EDB35C2-3D7E-4257-838D-FB95A1BC8A3C</systemguid>
+  </merchant>
+  <merchantreference>d8fbe55d-66ad-4699-850d-037241aadb38</merchantreference>
+  <returnurl>https://testportal.lowell.co.uk/oneoffpaymentresult</returnurl>
+  <template>
+    <merchanttemplateid>100000000000000365</merchanttemplateid>
+    <languagetemplateid>1</languagetemplateid>
+  </template>
+  <capturemethod>12</capturemethod>
+  <processingidentifier>1</processingidentifier>
+  <accountid>140012590</accountid>
+  <transactionvalue>12577.81</transactionvalue>
+  <authcode />
+
+  <tokenexpirationdate>09012023</tokenexpirationdate>
+  <registertoken>false</registertoken>
+  <starpan />
+  <allowedpaymentschemes>6,11,49,2</allowedpaymentschemes>
+  <allowedpaymentmethods>1</allowedpaymentmethods>
+  <description>Payment to Lowell account 10062678</description>
+  <showorderconfirmation>false</showorderconfirmation>
+  <showpaymentresult>true</showpaymentresult>
+  <customer>
+    <firstname></firstname>
+    <lastname></lastname>
+    <email></email>
+    <address>
+      <address1></address1>
+      <postcode></postcode>
+      <address2></address2>
+      <town></town>
+      <county></county>
+      <country>United Kingdom</country>
+      <countrycode>826</countrycode>
+    </address>
+    <basket>
+      <totalamount>12577.81</totalamount>
+      <shippingamount>0.0</shippingamount>
+      <vatamount>0.0</vatamount>
+      <basketitems>
+        <basketitem>
+          <productname>Payment to Lowell account 10062678</productname>
+          <productcode>10062678</productcode>
+          <quantity>1</quantity>
+          <unitamount>12577.81</unitamount>
+          <lineamount>12577.81</lineamount>
+          <vatrate>0</vatrate>
+          <vatamount>0</vatamount>
+        </basketitem>
+      </basketitems>
+    </basket>
+    <deliveryedit>false</deliveryedit>
+  </customer>
+  <processCPC>false</processCPC>
+  <hideBillingDetails>true</hideBillingDetails>
+  <hideDeliveryDetails>true</hideDeliveryDetails>
+  <hidepaymentresultsuccess>true</hidepaymentresultsuccess>
+  <enableUpdateToken>false</enableUpdateToken>
+  <enableRedFraudCheck>false</enableRedFraudCheck>
+
+</eftrequest>

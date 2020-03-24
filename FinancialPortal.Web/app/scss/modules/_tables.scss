@@ -1,0 +1,248 @@
+$table-border-color: #dddddd;
+$table-cell-padding: 1.5rem;
+
+@import 'bootstrap/scss/mixins/hover';
+@import 'bootstrap/scss/mixins/table-row';
+@import 'bootstrap/scss/tables';
+
+.table {
+    border-spacing: 0;
+    border-collapse: collapse;
+
+    thead {
+        background-color: #f2f2f2;
+
+        tr {
+            height: 60px;
+        }
+
+        th {
+            border-top: 0;
+            border-color: $brand-primary;
+            text-align: left;
+            font-size: 1.9rem;
+            font-weight: normal;
+            padding-bottom: 1.3rem;
+        }
+    }
+
+    tbody {
+        tr {
+            height: 50px;
+        }
+
+        td {
+            text-align: left;
+            padding-bottom: 1.3rem;
+            vertical-align: bottom;
+        }
+    }
+
+    &-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 15px;
+
+        .download {
+            display: inline-flex;
+            align-items: center;
+            color: $brand-primary;
+
+            i {
+                font-size: 2.3rem;
+                padding-right: 10px;
+            }
+
+            @include media-breakpoint-down(sm) {
+                flex-direction: row-reverse;
+                text-align: right;
+
+                i {
+                    padding-left: 10px;
+                    padding-right: 0;
+                }
+            }
+        }
+    }
+
+    &--transactions {
+        border-collapse: initial;
+        border-spacing: 0 10px;
+        margin-bottom: 30px;
+        margin-top: -10px;
+
+        thead {
+            background-color: #e2e2e2;
+
+            tr {
+                td {
+                    border: 0;
+                    padding-top: 20px;
+
+                    &:first-child {
+                        @include content-padding(left);
+
+                        @include media-breakpoint-down(sm) {
+                            padding-left: 15px !important;
+                        }
+                    }
+
+                    &:last-child {
+                        @include content-padding(right);
+                        text-align: right;
+
+                        @include media-breakpoint-down(sm) {
+                            padding-right: 15px !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        tbody {
+            padding: 0 10px;
+
+            tr {
+                td {
+                    border: 0;
+                    background-color: #eeeeee;
+                    white-space: nowrap;
+
+                    &:first-child {
+                        @include content-padding(left);
+
+                        @include media-breakpoint-down(sm) {
+                            padding-left: 15px !important;
+                        }
+                    }
+
+                    &:last-child {
+                        @include content-padding(right);
+                        text-align: right;
+
+                        @include media-breakpoint-down(sm) {
+                            padding-right: 15px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    &--transactions {
+        border-collapse: initial;
+        border-spacing: 0 10px;
+        margin-bottom: 30px;
+        margin-top: -10px;
+
+        thead {
+            background-color: #e2e2e2;
+
+            tr {
+                td {
+                    border: 0;
+                    padding-top: 20px;
+
+                    a {
+                        color: $brand-new-grey-90p;
+                        font-weight:bold;
+                    }
+
+                    &:first-child {
+                        @include content-padding(left);
+
+                        @include media-breakpoint-down(sm) {
+                            padding-left: 15px !important;
+                        }
+                    }
+
+                    &:last-child {
+                        @include content-padding(right);
+                        text-align: right;
+
+                        @include media-breakpoint-down(sm) {
+                            padding-right: 15px !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        tbody {
+            padding: 0 10px;
+
+            tr {
+                td {
+                    border: 0;
+                    background-color: #eeeeee;
+                    white-space: nowrap;
+
+                    &:first-child {
+                        @include content-padding(left);
+
+                        @include media-breakpoint-down(sm) {
+                            padding-left: 15px !important;
+                        }
+                    }
+
+                    &:last-child {
+                        @include content-padding(right);
+                        text-align: right;
+
+                        @include media-breakpoint-down(sm) {
+                            padding-right: 15px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &--bordered {
+        thead {
+            background: transparent;
+
+            th {
+                border: 1px solid #ddd;
+                color: $brand-primary;
+                font-weight: bold;
+                font-size: 1.8rem;
+                padding: 2rem;
+                white-space: nowrap;
+
+                @include media-breakpoint-up(md) {
+                    &:first-child,
+                    &:last-child {
+                        width: 25%;
+                    }
+
+                    &:nth-child(2) {
+                        width: 50%;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            td {
+                vertical-align: top;
+                border: 1px solid #ddd;
+                padding: 2rem;
+
+                @include media-breakpoint-up(md) {
+                    &:first-child,
+                    &:last-child {
+                        width: 25%
+                    }
+
+                    &:nth-child(2) {
+                        width: 50%;
+                    }
+                }
+            }
+        }
+    }
+}

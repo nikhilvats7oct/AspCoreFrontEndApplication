@@ -1,0 +1,68 @@
+﻿@model FinancialPortal.Web.ViewModels.ReturnToFormVm
+@{
+    ViewBag.Title = "Other ways to pay";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+
+                    <h2>Other ways to pay</h2>
+
+                    <div class="content__block__text">
+                        <h5 class="highlight bold">Payment by Telephone</h5>
+                        <p>
+                            Call to make a payment<br />
+                            <br />
+                            Telephone: 0333 556 5550
+                        </p>
+                    </div>
+
+                    <div class="content__block__text">
+                        <h5 class="highlight bold">Payment by Bank transfer / Standing Order</h5>
+                        <p>
+                            Use your Lowell reference number as your payment reference<br />
+                            <br />
+                            Set up your payment to the following account -<br />
+                            NatWest<br />
+                            Sort Code - 60-00-01<br />
+                            Account Number – 39543749
+                        </p>
+                    </div>
+                    
+                    <div class="content__block__text">
+                        <h5 class="highlight bold">At Natwest Branch</h5>
+                        <p>
+                            Payments can also be made at any NatWest branch using a payment slip<br />
+                            <br />
+                            You can find your local branch <a href="https://locator.natwest.com/" target="_blank">here</a>
+                        </p>
+                    </div>
+
+                    <div class="content__block__text">
+                        <h5 class="highlight bold">Payment by Cheque</h5>
+                        <p>
+                            Please make cheques payable to 'Lowell Financial'<br />
+                            <br />
+                            Send to our address -<br />
+                            Lowell Financial<br />
+                            PO Box 164<br />
+                            Leeds<br />
+                            LS10 9EH
+                        </p>
+                    </div>
+
+                    @using (Html.BeginForm(Model.ReturnActionName, Model.ReturnControllerName, new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post))
+                    {
+                        @* State of data entry form to be submitted - will result in round-trip of data to originating form *@
+                        <input type="hidden" name="@Model.StateFieldName" value="@Model.State" />
+
+                        <button type="submit" class="btn btn--primary">Back<i class="icon-arrow"></i></button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

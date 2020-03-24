@@ -1,0 +1,174 @@
+
+html, body {
+    font-family: "FS Matthew Web", Verdana, Arial, sans-serif;
+}
+
+.non-default-client-logo {
+    max-width: 100%;
+    width: 77.1%;
+}
+
+.logo-link {
+    height: 50px !important;
+}
+
+
+.logo-container-col {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+}
+
+
+logo-container-col {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+}
+
+@media (max-width: 767.98px) {
+
+    .non-default-client-logo {
+        position: absolute;
+    }
+
+    .card {
+        padding: 0 !important;
+    }
+
+    .header {
+        padding: 10px 0;
+        height: 90px;
+    }
+
+    .btn-register {
+        margin-top: 10px;
+    }
+}
+
+
+.login-card h1 {
+    font-size: 32px !important;
+}
+
+
+.btn-primary {
+    background-color: #cb490d;
+    justify-content: space-between;
+    padding: 5px 30px;
+    border-radius: 40px;
+    border: 1px solid transparent;
+    color: white;
+    text-decoration: none;
+    max-width: 280px;
+    transition: all .3s ease-in-out;
+    line-height: 155%;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    font-weight: 600;
+}
+
+    .btn-primary:hover, .btn-primary:active {
+        background-color: #86cbe3 !important;
+        color: #434a4f;
+        cursor: pointer;
+        border-color: #86cbe3 !important;
+    }
+
+    .btn-primary:focus {
+        box-shadow: none !important;
+    }
+
+
+
+.btn:focus {
+    box-shadow: none !important;
+}
+
+.btn-primary:active:hover:not([disabled]) {
+    color: #fff;
+    background-color: #c7c9ca;
+    border-color: transparent;
+}
+
+.btn-link {
+    color: #cb490d !important;
+    font-weight: normal;
+}
+
+.alert-info {
+    color: #434a4f;
+    background-color: #d8efe8;
+    border-color: #3b8c76;
+}
+
+h1 {
+    font-size: 32px !important;
+}
+
+.btn-register {
+    background-color: transparent;
+    border-color: #FE5000 !important;
+    color: #FE5000;
+    font-weight: 600;
+    float: none !important;
+    display: inline-flex !important;
+    -webkit-box-align: center !important;
+    -webkit-align-items: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+    -webkit-box-pack: justify !important;
+    -webkit-justify-content: space-between !important;
+    -ms-flex-pack: justify !important;
+    justify-content: space-between !important;
+    padding: 5px 30px !important;
+    border-radius: 40px !important;
+    border: 1px solid #FE5000 !important;
+    text-decoration: none !important;
+    max-width: 280px !important;
+    -webkit-transition: all .3s ease-in-out !important;
+    transition: all .3s ease-in-out !important;
+    line-height: 155% !important;
+    font-weight: 600;
+}
+
+    .btn-register:hover, .btn-register:active {
+        background-color: transparent;
+        border-color: #86cbe3 !important;
+    }
+
+.btn-primary:disabled {
+    color: #fff;
+    background-color: #c7c9ca;
+    border-color: transparent;
+}
+
+a.text-secondary:hover, a.text-secondary:focus {
+    color: #86cbe3 !important;
+}
+
+.form-control {
+    border: 2px solid #d9dbdc !important;
+    border-radius: 0;
+    color: #434A4F;
+    background-color: white;
+    width: 100%;
+    outline-offset: 0px !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.header {
+    box-shadow: 0 6px 8px -6px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    background-color: #434a4f;
+    padding: 20px 0;
+    height: 95px;
+    overflow: hidden;
+}
+
+.internal-login-col {
+    padding: 0 !important;
+}

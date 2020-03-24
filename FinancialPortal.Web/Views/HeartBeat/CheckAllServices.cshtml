@@ -1,0 +1,75 @@
+﻿@model FinancialPortal.Web.Models.DataTransferObjects.HeartBeatDto
+
+@{
+    ViewBag.Title = "Check All Services";
+}
+
+<span id="Statistic.OverallStatus:@Model.SolarWindsOverallStatus"></span>
+
+<div class="notification js-notification">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 offset-md-8">
+                <div class="notification__message">
+                    <b>Select a refresh rate (seconds)</b>
+                    
+                        <select id="timeFrame">
+                            <option value="30000">30</option>
+                            <option value="10000">10</option>
+                            <option value="5000">5</option>
+                            <option value="2000">2</option>
+                        </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="showerror">
+
+</div>
+
+<div id="checkServices">
+
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        var timeBetweenEachRefresh = 30000;
+
+        $(document).ready(function () {
+
+            var refreshTimer = null;
+
+            $('#timeFrame').on('change', function() {
+                var selectedValue = $(this).val();
+                console.log('selectedvalue=' + selectedValue);
+                clearInterval(refreshTimer);
+                refreshTimer = setInterval(LoadData, selectedValue);
+            });
+
+            function LoadData() {
+                console.log('called');
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetServiceHeartBeats")',
+                    dataType: 'html',
+                    data: { id: '' },
+                    success: function(data) {
+                        $('#showerror').hide();
+                        $('#checkServices').html(data);
+
+                    },
+                    error: function(ex) {
+                        $('#showerror').html("<p>Unable to connect. Please try again later.</p>");
+                    }
+                });
+            };
+
+            LoadData();
+            refreshTimer = setInterval(LoadData, 30000);
+        });
+    </script>
+}  

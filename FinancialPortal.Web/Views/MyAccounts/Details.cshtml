@@ -1,0 +1,286 @@
+﻿@using FinancialPortal.Web.ViewModels
+@model FinancialPortal.Web.ViewModels.MyAccountsDetailVm
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewBag.Title = Model.OriginalCompanyText;
+}
+
+@if (@Model.ArrearsMessage != null)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Let’s get your account back into shape</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>@Html.Raw(@Model.ArrearsMessage)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.PlanPendingTransfer)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <p class="notification__message__heading">Once this account has been paid off in full, the funds you were paying towards it may be automatically moved to pay off another one of your Lowell accounts.</p>
+                        <p>
+                            If you have more than one account with us we’ll select the most appropriate account, this usually means the account with the lowest balance, but we’ll contact you first to let you know which has been selected.
+                        </p>
+                        <p>
+                            Don’t worry, you don’t have to do anything this will happen automatically and you won’t see any change in when you pay us or how much you pay. If you’d prefer us not to transfer the payment, please call us on @Model.PlanTransferOptOutNumber to opt out and we’ll be happy to help.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.PlanTransferredFromAccounts.Any())
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <p class="notification__message__heading">
+                            Congratulations – You’ve completely paid off your @Model.PlanTransferredFromAccountsFormatted. The funds you were paying towards that account have now been automatically moved to put towards paying off this balance.
+                        </p>
+                        <p>
+                            Don’t worry, you won’t see any change in when you pay, how much you pay and the payment method.
+                        </p>
+                        <p>
+                            If for some reason you’re unable to continue with this plan please call us on @Model.PlanTransferOptOutNumber and we’ll be happy to help.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="content-wrapper content-wrapper--account">
+                <div class="content__block content__block--pb-none">
+                    <h2>@Model.OriginalCompanyText</h2>
+                    <p class="highlight">@Model.AccountReferenceCaption <span class="bold">@Model.AccountReferenceText</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-5 d-flex justify-content-md-end align-items-end">
+            <div class="content-wrapper content-wrapper--account content-wrapper--end">
+                <div class="content__block content__block--pb-none">
+                    <h3>
+                        @Model.OutstandingBalanceCaption @Model.OutstandingBalanceText
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="info-box info-box--discount info-box-directdebit-plain-in-place" data-mh="info-box" style="">
+                <div class="info-box__body">
+                    <div>
+                        <div class="pull-left">
+                            <p>@Model.AccountStatusText@Model.PlanDescription</p>
+                            @if (Model.DirectDebitInFlight)
+                            {
+                                <p>You currently have a payment in flight - please check back in a couple of days to amend the Direct Debit</p>
+                            }
+                            <p>@Model.PlanMessage</p>
+                        </div>
+                        <div class="pull-right">
+                            @{
+                                var renderDdAmendButton = Model.CanAmendPlan && !Model.DirectDebitInFlight && !Model.AccountWithSolicitors;
+                            }
+
+                            @if (renderDdAmendButton)
+                            {
+                                <a class="btn btn--primary btn-margin-bottom-10px" href="@Url.Action("Index", "AmendDirectDebtPlan", new {id = Model.LowellReferenceSurrogateKey})">Change this plan <i class="jw-icon-arrow"></i></a>
+                            }
+
+                            @if (Model.IsPaymentButtonAvailable)
+                            {
+                                <a class="btn @(renderDdAmendButton ? "btn--secondary" : "btn--primary") btn-margin-bottom-10px" href="@Url.Action("Index", "PaymentOptions", new {id = Model.LowellReferenceSurrogateKey})">Make a payment <i class="jw-icon-arrow"></i></a>
+                            }
+                        </div>
+
+                        <div style="clear: both"></div>
+                    </div>
+
+                </div>
+
+                @if (Model.IsDiscountLinkAvailable)
+                {
+                    <div class="info-box__bottom info-box__bottom--discount">
+                        <div class="info-box__discount">
+                            <p><span>@Model.DiscountAvailableLinkTextOptional</span></p>
+                        </div>
+                        <a class="btn btn--primary" href="@Url.Action("Index", "PaymentOptions", new {id = Model.LowellReferenceSurrogateKey})">
+                            Proceed
+                            <i class="jw-icon-arrow"></i>
+                        </a>
+                    </div>
+                }
+
+                @if (@Model.DiscountedBalanceTextOptional != null)
+                {
+                    <div class="info-box__bottom info-box__bottom--discount">
+                        <h4>@Model.DiscountedBalanceCaption <span>@Model.DiscountedBalanceTextOptional</span></h4>
+                        <p>
+                            The discount is only valid if you keep up your payments on your plan.
+                            If you don't currently have a Direct Debit plan, you can change your current plan to Direct Debit by selecting 'Make a Payment' and choosing 'Direct Debit plan'.
+                            If you have an accepted discount on your current plan this will be automatically transferred to your new Direct debit plan.
+                        </p>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+        @if (Model.IsDiscountLinkAvailable)
+        {
+            <div class="col-12 col-md-6">
+                <div class="info-box info-box--sidebar info-box--warning" data-mh="info-box" style="">
+                    <div class="info-box__top">
+                        <div class="info-box__heading">
+                            <div class="info-box__icon">
+                                <i class="jw-icon-caution"></i>
+                            </div>
+                            <div class="info-box__text">
+                                <h4>Accepting a discount</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box__body">
+                        <p>
+                            If this account is shown on your credit file as a default and you choose to pay the 'Discounted Balance', the default on your credit file will appear as ‘Partially Satisfied', once it’s paid.<br />
+                            If you choose to pay the full balance your credit file will appear as 'Satisfied'. It may take up to 50 days for your credit file to be updated. Remember, if you don’t keep up your payments, your discount may be removed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    @if (@Model.AccountMessage != null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <hr class="transparent" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="info-box" data-mh="info-box">
+                    <div class="info-box__top">
+                        <div class="info-box__heading">
+                            <div class="info-box__icon">
+                                <div>
+                                    <i class="jw-icon-caution"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4>Account Message</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box__body">
+                        <p>@Model.AccountMessage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.IsSolicitorsRedirectLinkAvailable)
+    {
+        <a class="btn btn--primary" href="@Model.SolicitorsRedirectLink">
+            Go to Lowell Solicitors <i class="jw-icon-arrow"></i>
+        </a>
+    }
+
+    <div class="row">
+        <div class="col-12">
+            <hr class="light" />
+        </div>
+    </div>
+
+    @if (Model.RecentTransactions.Count > 0)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="content-wrapper content-wrapper--account">
+                    <div class="content__block content__block--pb-none">
+                        <h3>Latest transactions</h3>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table--transactions">
+
+                        <thead>
+                            <tr>
+                                <td>Date</td>
+                                <td>Description</td>
+                                <td>Amount</td>
+                                <td>Balance</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (TransactionVm transaction in Model.RecentTransactions)
+                            {
+                                <tr>
+                                    <td>@transaction.DateText</td>
+                                    <td>@transaction.Description</td>
+                                    <td>@transaction.AmountText</td>
+                                    <td>@transaction.RollingBalanceText</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <a href="@Url.Action("Transactions", "ViewTransactions", new {id = Model.LowellReferenceSurrogateKey})">View all transactions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h3>You’ve made no payments to this account.</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

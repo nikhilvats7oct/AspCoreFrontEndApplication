@@ -1,0 +1,47 @@
+﻿@using System.Globalization
+@model FinancialPortal.Web.ViewModels.OpenWrksErrorVm
+@{
+    ViewData["Title"] = "MyBudget Error";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="content-wrapper">
+            <div class="content__block">
+                <h2>MyBudget Error</h2>
+                <p>
+                    It looks like an error occurred. Try again later or use the Lowell <a asp-controller="BudgetCalculator" asp-action="HouseholdStatus" asp-route-id="@Model.LowellFinancialAccountSurrogateKey">
+                        Budget Calculator
+                    </a> to work out what you can afford to pay.
+                </p>
+
+                <p>
+                    Date/Time:<br />
+                    @DateTime.Now.ToString("G", CultureInfo.CurrentCulture)
+                </p>
+
+                @* Should handle model being missing if navigate to view without it being set *@
+                @if (!string.IsNullOrWhiteSpace(Model.OccurrenceId))
+                {
+                    <p>
+                        <br />
+                        Occurrence ID:<br />
+                        @Model.OccurrenceId
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row pt-0">
+        <div class="content-wrapper pt-0">
+            <div class="content__block">
+
+                <a asp-controller="MyAccounts" asp-action="Index" class="btn btn--primary">
+                    Return to My Accounts <i class="jw-icon-arrow"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

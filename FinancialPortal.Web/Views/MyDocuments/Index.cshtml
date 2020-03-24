@@ -1,0 +1,231 @@
+﻿@model FinancialPortal.Models.ViewModels.MyDocumentsVm
+@using X.PagedList.Mvc.Common
+@using X.PagedList.Mvc.Core
+@{
+    ViewBag.Title = "My Documents";
+}
+
+<div id="accountsPanel" class="documents-sidepanel">
+    <a class="closebtn">
+        <i class="jw-icon-cross"></i>
+    </a>
+    <h4 class="mb-5">My Accounts</h4>
+    @foreach (var item in Model.LinkedAccounts)
+    {
+        <div class="row ml-5 menu">
+            <div class="col-12">
+
+                <a class="@(item.IsSelected ? "selected" : "") @(item.UnreadDocuments ? " unread-documents" : " read-documents")" asp-controller="MyDocuments" asp-action="ChangeAccount" asp-route-accountReference="@item.Account.Value">
+                    <i class="@(item.UnreadDocuments ? "fontawesome-icon-envelope unread-document" : "fontawesome-icon-envelope-open read-document")"></i>@item.Account.Key
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="content-wrapper content-wrapper--account">
+                <div class="content__block content__block--pb-none">
+                    <h2>
+                        My documents @if (Model.AccountsHaveUnreadDocuments)
+                        {
+                            <i class="fontawesome-icon-envelope unread-document"></i>
+                        }
+                    </h2>
+                    <h4>@Model.Account.AccountName</h4>
+                    <p class="highlight">Your reference: <span class="bold">@Model.Account.Reference</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-5 d-flex justify-content-md-end align-items-end">
+            <div class="content-wrapper content-wrapper--account content-wrapper--end">
+                <div class="content__block content__block--pb-none">
+                    <h4>Balance: @(string.Format("{0:C}", Model.Account.OutstandingBalance))</h4>
+                    @if (Model.Account.DiscountedBalance != null || Model.Account.DiscountedBalance > 0)
+                    {
+                        <h4>Discounted Balance: @(string.Format("{0:C}", Model.Account.DiscountedBalance))</h4>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        @if (Model.LinkedAccounts.Count > 0)
+        {
+            <div class="col-12 col-md-5">
+                <button id="change-account" class="btn btn--outline mt-4 mb-4 ml-lg-5 ml-md-4">Change Account</button>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12 col-md-12">
+            @using (Html.BeginForm(actionName: "FilterItems", controllerName: "MyDocuments", method: FormMethod.Post, htmlAttributes: new { @class = "form" }))
+            {
+                @Html.Hidden("AccountReference", Model.Account.AccountReference)
+                <h4 class="mt-3 mb-3">
+                    <span id="filter-letters-link" class="link">
+                        Filter letters
+                        <i id="filter-link" class="jw-icon-arrow"></i>
+                    </span>
+                </h4>
+
+                <div id="filter-letters" class="row mt-1 @(!ViewData.ModelState.IsValid ? "" : "hide-filter-letters")">
+                    <div class="col-xl-4 col-md-6">
+                        <label for="reference-number">Date from</label>
+                        <div class="form__element__dob">
+                            <div class="select-wrapper">
+                                @Html.DropDownListFor(expression: m => m.FilterItems.FromDay, selectList: new SelectList(items: Model.FilterItems.DateDropDown.DateFromDays, selectedValue: Model.FilterItems.FromDay), htmlAttributes: new { @class = "js-select-style-only" })
+                            </div>
+                            <div class="select-wrapper">
+                                @Html.DropDownListFor(expression: m => m.FilterItems.FromMonth, selectList: new SelectList(items: Model.FilterItems.DateDropDown.DateFromMonths, selectedValue: Model.FilterItems.FromMonth), htmlAttributes: new { @class = "js-select-style-only" })
+                            </div>
+                            <div class="select-wrapper">
+                                @Html.DropDownListFor(expression: m => m.FilterItems.FromYear, selectList: new SelectList(items: Model.FilterItems.DateDropDown.DateFromYears, selectedValue: Model.FilterItems.FromYear), htmlAttributes: new { @class = "js-select-style-only" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <label for="reference-number">Date to</label>
+                        <div class="form__element">
+                            <div class="form__element__dob">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(expression: m => m.FilterItems.ToDay, selectList: new SelectList(items: Model.FilterItems.DateDropDown.DateToDays, selectedValue: Model.FilterItems.ToDay), htmlAttributes: new { @class = "js-select-style-only" })
+                                </div>
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(expression: m => m.FilterItems.ToMonth, selectList: new SelectList(items: Model.FilterItems.DateDropDown.DateToMonths, selectedValue: Model.FilterItems.ToMonth), htmlAttributes: new { @class = "js-select-style-only" })
+                                </div>
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(expression: m => m.FilterItems.ToYear, selectList: new SelectList(items: Model.FilterItems.DateDropDown.DateToYears, selectedValue: Model.FilterItems.ToYear), htmlAttributes: new { @class = "js-select-style-only" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <label for="reference-number">Keyword search</label>
+                        <div class="form__element">
+                            @Html.TextBoxFor(expression: m => m.FilterItems.KeyWord, htmlAttributes: new { @placeholder = "Keyword search" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row @(!ViewData.ModelState.IsValid ? "" : "hide-filter-letters")" id="search">
+                    <div class="col-12 mb-3">
+                        @Html.ValidationMessageFor(x => x.FilterItems)
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <button type="submit" class="btn btn--primary">Search <i class="jw-icon-arrow"></i></button>
+                        <a class="btn btn--outline ml-lg-2 ml-md-2" asp-controller="MyDocuments" asp-action="ChangeAccount" asp-route-accountReference="@Model.Account.AccountReference">Clear All</a>
+                    </div>
+                </div>
+
+                @if (Model.Account.Documents.Count > 0)
+                {
+                    <div class="table-responsive d-none d-md-block">
+                        <table class="table table--transactions">
+                            <thead id="documents-table-header">
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <a type="submit" class="btn btn--link" href="@Url.Action("OrderDocuments", "MyDocuments", new { orderBySubject = Model.FilterItems.OrderBySubject, accountReference=Model.Account.AccountReference, dateTo = Model.FilterItems.DateTo, dateFrom = Model.FilterItems.DateFrom, keyword = Model.FilterItems.KeyWord})">Subject</a>
+                                    </td>
+                                    <td>
+                                        <a type="submit" class="btn btn--link" href="@Url.Action("OrderDocuments", "MyDocuments", new { orderByReceived = Model.FilterItems.OrderByReceived, accountReference=Model.Account.AccountReference, dateTo = Model.FilterItems.DateTo, dateFrom = Model.FilterItems.DateFrom, keyword = Model.FilterItems.KeyWord})">Received</a>
+                                    </td>
+                                    <td>
+                                        <a type="submit" class="btn btn--link" href="@Url.Action("OrderDocuments", "MyDocuments", new { orderByRead = Model.FilterItems.OrderByRead, accountReference=Model.Account.AccountReference, dateTo = Model.FilterItems.DateTo, dateFrom = Model.FilterItems.DateFrom, keyword = Model.FilterItems.KeyWord})">Read</a>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Account.Documents)
+                                {
+                                    <tr class="tbl-documents-row">
+                                        <td><i class="@(item.IsNewDocument ? "fontawesome-icon-envelope unread-document" : "fontawesome-icon-envelope-open read-document")"></i></td>
+                                        <td class="@(item.IsNewDocument ? " bold" : "documents-read-content documents-read-content-td")"><a class="btn-view-document" asp-controller="MyDocuments" asp-action="OpenDocument" asp-route-accountReference="@Model.Account.AccountReference" asp-route-documentId="@item.DocumentId" target="_blank">@item.Subject</a></td>
+                                        <td class="@(item.IsNewDocument ? " bold" : "")">@item.Received?.ToString("dd/MM/yyyy")</td>
+                                        <td class="@(item.IsNewDocument ? " bold" : "") documents-read-content documents-read-content-td">@item.Read?.ToString("dd/MM/yyyy")</td>
+                                        <td class="@(item.IsNewDocument ? " bold" : "documents-read-content documents-read-content-td")">
+                                            <a asp-controller="MyDocuments" asp-action="DownloadDocument" asp-route-accountReference="@Model.Account.AccountReference" asp-route-documentId="@item.DocumentId">Download</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-block d-md-none">
+                        @foreach (var item in Model.Account.Documents)
+                        {
+                            <div class="row documents-card">
+                                <div class="col-2 justify-content-center align-self-center">
+                                    @if (item.IsNewDocument)
+                                    {
+                                        <i class="card-icon fontawesome-icon-envelope unread-document"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="card-icon fontawesome-icon-envelope-open read-document"></i>
+                                    }
+                                </div>
+                                <div class="col-8 mt-3 mb-3 d-flex flex-column">
+                                    <div class="mt-2 documents-card-subject @(item.IsNewDocument ? "documents-card-unread" : "documents-card-read")"><a class="btn-view-document" asp-controller="MyDocuments" asp-action="OpenDocument" asp-route-accountReference="@Model.Account.AccountReference" asp-route-documentId="@item.DocumentId" target="_blank">@item.Subject</a></div>
+                                    <div class="mt-2 d-flex justify-content-between">
+                                        <span class="documents-card-date @(item.IsNewDocument ? "documents-card-unread" : "documents-card-read")">Received: @item.Received?.ToString("dd/MM/yyyy")</span>
+                                        <span class="documents-card-date @(item.IsNewDocument ? "documents-card-unread" : "documents-card-read") documents-read-content documents-read-content-card">Read: @item.Read?.ToString("dd/MM/yyyy")</span>
+                                    </div>
+                                </div>
+                                <div class="col-2 justify-content-center align-self-center">
+                                    <a class="card-download" asp-controller="MyDocuments" asp-action="DownloadDocument" asp-route-accountReference="@Model.Account.AccountReference" asp-route-documentId="@item.DocumentId"><i class="fontawesome-icon-arrow-alt-circle-down"></i></a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <ul class="pagination mt-4">
+                        <li></li>
+                        <div class="pagination__page-wrapper">
+                            @if (Model.Account.Documents != null)
+                            {
+                                @Html.PagedListPager(
+                             Model.Account.Documents,
+                             page => Url.Action(action: "FilterItems",
+                             values: new
+                             {
+                                 datefrom = Model.FilterItems.DateFrom,
+                                 dateTo = Model.FilterItems.DateTo,
+                                 keyword = Model.FilterItems.KeyWord,
+                                 pageNumber = page,
+                                 accountReference = Model.Account.AccountReference,
+                                 orderByRead = Context.Request.Query["orderByRead"],
+                                 orderByReceived = Context.Request.Query["orderByReceived"],
+                                 orderBySubject = Context.Request.Query["orderBySubject"]
+                             }),
+                             new PagedListRenderOptions
+                             {
+                                 NextElementClass = "pagination__item pagination__next",
+                                 PreviousElementClass = "pagination__item pagination__prev pagination__item--disabled",
+                                 LinkToNextPageFormat = @"<i class="" jw-icon-arrow""></i>",
+                                 LinkToPreviousPageFormat = @"<i class="" jw-icon-arrow""></i>",
+                                 ActiveLiElementClass = "pagination__item--active",
+                                 LiElementClasses = new List<string>
+                                     {
+                                        "pagination__item pagination__page"
+                                     }
+                             })
+                            }
+                        </div>
+                        <li></li>
+                    </ul>
+                }
+                else
+                {
+                    <h3 class="mt-5">No documents</h3>
+                }
+            }
+        </div>
+    </div>
+</div>

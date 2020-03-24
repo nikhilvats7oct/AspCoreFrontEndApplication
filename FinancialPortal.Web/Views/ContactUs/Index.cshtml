@@ -1,0 +1,159 @@
+﻿@model FinancialPortal.Web.ViewModels.ContactUsVm
+
+@{
+    ViewBag.Title = "ContactUs";
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="@Url.Content("~/css/main.css")">
+</head>
+<body>
+    <div class="container m-0">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6 p-0">
+                <div class="content-wrapper p-0">
+                    <div class="content__block pt-0">
+
+                        @if (Model.HasMessageBeenSentSuccessfully)
+                        {
+
+                            <div>
+                                <p>
+                                    Thanks for getting in touch, we will get back to you within 48 hours.
+                                </p>
+                            </div>
+                            <div class="col-6" style="overflow: hidden; text-align: center; padding:10px;">
+                                <span>
+                                    <i class="jw-icon-tick"
+                                       style="border-radius: 50%; width: 36px; height: 36px; padding: 8px; background: #fff; border: 1px solid #eff9e9; color: #b1e095; text-align: center; font-size: 32px;" aria-hidden="true">
+                                    </i>
+                                </span>
+                            </div>
+                        }
+
+                        <div class=" clsform-contactus">
+
+
+                            @if (!Model.HasMessageBeenSentSuccessfully)
+                            {
+                                <p>
+                                    Send us a quick message and we will get back to you as soon as we can. We aim to reply to all messages within 48 hours.
+                                </p>
+
+
+                                using (Html.BeginForm("SendMessage", "ContactUs", FormMethod.Post, new { @class = "form" }))
+                                {
+                                    var queryTopics = new List<SelectListItem>();
+
+                                    if (Model.QueryTopicsSelections != null)
+                                    {
+                                        queryTopics = Model.QueryTopicsSelections.Select(x => new SelectListItem() { Text = x, Value = x }).ToList();
+                                    }
+
+                                    var passwordStyle = Model.IsThirdPartyPasswordRequired ? "" : "display:none";
+
+                                    @Html.AntiForgeryToken()
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.QueryTopic, "Your information")
+                                        @Html.DropDownListFor(model => model.QueryTopic, queryTopics, "Choose a topic..", new { @class = "js-select js-select-style-only", id = "queryarea" })
+                                        @Html.ValidationMessageFor(model => model.QueryTopic)
+                                    </div>
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.FullName, "Full Name")
+                                        @Html.TextBoxFor(model => model.FullName, new { placeholder = "Full Name", maxlength = 100 })
+                                        @Html.ValidationMessageFor(model => model.FullName)
+                                    </div>
+                                    <div class="form__element">
+
+                                        @foreach (var opt in Model.AccountHolderStatuses)
+                                        {
+                                            var id = Guid.NewGuid().ToString("N");
+
+                                            <div class="radio-wrapper">
+                                                @Html.RadioButtonFor(x => x.AccountHolderStatus, @opt.Key, new { id = @id })
+
+                                                <label for="@id">@opt.Value</label>
+                                                <div class="custom-radio"></div>
+                                            </div>
+                                        }
+
+                                        @Html.ValidationMessageFor(model => model.AccountHolderStatus)
+                                    </div>
+
+                                    @Html.HiddenFor(x => x.IsThirdPartyPasswordRequired)
+
+                                    <div class="form__element" style="@passwordStyle" name="divthridpartypassword">
+                                        @Html.LabelFor(model => model.AuthorisedThirdPartyPassword, "Third Party Password")
+                                        @Html.PasswordFor(model => model.AuthorisedThirdPartyPassword, new { @class = "js-password", placeholder = "password", id = "authorisedthridpartypassword", type = "password", name = "authorisedthridpartypassword" })
+                                        @Html.ValidationMessageFor(model => model.AuthorisedThirdPartyPassword)
+                                    </div>
+
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.ContactUsEmailAddress, "Email")
+                                        @Html.TextBoxFor(model => model.ContactUsEmailAddress, new { placeholder = "Email", id = "emailaddr", name = "emailaddr" })
+                                        @Html.ValidationMessageFor(model => model.ContactUsEmailAddress)
+                                    </div>
+
+                                    <div class="form__element mb-1">
+                                        <h5><b>Account Holder Information</b></h5>
+                                    </div>
+
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.LowellReferenceNumber, "Account Reference")
+                                        @Html.TextBoxFor(model => model.LowellReferenceNumber, new { placeholder = "eg. 1238948334" })
+                                        @Html.ValidationMessageFor(model => model.LowellReferenceNumber)
+                                    </div>
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.FirstLineOfAddress, "1st Line of Address")
+                                        @Html.TextBoxFor(model => model.FirstLineOfAddress, new { placeholder = "e.g 23 Church Lane" })
+                                        @Html.ValidationMessageFor(model => model.FirstLineOfAddress)
+                                    </div>
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.Postcode, "Postcode")
+                                        @Html.TextBoxFor(model => model.Postcode, new { placeholder = "e.g LS18 4AA", maxlength = 10 })
+                                        @Html.ValidationMessageFor(model => model.Postcode)
+                                    </div>
+                                    <div class="form__element">
+                                        @Html.LabelFor(m => m.DateOfBirth, "Date of Birth")
+
+                                        <div class="form__element__dob">
+                                            @Html.TextBoxFor(m => m.DateOfBirth, "{0:dd/MM/yyyy}", new { @name = "date-of-birth", @style = "width: 0;height: 0; position: absolute;", @class = "date-of-birth-text" })
+                                            <div class="select-wrapper day">
+                                                @Html.DropDownListFor(m => m.Day, new SelectList(Model.Days, "Key", "Value", Model.Day), new { @name = "dropdown-day", @class = "js-select-dob dropdown-day" })
+                                            </div>
+                                            <div class="select-wrapper month">
+                                                @Html.DropDownListFor(m => m.Month, new SelectList(Model.Months, "Key", "Value", Model.Month), new { @name = "dropdown-month", @class = "js-select-dob dropdown-month" })
+                                            </div>
+                                            <div class="select-wrapper year">
+                                                @Html.DropDownListFor(m => m.Year, new SelectList(Model.Years, "Key", "Value", Model.Year), new { @name = "dropdown-year", @class = "js-select-dob dropdown-year" })
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.DateOfBirth)
+                                    </div>
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.Postcode, "What do you want to ask?")
+                                        @Html.TextAreaFor(model => model.MessageContent, new { placeholder = "Your Message(max 500 char)", maxlength = 500 })
+                                        @Html.ValidationMessageFor(model => model.MessageContent)
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn--primary">Submit Message</button>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="@Url.Content("~/js/main.min.js")"></script>
+    <script src="@Url.Content("~/js/additionalscript-min.js")"></script>
+    @* Additional JQuery Validation *@
+    <script src="~/js/contactus.js"></script>
+
+    @* External framework to allow for iFrame resize*@
+    <script src="~/js/lib/iframeResizer.contentWindow.min.js"></script>
+
+</body>

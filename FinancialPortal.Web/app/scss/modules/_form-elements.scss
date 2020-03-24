@@ -1,0 +1,373 @@
+.form__element {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-bottom: 30px;
+
+    p {
+        margin-bottom: 0 !important;
+    }
+
+    &__more-info {
+        margin-top: 10px;
+        display: inline-block;
+
+        &:empty {
+            margin-top: 0;
+        }
+    }
+
+    &__dob {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .select-wrapper {
+            padding: 0 5px;
+            flex-grow: 1;
+
+            &.day {
+                flex-basis: 20%;
+            }
+
+            &.month {
+                flex-basis: 45%;
+            }
+
+            &.year {
+                flex-basis: 30%
+            }
+
+            &:first-of-type {
+                padding-left: 0;
+            }
+
+            &:last-of-type {
+                padding-right: 0;
+            }
+
+            &.input-validation-error {
+                select,
+                .select2-container--lowell {
+                    border-color: $error-red !important;
+                }
+            }
+
+            + .field-validation-error {
+                margin-top: 10px;
+                color: $error-red;
+                font-weight: 700;
+            }
+        }
+
+        > .input-validation-error {
+            ~ .select-wrapper {
+                select,
+                .select2-container--lowell {
+                    border-color: $error-red !important;
+                }
+            }
+        }
+
+        + .field-validation-error {
+            margin-top: 10px;
+            color: $error-red;
+            font-weight: 700;
+        }
+    }
+
+    &__money {
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        min-height: 0; // Fix Firefox/Edge height issue
+        .currency {
+            background-color: $brand-new-blue-80p;
+            color: $brand-new-grey;
+            flex: 0 0 50px;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        input {
+            flex: 1;
+            display: flex;
+            border-left: none !important;
+            min-width: 0; // Fix Firefox/Edge width issue
+            + .field-validation-error {
+                flex-basis: 100%;
+            }
+        }
+    }
+
+    &__direct-debit {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: nowrap;
+
+        img {
+            width: 100px;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+
+        p {
+            flex-grow: 1;
+            flex-shrink: 1;
+            display: inline-flex;
+            padding-left: 20px;
+        }
+    }
+
+    &__3col {
+        display: flex;
+        justify-content: space-between;
+
+        .form__element {
+            padding: 0 5px;
+            flex-grow: 1;
+            margin-bottom: 0;
+            flex-wrap: nowrap;
+
+            &:first-of-type {
+                padding-left: 0;
+            }
+
+            &:last-of-type {
+                padding-right: 0;
+            }
+        }
+    }
+
+    &__notifcation {
+        display: flex;
+        flex-basis: 100%;
+        background: $brand-yellow;
+        align-items: center;
+        font-size: 1.6rem;
+        padding: 10px 15px;
+        margin-top: 15px;
+
+        .jw-icon-caution {
+            font-size: 2rem;
+            padding-right: 15px;
+        }
+
+        span {
+            font-size: 1.4rem;
+        }
+
+        .jw-icon-cross {
+            margin-left: auto;
+            cursor: pointer;
+        }
+    }
+
+    &__info {
+        display: flex;
+        align-items: center;
+        flex-basis: 100%;
+        padding-bottom: 10px;
+
+        label {
+            flex-basis: auto !important;
+            padding: 0;
+        }
+
+        [class^="jw-icon-"] {
+            color: $brand-new-blue-80p;
+            font-size: 2rem;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        &--toggle {
+            width: 100%;
+            margin-bottom: 10px;
+
+            p {
+                color: $brand-primary-darker;
+            }
+        }
+    }
+
+    @at-root {
+        .form .form__element:last-of-type,
+        div:last-of-type:not(:only-child) > .form__element:last-of-type,
+        div[data-form-fields] > .form__element:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    &--direct-debit {
+        background-color: $brand-pattern-blue;
+        padding: 20px;
+
+        .checkbox-wrapper {
+            margin-bottom: 15px;
+            color: $brand-new-grey !important;
+            border-color: $brand-new-grey !important;
+        }
+    }
+
+    &--row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        .checkbox-wrapper {
+            width: auto;
+
+            input[type=checkbox] ~ label {
+                flex-basis: auto;
+            }
+        }
+    }
+
+    &--button {
+        @include media-breakpoint-down(sm) {
+            justify-content: center;
+
+            button + a,
+            button + .btn--link {
+                margin-top: 20px;
+            }
+        }
+    }
+
+    &--white {
+        color: white;
+
+        .form__element__more-info {
+            color: inherit;
+        }
+    }
+
+    &--warning {
+        padding: 20px;
+        background-color: $brand-yellow;
+        color: $brand-grey;
+    }
+
+    &--notify {
+        padding: 20px;
+        background-color: $brand-green;
+        color: $brand-grey;
+    }
+
+    &--label {
+        margin-bottom: 20px !important;
+
+        p {
+            margin-bottom: 0;
+        }
+    }
+
+    &--2row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        label {
+            flex-basis: 100%;
+        }
+
+        .form__element__money {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: 30%;
+
+            @include media-breakpoint-down(sm) {
+                flex-basis: 45%;
+            }
+        }
+
+        .form__element {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: 65%;
+            margin-bottom: 0;
+
+            @include media-breakpoint-down(sm) {
+                flex-basis: 50%;
+            }
+        }
+
+        span.field-validation-valid { // This is due to and added field on lowell's side
+            width: 100%;
+        }
+
+        &--checkbox {
+            .form__element {
+                margin-bottom: 0;
+                flex-basis: 41%;
+
+                @include media-breakpoint-down(lg) {
+                    flex-basis: 38%
+                }
+
+                @include media-breakpoint-down(sm) {
+                    flex-basis: 50%;
+                }
+
+                &:nth-of-type(3) {
+                    flex-basis: 19%;
+
+                    @include media-breakpoint-down(lg) {
+                        flex-basis: 22%;
+                    }
+
+                    @include media-breakpoint-down(sm) {
+                        margin-top: 15px;
+                        flex-basis: 100%;
+                    }
+                }
+            }
+        }
+
+        &--warning {
+            .form__element__money {
+                .currency {
+                    background-color: $brand-yellow;
+                    color: $brand-grey;
+                }
+
+                input {
+                    border-color: $brand-yellow;
+                }
+            }
+
+            .form__element {
+                border-color: $brand-yellow;
+
+                .select2-container--lowell {
+                    border-color: lighten($brand-new-grey, 70%);
+                }
+            }
+        }
+    }
+
+    &--arrears {
+        margin-top: 30px;
+        flex-basis: 100% !important;
+        padding: 20px;
+        background-color: #eeeeee;
+        color: $brand-new-grey-80p;
+
+        .form__element {
+            color: inherit;
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: 65%;
+
+            @include media-breakpoint-down(sm) {
+                flex-basis: 50%;
+            }
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        margin-bottom: 30px;
+    }
+}

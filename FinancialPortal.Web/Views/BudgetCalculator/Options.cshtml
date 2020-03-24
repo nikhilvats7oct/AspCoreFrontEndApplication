@@ -1,0 +1,80 @@
+﻿@using FinancialPortal.Web.Settings
+@model Guid
+@inject CmsEndpoints CmsEndpoints
+@inject PortalSetting PortalSettings
+
+@{
+    ViewData["Title"] = "Budget Calculator Options";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Work out what you can afford to pay</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pt-0">
+        @if (PortalSettings.Features.EnableOpenWrks)
+        {
+            <div class="col-md-6 col-sm-12">
+                <div class="content-wrapper pt-0">
+                    <div class="content__block">
+                        <p>
+                            The OpenWrks MyBudget tool is here to help. You’ll build a realistic budget using real-time information,
+                            saving you time and removing the guesswork.
+                        </p>
+                        <p>
+                            You'll need online banking to make use of this tool.
+                            Please note that by using the tool, you are agreeing to OpenWrks sharing your budget with us.
+                        </p>
+                        <p>
+                            <a target="_blank" href="@CmsEndpoints.OpenWrks">Learn more about the MyBudget tool</a>
+                        </p>
+                        <a asp-controller="OpenWrks" asp-action="Index" class="btn btn--primary">MyBudget Tool</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+            <div class="col-md-6 col-sm-12">
+                <div class="content-wrapper pt-0">
+                    <div class="content__block">
+
+                        @if (PortalSettings.Features.EnableOpenWrks)
+                        {
+                            <p>
+                                If the MyBudget tool isn't for you, our budget calculator can show your results all in one place and help put you in control of your household spending.
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                Our budget calculator can show your results all in one place and help put you in control of your household spending.
+                            </p>
+                        }
+                        <p>
+                            Before you start managing your account, get as much accurate and up to date information as you can. Use the information on your bank statements to fill in your regular income and outgoings.
+                        </p>
+
+                        @if (Model != Guid.Empty)
+                        {
+                            <!--For Logged on user-->
+                            <a asp-controller="BudgetCalculator" asp-action="HouseholdStatus" asp-route-id="@Model" class="btn btn--primary">Budget Calculator</a>
+                        }
+                        else
+                        {
+                            <!--For anonymous user-->
+                            <a asp-controller="BudgetCalculator" asp-action="Index" class="btn btn--primary">Budget Calculator</a>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+

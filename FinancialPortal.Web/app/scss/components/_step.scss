@@ -1,0 +1,40 @@
+.step {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+
+    &__number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        margin-right: 15px;
+        border-radius: 100%;
+        color: $brand-new-blue-80p;
+        border: 2px solid $brand-new-blue-80p;
+        background-color: transparent;
+        transition: 0.3s ease-in-out all;
+
+        &--active {
+            color: $brand-primary-darker;
+            background-color: transparent;
+            border-color: $brand-primary-darker;
+        }
+    }
+
+    p {
+        font-weight: bold;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        @include media-breakpoint-down(md) {
+            flex-basis: 100%;
+            margin: 15px 0 !important;
+        }
+    }
+}

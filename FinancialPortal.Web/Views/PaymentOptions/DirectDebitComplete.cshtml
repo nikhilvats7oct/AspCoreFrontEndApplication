@@ -1,0 +1,28 @@
+﻿@model FinancialPortal.Web.ViewModels.DirectDebitPlanOverviewVm
+@{
+    ViewBag.Title = "Complete";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2><b>Thank you.</b></h2>
+                    <h2>Your payment plan for @Model.ClientName has been set up</h2>
+                    <p>You’ll receive written confirmation within the next few days. The Direct Debit payment will be debited from your account on the date you chose. If this falls on a weekend or bank holiday we’ll take the payment on the next working day. It’ll appear on your bank statement as LP1.  </p>
+
+                    @if (Model.UserLoggedIn)
+                    {
+                        <a href="@Url.Action("Index", "MyAccounts")" class="btn btn--primary">View all my accounts <i class="jw-icon-arrow"></i></a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Index", "Home")" class="btn btn--primary">Back to Home Page<i class="jw-icon-arrow"></i></a>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

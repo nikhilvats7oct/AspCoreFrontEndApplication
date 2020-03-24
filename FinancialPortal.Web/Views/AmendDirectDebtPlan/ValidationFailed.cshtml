@@ -1,0 +1,41 @@
+﻿@using FinancialPortal.Web.Settings
+@inject PortalSetting PortalSetting
+
+@{
+    ViewBag.Title = "Amend Direct Debit";
+}
+
+<div class="notification notification--error js-notification">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="notification__message">
+                    <div class="notification__message__heading">
+                        <p>Account Details Changed</p>
+                    </div>
+                    <div class="notification__message__body">
+                        <p>Your account details changed since you starting amending your plan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <p>Please review your account information and set up your payment or plan again.</p>
+                    <p>If you'd like to speak to someone, <a target="_blank" href="@PortalSetting.TalkToUsUrl">talk to us</a> and we'll be happy to help</p>
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="@Url.Action("Details", "MyAccounts", new { id = ViewContext.RouteData.Values["id"] })" class="btn btn--primary">Back to Account <i class="jw-icon-arrow"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

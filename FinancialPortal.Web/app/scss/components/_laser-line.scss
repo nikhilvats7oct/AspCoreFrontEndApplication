@@ -1,0 +1,103 @@
+.laser-line {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border: 14px solid;
+    border-radius: 28px;
+    transform: rotateZ(45deg);
+    top: -60px;
+    left: -330px;    
+    z-index: 2;
+    border-color: $brand-primary;
+
+    @include media-breakpoint-down(lg) {
+        top: -30px;
+        left: -250px;
+        border-width: 12px;
+    }
+
+    @include media-breakpoint-down(sm) {
+        left: initial;
+        right: 70%;
+        top: -280px;
+        height: 460px;
+        width: 740px;
+        border-width: 8px;
+    }
+
+    &--large {
+        height: 140%;
+        width: 160%;
+        position: absolute;
+        border: 14px solid;
+        border-radius: 28px;
+        -webkit-transform: rotateZ(45deg);
+        transform: rotateZ(45deg);
+        top: 125px;
+        left: -480px;
+        z-index: 0;
+
+        @include media-breakpoint-down(lg) {
+            width: 140%;
+            top: 30px;
+            left: -415px;
+            height: 150%;
+            border-width: 12px;
+        }
+
+        @include media-breakpoint-down(sm) {
+            left: initial;
+            right: 76%;
+            top: -250px;
+            height: 700px;
+            width: 860px;
+            border-width: 8px;
+        }
+    }
+
+    // Laser Line Colours
+    @each $class, $colour in $colour-map {
+        &--#{$class}{
+            border-color: $colour;
+        }
+    }
+
+}
+
+.laser-line-wrapper {
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
+
+    @include media-breakpoint-down(sm) {
+        display: block;
+        min-height: 140px
+    }
+
+    &--style-2 {
+        .laser-line {
+            z-index: 0;
+
+            &--large {
+                z-index: 1;
+            }
+        }
+    }
+
+    &--style-3 {
+        .laser-line {
+            z-index: 2;
+
+            &--large {
+                z-index: 1;
+            }
+        }
+    }
+}

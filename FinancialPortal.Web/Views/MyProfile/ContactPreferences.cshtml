@@ -1,0 +1,66 @@
+﻿@using FinancialPortal.Web.Settings
+@model FinancialPortal.Web.ViewModels.ContactPreferencesVm
+@inject CmsEndpoints CmsEndpoints;
+@{
+    ViewBag.Title = "Contact Preferences";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <form class="form" asp-controller="MyProfile" asp-action="ContactPreferencesPost">
+        <div class="row  mb-3">
+            <div class="col-12 col-md-6">
+                <h2>Contact Preferences</h2>
+                <p>Reduce the number of letters from us by selecting to receive them via email or SMS. We'll use this preference whenever we can. This might include reminders, statements or regulatory notices. However sometimes we may get in touch using other contact details we hold for you. For information about how we use your data please see our <a href="@CmsEndpoints.PrivacyPolicy" target="_blank">Privacy Promise</a>.</p>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-2">
+                @* TODO: Add a new class js-checkbox-toggle that only toggles if checkbox is set to true *@
+                <div class="checkbox-wrapper js-checkbox-toggle">                    
+                    <input type="checkbox" asp-for="@Model.AllowContactBySms" />
+                    <div class="custom-checkbox"></div>                    
+                    <label>SMS</label>
+                </div>
+            </div>
+
+            <div class="form__element__info--toggle js-toggle-visible contprefmobile">
+                <br />
+                <div id="sms-message" class="col-md-4">
+                    <p>The best mobile number to send these to is:</p>
+                </div>
+                <div id="sms-mobile-textbox" class="col-md-3 mt-md-5 ">
+                    <input asp-for="@Model.MobileNumber" type="text" placeholder="+44">
+                    @Html.ValidationMessageFor(model => model.MobileNumber)
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <div class="checkbox-wrapper">
+                    <input id="email-checkbox" type="checkbox" asp-for="@Model.AllowContactByEmail" />
+                    <div class="custom-checkbox"></div>
+                    <label>Email</label>
+                </div>
+            </div>
+            <input type="hidden" asp-for="@Model.LowellReference" />
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p class="mb-5">Please check your contact details are correct and update them if necessary. This is really important as we'll send you a notification when a message is available to view and download.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" class="btn btn--primary mb-3">Save <i class="jw-icon-arrow"></i></button>
+               <a class="btn btn--link ml-md-5" href="@Url.Action("Index", "MyProfile", null)"> Cancel</a>
+            </div>
+        </div>
+
+    </form>
+</div>

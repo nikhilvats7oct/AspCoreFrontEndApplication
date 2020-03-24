@@ -1,0 +1,143 @@
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 30px;
+    font-size: 1.4rem;
+    border-radius: 40px;
+    border: 1px solid transparent;
+    color: white;
+    text-decoration: none;
+    max-width: 280px;
+    transition: all .3s ease-in-out;
+    line-height: 155%;
+
+    svg path {
+        transition: all .3s ease-in-out;
+    }
+
+    i {
+        display: flex;
+        margin-left: 12px;
+        font-size: 1rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+        justify-content: center;
+        max-width: none;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    &--primary {
+        @include coloured-button-transition($brand-primary-darker, $brand-new-blue,$standard-white,$brand-new-grey);
+    }
+
+    &--secondary {
+        @include coloured-button($brand-grey, $brand-grey-hover);
+    }
+
+    &--light-grey {
+        @include coloured-button(#707070, #5f5f5f);
+    }
+
+    &--outline {
+        background-color: transparent;
+        border-color: $brand-primary-darker;
+        color: $brand-primary-darker;
+        font-weight: 600;
+
+        svg path {
+            stroke: $brand-primary;
+        }
+
+        &:hover {
+            background-color: $standard-white;
+            border-color: $brand-new-blue;
+            color: $brand-new-grey;
+
+            svg path {
+                stroke: white;
+            }
+        }
+    }
+
+    &--white {
+        background-color: white;
+
+        &.btn--outline {
+            background-color: transparent;
+            border-color: white;
+            color: white;
+
+            svg path {
+                stroke: white;
+            }
+
+            &:hover {
+                background-color: white;
+                border-color: white;
+                color: $brand-primary;
+
+                svg path {
+                    stroke: $brand-primary;
+                }
+            }
+        }
+    }
+
+    &--reverse {
+        flex-direction: row-reverse;
+
+        i {
+            transform: rotateY(180deg);
+            margin-right: 12px;
+            margin-left: 0;
+        }
+    }
+
+    &--arrow {
+        padding: 0;
+        border: 0;
+        color: $brand-primary-aa;
+        font-weight: bold;
+        align-items: baseline;
+        line-height: 1.2;
+    }
+
+    &--link {
+        padding: 0;
+        border: 0;
+        text-align: left;
+        color: $brand-new-grey;
+        text-decoration: underline;
+        transition: color 0.3s ease-in-out;
+        background-color: transparent;
+        line-height: 1.2;
+        font-weight: normal;
+        border-radius: 0px !important;
+        text-decoration: none !important;
+        font-weight: bold;
+        padding-bottom: 3px;
+        border-bottom: 2px solid $brand-primary-darker;
+
+        &:hover {
+            color: $brand-new-grey;
+            border-bottom: 2px solid $brand-new-blue;
+        }
+    }
+
+    &--btn-lg {
+        // line-height: ensure even-numbered height of button next to large input
+        @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
+    }
+
+    &--btn-sm {
+        // line-height: ensure proper height of button next to small input
+        @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
+    }
+
+    &--btn-xs {
+        @include button-size($padding-xs-vertical, $padding-xs-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
+    }
+}

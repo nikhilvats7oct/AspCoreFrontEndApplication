@@ -1,0 +1,156 @@
+﻿@using FinancialPortal.Web.Helpers
+@using FinancialPortal.Web.Models.DataTransferObjects
+@using FinancialPortal.Web.Settings
+@using FinancialPortal.Web.ViewModels
+@using Newtonsoft.Json;
+
+@using Microsoft.Extensions.Configuration
+@model FinancialPortal.Web.ViewModels.OneOffPaymentReviewVm
+@inject PortalSetting PortalSetting;
+@inject IJsonHelper Json;
+
+@{
+    ViewBag.Title = "One Off Payment";
+}
+<div class="container">
+    <form class="form" action="@Model.VerifoneUrl" method="post">
+        <div class="payment-details">
+            @Html.HiddenFor(x => x.ClientName, new { @Name = "account" })
+            @Html.HiddenFor(x => x.PaymentAmount, new { @Name = "paymentAmount" })
+            @Html.Hidden("paymentDate", DateTime.Now.ToString("dd-MM-yyyy"))
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Let’s set up a one-off payment </h2>
+                        <p>Please check all the details are correct before going ahead.</p>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="step__number step__number--active">1</div>
+                            <div class="step__number step__number--active">2</div>
+                            <div class="step__number">3</div>
+                        }
+                        else
+                        {
+                            <div class="step">
+                                <div class="step__number step__number--active">1</div>
+                                <div class="step__number step__number--active">2</div>
+                                <div class="step__number step__number--active">3</div>
+                                <div class="step__number">4</div>
+                            </div>
+                        }
+                        <p class="subtitle-h3">Tell us your payment details</p>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Payment to account name</h5>
+                            <p>
+                                @Model.ClientName
+
+                            </p>
+                        </div>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Account number</h5>
+                            <p>@Model.LowellReference</p>
+                        </div>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Amount</h5>
+                            <p>&pound;@Model.PaymentAmount</p>
+                        </div>
+                        <div class="form__element">
+                            <div style="display: none">
+                                @using (Html.BeginForm("Change", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post))
+                                {
+                                    @* State of payment options view model to be restored *@
+                                    <input type="hidden" name="@nameof(PaymentOptionsStateVm.FilledInState)" value="@Model.FilledInPaymentOptionsState" />
+
+                                    <button type="submit" class="btn btn--link">Change details</button>
+                                }
+                            </div>
+                            <!-- Change Submission Form -->
+                            @using (Html.BeginForm("Change", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post))
+                            {
+                                @* State of payment options view model to be restored *@
+                                <input type="hidden" name="@nameof(PaymentOptionsStateVm.FilledInState)" value="@Model.FilledInPaymentOptionsState" />
+
+                                <button type="submit" class="btn btn--link">Change details</button>
+                            }
+                        </div>
+                        <div class="form__element form__element--row form__element--button">
+                            
+                            @{
+                                var verifonePostData =
+                                    Html.Encode(Model.VerifonePostDataXml
+                                        .Trim()
+                                        .Replace("\r", "")
+                                        .Replace("\n", "")
+                                        .Replace("\r\n", ""))
+                                        .Replace("&#xA;", "");
+                            }
+
+                            <!-- Verifone Submission Form -->
+                            @Html.Hidden("postdata", Html.Raw(verifonePostData))
+                            <button id="btnCardDetails" type="submit" class="btn btn--primary">Yes, all the details are correct.<i class="jw-icon-arrow"></i></button>
+
+                            <!-- Cancel Submission Form -->
+                            @using (Html.BeginForm("OneOffCancel", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post))
+                            {
+                                @* State of payment options view model to be restored *@
+                                <input type="hidden" name="@nameof(PaymentOptionsStateVm.FilledInState)" value="@Model.FilledInPaymentOptionsState" />
+
+                                <button type="submit" class="btn btn--link">Cancel</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts
+    {
+    @if (Model != null)
+    {
+        GtmEvent gtmEvent = new GtmEvent()
+        {
+            step = "3 - Payment Details Reviewed",
+            guid = Model.UserID,
+            payment_type = "One Off Payment",
+            payment_amount = Model.PaymentAmount,
+            payment_detail = Model.PaidInFull ? "Full Balance" : "Partial Payment",
+            discount_available = Model.DiscountAvailable ? "Discount available" : "No discount available",
+            plan_type = "Regular Account",
+            balance_selected = Model.DiscountSelected ? "Discounted Balance" : "Full Balance",
+            plan_status = Model.InArrears ? "Plan Arrears Payment" : Model.PlanInPlace ? "Payment against Plan" : "No Plan in Place",
+            user_status = String.IsNullOrEmpty(Model.UserID) ? "Not Logged In" : "Logged In",
+            source_of_funds = Model.SourceOfFunds,
+            gtm_event = "PaymentEvent"
+        };
+
+        gtmEvent.account_ref = String.IsNullOrEmpty(gtmEvent.account_ref) ? null : HashData.Sha256(gtmEvent.account_ref,PortalSetting.ShaSalt);
+        gtmEvent.guid = String.IsNullOrEmpty(gtmEvent.guid) ? null : HashData.Sha256(gtmEvent.guid,PortalSetting.ShaSalt);
+        string userId = String.IsNullOrEmpty(Model.UserID) ? "undefined" : $"'{HashData.Sha256(Model.UserID, PortalSetting.ShaSalt)}'";
+        string lowellRef = String.IsNullOrEmpty(Model.LowellReference) ? "undefined" : $"'{HashData.Sha256(Model.LowellReference, PortalSetting.ShaSalt)}'";
+
+        <script>
+            $('#btnCardDetails').click(function ()
+            {
+                dataLayer.push(@Html.Raw(JsonConvert.SerializeObject(gtmEvent, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore })));
+                if (typeof GTMModule !== 'undefined')
+                {
+                    GTMModule.logOneOffPaymentStep3DetailsReviewed(dataLayer, @Html.Raw(userId), @Model.PaymentAmount, @Json.Serialize(Model.PaidInFull),
+                        @Json.Serialize(Model.DiscountAvailable), @Json.Serialize(Model.DiscountSelected), @Json.Serialize(Model.PlanInPlace), @Json.Serialize(Model.InArrears),
+                        '@Html.Raw(Model.SourceOfFunds)', 'Regular Account');
+                }
+
+                var postdata = {
+                    lowellRef: '@Html.Raw(Model.LowellReference)',
+                    userId: '@Html.Raw(Model.UserID)',
+                    fullPayment: @Json.Serialize(Model.PaidInFull),
+                    discounted: @Json.Serialize(Model.DiscountSelected) };
+
+                $.post("@Url.Action("OneOffCardDetails", "PaymentOptions")", postdata);
+            });
+        </script>
+    }
+}

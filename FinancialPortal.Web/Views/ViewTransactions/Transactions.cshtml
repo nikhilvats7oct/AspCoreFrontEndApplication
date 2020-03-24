@@ -1,0 +1,219 @@
+﻿@using FinancialPortal.Web.Helpers
+@using FinancialPortal.Web.Models.DataTransferObjects
+@using FinancialPortal.Web.Settings
+@using Newtonsoft.Json;
+@using X.PagedList.Mvc.Common
+@using X.PagedList.Mvc.Core
+@inject PortalSetting PortalSetting
+
+@model FinancialPortal.Web.ViewModels.TransactionsVm
+
+
+@{
+    ViewBag.Title = "Transactions";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>@Model.AccountName</h2>
+                    <p class="highlight">Your reference: <span class="bold">@Model.AccountReference</span></p>
+                    <p>Here’s all the activity for this account, and you can also download a statement. If anything’s not quite right, just <a target="_blank" href="@PortalSetting.TalkToUsUrl">talk to us.</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5">
+            <div class="content-wrapper content-wrapper--end">
+                <div class="content__block">
+                    <h2>Balance: @string.Format(format: "{0:C}", arg0: Model.AccountBalance)</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-options">
+                        <div class="filter">
+                            All transactions
+                            <a href="#filter-trans">Filter Transactions</a>
+                        </div>
+                        <div class="download">
+                            <i class="jw-icon-pdf"></i>
+                            @Html.ActionLink(linkText: "Download transactions", actionName: "Download", routeValues: new { id = ViewContext.RouteData.Values[key: "id"] }, htmlAttributes: new { target = "_blank", @class = "download_link" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                @if (Model.PagedList != null)
+                {
+                    <table class="table table--transactions">
+                        <thead>
+                            <tr>
+                                <td>Date</td>
+                                <td>Description</td>
+                                <td>Amount</td>
+                                <td>Balance</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PagedList)
+                            {
+                                <tr>
+                                    <td>@item.DateText</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.AmountText</td>
+                                    <td>Balance: @item.RollingBalanceText</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    if (!string.IsNullOrEmpty(value: Model.FilterTransactions.DateMessage))
+                    {
+                        <h3>@Model.FilterTransactions.DateMessage</h3>
+                    }
+                }
+                else
+                {
+                    <h3>No transactions to display</h3>
+                }
+            </div>
+
+            <ul class="pagination">
+                <li></li>
+                <div class="pagination__page-wrapper">
+                    @if (Model.PagedList != null)
+                    {
+
+                        @Html.PagedListPager(
+                            Model.PagedList,
+                            page => Url.Action(action: "Transactions",
+                                values: new
+                                {
+                                    datefrom = Model.FilterTransactions.DateFrom,
+                                    dateTo = Model.FilterTransactions.DateTo,
+                                    keyword = Model.FilterTransactions.KeyWord,
+                                    pageNumber = page
+                                }),
+                            new PagedListRenderOptions
+                            {
+                                NextElementClass = "pagination__item pagination__next",
+                                PreviousElementClass = "pagination__item pagination__prev pagination__item--disabled",
+                                LinkToNextPageFormat = @"<i class=""jw-icon-arrow""></i>",
+                                LinkToPreviousPageFormat = @"<i class=""jw-icon-arrow""></i>",
+                                ActiveLiElementClass = "pagination__item--active",
+                                LiElementClasses = new List<string>
+                                {
+                                    "pagination__item pagination__page"
+                                }
+                            })
+                    }
+                </div>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <hr class="light" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="content__block content__block--pt" id="filter-trans">
+                <h3>Filter transactions</h3>
+                @using (Html.BeginForm(actionName: "Transactions", controllerName: "ViewTransactions", method: FormMethod.Post, htmlAttributes: new { @class = "form" }))
+                {
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form__element">
+
+                                <label for="reference-number">Date from</label>
+                                <div class="form__element__dob">
+                                    <div class="select-wrapper">
+                                        @Html.DropDownListFor(expression: m => m.FilterTransactions.FromDay, selectList: new SelectList(items: Model.FilterTransactions.DatesDropDownList.DateFromDays, selectedValue: Model.FilterTransactions.FromDay), htmlAttributes: new { @class = "js-select-style-only" })
+                                    </div>
+                                    <div class="select-wrapper">
+                                        @Html.DropDownListFor(expression: m => m.FilterTransactions.FromMonth, selectList: new SelectList(items: Model.FilterTransactions.DatesDropDownList.DateFromMonths, selectedValue: Model.FilterTransactions.FromMonth), htmlAttributes: new { @class = "js-select-style-only" })
+                                    </div>
+                                    <div class="select-wrapper">
+                                        @Html.DropDownListFor(expression: m => m.FilterTransactions.FromYear, selectList: new SelectList(items: Model.FilterTransactions.DatesDropDownList.DateFromYears, selectedValue: Model.FilterTransactions.FromYear), htmlAttributes: new { @class = "js-select-style-only" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form__element">
+                                <label for="reference-number">Date to</label>
+                                <div class="form__element__dob">
+                                    <div class="select-wrapper">
+                                        @Html.DropDownListFor(expression: m => m.FilterTransactions.ToDay, selectList: new SelectList(items: Model.FilterTransactions.DatesDropDownList.DateFromDays, selectedValue: Model.FilterTransactions.ToDay), htmlAttributes: new { @class = "js-select-style-only" })
+                                    </div>
+                                    <div class="select-wrapper">
+                                        @Html.DropDownListFor(expression: m => m.FilterTransactions.ToMonth, selectList: new SelectList(items: Model.FilterTransactions.DatesDropDownList.DateFromMonths, selectedValue: Model.FilterTransactions.ToMonth), htmlAttributes: new { @class = "js-select-style-only" })
+                                    </div>
+                                    <div class="select-wrapper">
+                                        @Html.DropDownListFor(expression: m => m.FilterTransactions.ToYear, selectList: new SelectList(items: Model.FilterTransactions.DatesDropDownList.DateFromYears, selectedValue: Model.FilterTransactions.ToYear), htmlAttributes: new { @class = "js-select-style-only" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form__element">
+                                <label for="reference-number">Description</label>
+                                <div>
+                                    @Html.TextBoxFor(expression: m => m.FilterTransactions.KeyWord, htmlAttributes: new { @placeholder = "Description" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            @Html.ValidationMessageFor(expression: model => model.FilterTransactions)
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="form__element form__element--row">
+                                <button type="submit" class="btn btn--primary">Search <i class="jw-icon-arrow"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    @if (Model != null)
+    {
+        GtmEvent gtmEvent = new GtmEvent()
+        {
+            action_taken = "Statement downloaded",
+            guid = Model.LoggedInUserID,
+            gtm_event = "AccountActivity",
+            plan_type = "Regular Account"
+        };
+
+        gtmEvent.account_ref = String.IsNullOrEmpty(value: gtmEvent.account_ref) ? null : HashData.Sha256(gtmEvent.account_ref, PortalSetting.ShaSalt);
+        gtmEvent.guid = String.IsNullOrEmpty(value: gtmEvent.guid) ? null : HashData.Sha256(plainText: gtmEvent.guid, PortalSetting.ShaSalt);
+
+        <script>
+            $(function () {
+                $('.download_link').click(function () {
+                    dataLayer.push(@Html.Raw(value: JsonConvert.SerializeObject(value: gtmEvent, settings: new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore })));
+                })
+            });
+        </script>
+    }
+}

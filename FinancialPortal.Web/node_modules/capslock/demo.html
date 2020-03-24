@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Caps Lock Demo</title>
+        <style>
+            #capsLock {
+                background-color: #444444;
+                background-image:         linear-gradient(#666666, #333333);
+                background-image:    -moz-linear-gradient(#666666, #333333);
+                background-image: -webkit-linear-gradient(#666666, #333333);
+                background-image:      -o-linear-gradient(#666666, #333333);
+                border: 0.083em solid #000000;
+                border-radius: 0.666em;
+                color: #FFFFFF;
+                float: left;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 0.8em;
+                line-height: 1.2em;
+                padding: 0.666em;
+            }
+
+            #led {
+                border-radius: 0.333em;
+                display: block;
+                float: right;
+                height: 0.666em;
+                margin-left: 1.333em;
+                width: 0.666em;
+            }
+
+            #capsLock .off {
+                background-color: #333333;
+            }
+
+            #capsLock .on {
+                background-color: #C0FF80;
+                box-shadow: 0 0 0.1875em #FFFFFF;
+            }
+        </style>
+        <script src="capsLock.js"></script>
+        <script>
+            var led;
+
+            capsLock.observe(function (status) {
+                led = led || document.getElementById("led");
+                led.className = status ? "on" : "off";
+            });
+        </script>
+    </head>
+    <body>
+        <div id="capsLock">
+            <span id="led" class="off"></span>
+            Caps<br>Lock
+        </div>
+    </body>
+</html>

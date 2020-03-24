@@ -1,0 +1,269 @@
+﻿@using System.Globalization;
+@using FinancialPortal.Web.Settings
+@using FinancialPortal.Web.Validation
+@using FinancialPortal.Web.ViewModels
+@using Microsoft.AspNetCore.Routing
+@model FinancialPortal.Web.ViewModels.AmendDirectDebitVm
+@inject CmsEndpoints CmsEndpoints
+
+@{
+    ViewBag.Title = "Amend Direct Debit";
+}
+
+@using (Html.BeginForm("Index", "AmendDirectDebtPlan", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, null, new { @class = "form js-payment-calc" }))
+{
+    @Html.HiddenFor(x => x.InitialState)
+    @Html.HiddenFor(x => x.LatestStartDate)
+    @Html.HiddenFor(x => x.EarliestStartDate)
+    @Html.HiddenFor(x => x.OutstandingBalance)
+    @Html.HiddenFor(x => x.ClientName)
+    @Html.HiddenFor(x => x.LowellReference)
+    @Html.HiddenFor(x => x.DiscountedBalancePreviouslyAccepted)
+
+    <div class="js-general-payment-settings">
+        <input type="hidden" name="account" value="@Model.ClientName" />
+        <input type="hidden" name="paymentAmount" value="@Model.DirectDebitAmount" />
+        <input type="hidden" name="balance" value="@Model.OutstandingBalance" />
+        <input type="hidden" name="paymentDate" value="@Model.PlanStartDate" />
+        <input type="hidden" name="minDateRange" value="@Model.EarliestStartDate" />
+        <input type="hidden" name="maxDateRange" value="@Model.LatestStartDate" />
+        <input type="hidden" name="iAndELessThanOrIs12MonthsOld" value="@Model.IandELessThanOrIs12MonthsOld.ToString().ToLower()" />
+        <input type="hidden" name="iandENotAvailable" value="@Model.IandENotAvailable.ToString().ToLower()" />
+        <input type="hidden" name="monthlyDisposableIncome" value="@Model.MonthlyDisposableIncome" />
+        <input type="hidden" name="averageMonthlyPayment" value="@Model.AverageMonthlyPayment" />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Got a change of plan?</h2>
+                        <p>It’s simple, just update your details below.</p>
+                        <div class="payment-active" data-form-fields="direct-debit" style="display:block;">
+                            <div class="js-payment-settings-type">
+                                <input type="hidden" name="paymentName" class="js-disabled" value="Monthly payment" disabled />
+                                <input type="hidden" name="paymentAmount" class="js-disabled js-payment-amount" value="@(Model.DirectDebitAmount ?? 0)" disabled />
+                                <input type="hidden" name="directDebitAmount" class="js-disabled js-payment-amount" value="@(Model.DirectDebitAmount ?? 0)" disabled />
+                                <input type="hidden" name="paymentDate" class="js-disabled" value="@Model.PlanStartDate" disabled />
+                                <input type="hidden" name="term" class="js-disabled" value="" disabled />
+                                <input type="hidden" name="monthlyDisposableIncomePerAccount" class="js-disabled" value="@Model.MonthlyDisposableIncomePerAccount" disabled />
+                            </div>
+                            <div class="form__element">
+                                <label for="">Frequency of payments</label>
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(model => model.PlanFrequency, new SelectList(@Model.Frequency, "Value", "DisplayedText"), new { @class = "js-select-style-only-no-search js-payment-length" })
+                                    @Html.ValidationMessageFor(m => m.PlanFrequency)
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <label for="">Payment date</label>
+                                @Html.TextBoxFor(model => model.PlanStartDate, new { type = "text", name = "paymentStartDate", @class = "js-datepicker-payment", autocomplete = "off" })
+                                @Html.ValidationMessageFor(m => m.PlanStartDate)
+                            </div>
+                            @if (!Model.IandELessThanOrIs12MonthsOld)
+                            {
+                            <div class="form__element mb-0">
+                                <label>
+                                    Choose your payment offer amount below. We’ll never make you pay more than you can afford.
+                                </label>
+                            </div>
+                            }
+                            else
+                            {
+                            <div class="form__element mb-0">
+                                <label>
+                                    Choose your payment offer amount below:
+                                </label>
+                            </div>
+                            }
+                            <div class="form__element">
+                                <div class="container">
+
+                                    <div id="disposableIncomeOption" class="row mb-1 @((!Model.IandELessThanOrIs12MonthsOld || Model.MonthlyDisposableIncome <= 0) ? "d-none" : "")">
+                                        <div class="radio-wrapper col-6">
+                                            @Html.RadioButtonFor(x => x.SelectedPlanSetupOption, PlanSetupOptions.DisposableIncome, new { id = PlanSetupOptions.DisposableIncome })
+                                            <label for="@PlanSetupOptions.DisposableIncome" class="pl-4">Left over funds from my budget</label>
+                                            <div class="custom-radio mt-3"></div>
+                                        </div>
+                                        <div class="col-1 pt-3 pl-0 pr-0">
+                                            <i class="jw-icon-info-lg highlight js-toggle p-0 m-0" style="cursor:pointer;"></i>
+                                        </div>
+                                        <div class="form__element__money col-5 pr-0 pl-0">
+                                            <div class="currency sm-">£</div>
+                                            <input class="js-disabled" type="text" id="disposableIncome" value="@Model.MonthlyDisposableIncomePerAccount.ToString("F")" disabled>
+                                        </div>
+                                        <div class="form__element__info--toggle js-toggle-visible mt-3">
+                                            <p>
+                                                Left over funds is based on the information you recently gave us about your budget.
+                                                This example shows how 80% of your left over funds could be put towards paying off your @Model.AccountCount Lowell @(Model.AccountCount>1?"accounts":"account").
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div id="otherPaymentOption" class="row mb-1">
+                                        <div class="radio-wrapper col-7">
+                                            @Html.RadioButtonFor(x => x.SelectedPlanSetupOption, PlanSetupOptions.OtherPaymentOffer, new { id = PlanSetupOptions.OtherPaymentOffer })
+                                            <label for="@PlanSetupOptions.OtherPaymentOffer" class="pl-4">My payment offer</label>
+                                            <div class="custom-radio mt-3"></div>
+                                        </div>
+                                        <div class="form__element col-5 pr-0 pl-0">
+                                            <div class="form__element__money">
+                                                <div class="currency">£</div>
+                                                @Html.TextBoxFor(x => x.DirectDebitAmount, new Dictionary<string, object> { { "class", "js-payment-input" }, { "value", "" }, { "type", "text" }, { "id", "money" }, { "autocomplete", "off" }, { "data-val", "true" }, { "data-val-required", $"{ValidationMessages.InvalidAmount}" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="averagePaymentOption" class="row mb-1 @(Model.IandELessThanOrIs12MonthsOld ? "d-none" : "")">
+                                        <div class="radio-wrapper col-6">
+                                            @Html.RadioButtonFor(x => x.SelectedPlanSetupOption, PlanSetupOptions.AverageSetupValue, new { id = PlanSetupOptions.AverageSetupValue })
+                                            <label for="@PlanSetupOptions.AverageSetupValue" class="pl-4">The average plan value</label>
+                                            <div class="custom-radio mt-3"></div>
+                                        </div>
+                                        <div class="col-1 pt-3 pl-0 pr-0">
+                                            <i class="jw-icon-info-lg highlight js-toggle p-0 m-0" style="cursor:pointer;"></i>
+                                        </div>
+                                        <div class="form__element__money col-5 pr-0 pl-0">
+                                            <div class="currency">£</div>
+                                            <input class="js-disabled" type="text" id="averagePayment" value="@Model.AverageMonthlyPayment.ToString("F")" disabled>
+                                        </div>
+                                        <div class="form__element__info--toggle js-toggle-visible mt-3">
+                                            <p>
+                                                When we speak to customers, this is the average payment that they decide to set up.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.DirectDebitAmount)
+                                <div id="PlanSetupOptionValMsg" class="mt-3">
+                                    @Html.ValidationMessageFor(model => model.SelectedPlanSetupOption)
+                                </div>
+                            </div>
+                            <div id="dd-term-message" class="info-box-wrapper d-none">
+                                <div class="info-box">
+                                    <div class="info-box__top">
+                                        <div class="info-box__heading">
+                                            <div class="info-box__text">
+                                                <h5>Based on this payment, your plan will take <span id="dd-term-years"></span> years and <span id="dd-term-months"></span> months to clear the balance</h5>
+                                            </div>
+                                        </div>
+                                        <div class="info-box__text">
+                                            <span class="bold">Are you happy to proceed?</span>
+                                        </div>
+                                    </div>
+                                    <div class="info-box__bottom p-4">
+                                        <div class="container col-12">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <button type="submit" class="btn btn--primary mt-0 mb-3" style="width:100%;justify-content:center">
+                                                        Yes
+                                                    </button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <a id="btnPlanReset" class="btn btn--secondary mt-0 mb-3" style="width:100%;justify-content:center">
+                                                        No
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="info-box__text" id="dd-term-debt-advice">
+                                                We know that being in debt can be stressful and that you might need extra help. You can get access
+                                                to free financial advice and support at
+                                                <a href="@CmsEndpoints.StepChangeLink" target="_blank">www.stepchange.org</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <a href="@Url.Action("HouseholdStatus", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] })" class="form__element__more-info">How much can I afford?</a>
+                            </div>
+                            <div class="form__element form__element--direct-debit">
+                                <div class="form__element__direct-debit">
+                                    <img src="/images/direct-debit-logo.png" width="100" />
+                                    <p>You can cancel your Direct Debit anytime with your bank</p>
+                                </div>
+                            </div>
+                            <input value="Other Ways to Pay" type="submit" class="btn btn--link cancel" formaction="@Url.Action("PaymentMethods", new { id = ViewContext.RouteData.Values["id"] })" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8 offset-lg-1 col-lg-5">
+                <div class="content-wrapper">
+                    <div class="info-box-wrapper">
+                        <div class="info-box info-box--sidebar js-payment-info-box" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4 class="js-payment-account">@Model.ClientName</h4>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>
+                                        @if (@Model.DiscountedBalance != @Model.OutstandingBalance)
+                                        {
+                                            <div class="discount-already-selected">@Model.DiscountedBalance</div>
+
+                                            <div class="info-box__highlight">
+                                                <p><div>Balance</div>: <span>£ @Model.OutstandingBalance</span></p>
+                                                <p><div>Discounted Balance</div>: <span>£ @Model.DiscountedBalance</span></p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="info-box__highlight">
+                                                <p><div class="js-payment-balance-name">Balance</div>: <span class="js-payment-balance">£ @Model.OutstandingBalance</span></p>
+                                            </div>
+                                        }
+                                    </li>
+                                    <li>
+                                        <div class="js-payment-name">New single payment</div>: <span class="js-payment-amount">£@Model.DirectDebitAmount</span>
+                                    </li>
+                                    <li>Term: <span class="js-payment-term">@Model.PlanFrequency</span></li>
+                                    <li>Payment date: <span class="js-payment-date">@Model.PlanStartDate</span></li>
+                                    <li class="js-payment-info"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.Partial("Partials/LowellReferenceLocation")
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="content-wrapper content-wrapper--padding-reset">
+                    <div class="content__block">
+                        <div class="form__element form__element--row form__element--button">
+                            <input value="Cancel" type="submit" class="btn btn--link cancel" formaction="@Url.Action("Cancel", new {id = ViewContext.RouteData.Values["id"]})" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    @*The following script must be executed after Jquery Validation and Jquery Unobtrusive scripts are loaded.*@
+    <script>
+        $(document).ready(function () {
+            $.validator.addMethod(
+                "date",
+                function (value, element) {
+                    var bits = value.match(/([0-9]+)/gi), str;
+                    if (!bits)
+                        return this.optional(element) || false;
+                    str = bits[1] + '/' + bits[0] + '/' + bits[2];
+                    return this.optional(element) || !/Invalid|NaN/.test(new Date(str));
+                },
+                "Please enter a date in the format dd/mm/yyyy"
+            );
+
+            $('.js-datepicker-payment').first().change(function (e) {
+                $(this).attr('value', $(this).val());
+            });
+        });
+    </script>
+}

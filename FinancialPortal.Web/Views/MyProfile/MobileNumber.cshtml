@@ -1,0 +1,36 @@
+﻿@model FinancialPortal.Web.ViewModels.ContactPreferencesVm
+
+@{
+    ViewBag.Title = "Update mobile phone number";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <form class="form" asp-controller="MyProfile" asp-action="MobileNumberPost">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <h2>Update mobile phone number</h2>
+                <p></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <p>Please enter a mobile phone number:</p>
+                <input asp-for="@Model.MobileNumber" type="text" placeholder="+44">
+                @Html.ValidationMessageFor(model => model.MobileNumber)
+            </div>
+            <input type="hidden" asp-for="@Model.LowellReference" />
+            <input type="hidden" asp-for="@Model.AllowContactBySms" />
+            <input type="hidden" asp-for="@Model.AllowContactByEmail" />
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <button type="submit" class="btn btn--primary mb-3">Save <i class="jw-icon-arrow"></i></button>
+
+                <a href="@Url.Action("Index", "MyProfile", null)" class="ml-md-5"> Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,65 @@
+// General rules
+body {
+    background-color: white; // Thanks Apple!
+}
+
+html, body {
+    -webkit-overflow-scrolling: touch;
+}
+
+html.noscroll,
+html.noscroll body,
+body.noscroll {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /*Avoid flicker on slides transitions for mobile phones #336 */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.info-box-direct-debit-plain-in-place {
+    margin-bottom: 40px !important;
+}
+
+.info-box-direct-debit-plain-in-place p {
+    margin-bottom: 0 !important;
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+
+clear-fix {
+    clear: both;
+}
+
+.info-box-directdebit-plain-in-place p {
+    padding-top: 10px;
+    font-weight: normal;
+}
+
+.my-account-main .info-box__heading h4 {
+    margin-bottom: 10px !important;
+}
+
+.my-account-main .info-box__highlight a {
+    color: white !important;
+}
+
+.btn-margin-bottom-10px{
+    margin-bottom: 10px !important;
+}
+
+.dd-confirm-cancel-form {
+    float: right;
+    padding-top: 10px
+}
+
+.dd-confirm-setup-form {
+    float: left;
+}

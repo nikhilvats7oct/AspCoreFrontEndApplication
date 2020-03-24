@@ -1,0 +1,632 @@
+﻿@model FinancialPortal.Web.ViewModels.BillsAndOutgoingsVm
+
+@{
+    ViewBag.Title = "Bills";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    IEnumerable<SelectListItem> frequencies = new List<SelectListItem>
+    {
+        new SelectListItem{Text = "Monthly", Value = "monthly", Selected = true },
+        new SelectListItem{Text = "Weekly", Value = "weekly"},
+        new SelectListItem{Text = "Fortnightly", Value = "fortnightly"},
+        new SelectListItem{Text = "Every 4 weeks", Value = "4week"},
+    };
+}
+
+@if (Model.PartialSavedEvent && Model.PartialSavedIAndE)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Budget calculator saved</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>Are you sure you want to quit your session? We’ll save this information so you can come back anytime in the next 30 days to complete your budget assessment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+    @using (Html.BeginForm("BillsAndOutgoings", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, null, new { @class = "form js-budget-calc" }))
+    {
+        <div class="js-income">
+            <input type="hidden" name="earnings" value="@Model.IncomeSummary.Salary" disabled />
+            <input type="hidden" name="benefits" value="@Model.IncomeSummary.Benefits" disabled />
+            <input type="hidden" name="pensions" value="@Model.IncomeSummary.Pension" disabled />
+            <input type="hidden" name="other" value="@Model.IncomeSummary.Other" disabled />
+            <input type="hidden" name="total" value="@Model.IncomeSummary.Total" disabled />
+            <input type="hidden" name="children" value="false" disabled />
+        </div>
+        <div class="js-outgoings">
+            <input type="hidden" name="household" value="@Model.OutgoingSummary.HouseholdBills" disabled />
+            <input type="hidden" name="expenditure" value="@Model.OutgoingSummary.Expenditures" disabled />
+            <input type="hidden" name="total" value="@Model.OutgoingSummary.Total" disabled />
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-10 col-lg-7">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Your outgoings</h2>
+                        <p>Tell us more about the income you’re spending on living essentials. <br /><span class="highlight">Leave fields blank if they do not apply to you.</span></p>
+                        <div class="step">
+                            <div class="step__number step__number--active">1</div>
+                            <div class="step__number step__number--active">2</div>
+                            <div class="step__number step__number--active">3</div>
+                            <div class="step__number">4</div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="mortgage">Mortgage</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Mortgage.Amount, new { @class = "js-payment-input", @type = "text", @name = "mortgage", @id = "mortgage", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Mortgage.Frequency, frequencies, new { @name = "mortgage-select", @id = "mortgage-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.Mortgage.InArrears, new { @name = "checkbox", @id = "mortgage-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "mortgage-arrears" })
+                                    <label for="mortgage-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.Mortgage.Amount)
+                            @Html.ValidationMessageFor(model => model.Mortgage)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.Mortgage.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "mortgage-arrears", @id = "mortgage-arrears", @placeholder = "0.00", @data_category = "household" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+
+                                    @Html.ValidationMessageFor(model => model.Mortgage.ArrearsAmount)
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="rent">Rent / Ground rent </label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Rent.Amount, new { @class = "js-payment-input", @type = "text", @name = "rent", @id = "rent", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Rent.Frequency, frequencies, new { @name = "rent-select", @id = "rent-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.Rent.InArrears, new { @name = "checkbox", @id = "rent-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "rent-arrears" })
+                                    <label for="rent-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.Rent.Amount)
+                            @Html.ValidationMessageFor(model => model.Rent)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.Rent.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "rent-arrears", @id = "rent-arrears", @placeholder = "0.00", @data_category = "household" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+
+                                    @Html.ValidationMessageFor(model => model.Rent.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="secured-loan">Secured loan</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.SecuredLoan.Amount, new { @class = "js-payment-input", @type = "text", @name = "secured-loan", @id = "secured-loan", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.SecuredLoan.Frequency, frequencies, new { @name = "secured-loan-select", @id = "secured-loan-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.SecuredLoan.InArrears, new { @name = "checkbox", @id = "secured-loan-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "secured-loan-arrears" })
+                                    <label for="secured-loan-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.SecuredLoan.Amount)
+                            @Html.ValidationMessageFor(model => model.SecuredLoan)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.SecuredLoan.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "secured-loan-arrears", @id = "secured-loan-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+
+                                    @Html.ValidationMessageFor(model => model.SecuredLoan.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="council-tax">Council tax</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.CouncilTax.Amount, new { @class = "js-payment-input", @type = "text", @name = "council-tax", @id = "council-tax", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.CouncilTax.Frequency, frequencies, new { @name = "council-tax-select", @id = "council-tax-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.CouncilTax.InArrears, new { @name = "checkbox", @id = "council-tax-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "council-tax-arrears" })
+                                    <label for="council-tax-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.CouncilTax.Amount)
+                            @Html.ValidationMessageFor(model => model.CouncilTax)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.CouncilTax.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "council-tax-arrears", @id = "council-tax-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.CouncilTax.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="appliance-rental">Appliance/furniture rental</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.ApplianceOrFurnitureRental.Amount, new { @class = "js-payment-input", @type = "text", @name = "appliance-rental", @id = "appliance-rental", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.ApplianceOrFurnitureRental.Frequency, frequencies, new { @name = "appliance-rental-select", @id = "appliance-rental-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.ApplianceOrFurnitureRental.InArrears, new { @name = "checkbox", @id = "appliance-rental-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "appliance-rental-arrears" })
+                                    <label for="appliance-rental-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.ApplianceOrFurnitureRental.Amount)
+                            @Html.ValidationMessageFor(model => model.ApplianceOrFurnitureRental)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.ApplianceOrFurnitureRental.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "appliance-rental-arrears", @id = "appliance-rental-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.ApplianceOrFurnitureRental.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="tv-license">TV license</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.TvLicense.Amount, new { @class = "js-payment-input", @type = "text", @name = "tv-license", @id = "tv-license", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.TvLicense.Frequency, frequencies, new { @name = "tv-license-select", @id = "tv-license-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.TvLicense.InArrears, new { @name = "checkbox", @id = "tv-license-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "tv-license-arrears" })
+                                    <label for="tv-license-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.TvLicense.Amount)
+                            @Html.ValidationMessageFor(model => model.TvLicense)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.TvLicense.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "tv-license-arrears", @id = "tv-license-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.TvLicense.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="gas">Gas (including calor)</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Gas.Amount, new { @class = "js-payment-input", @type = "text", @name = "gas", @id = "gas", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Gas.Frequency, frequencies, new { @name = "gas-select", @id = "gas-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.Gas.InArrears, new { @name = "checkbox", @id = "gas-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "gas-arrears" })
+                                    <label for="gas-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.Gas.Amount)
+                            @Html.ValidationMessageFor(model => model.Gas)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.Gas.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "gas-arrears", @id = "gas-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Gas.ArrearsAmount)
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="other-fuel">Other fuel (coal, oil etc.)</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.OtherFuel.Amount, new { @class = "js-payment-input", @type = "text", @name = "other-fuel", @id = "other-fuel", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.OtherFuel.Frequency, frequencies, new { @name = "other-fuel-select", @id = "other-fuel-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.OtherFuel.InArrears, new { @name = "checkbox", @id = "other-fuel-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "other-fuel-arrears" })
+                                    <label for="other-fuel-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.OtherFuel.Amount)
+                            @Html.ValidationMessageFor(model => model.OtherFuel)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.OtherFuel.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "other-fuel-arrears", @id = "other-fuel-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.OtherFuel.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="electric">Electric</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Electric.Amount, new { @class = "js-payment-input", @type = "text", @name = "electric", @id = "electric", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Electric.Frequency, frequencies, new { @name = "electric-select", @id = "electric-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.Electric.InArrears, new { @name = "checkbox", @id = "electric-in-arrears", @class = "js-field arrears-checkbox", @data_amount_field = "electric-arrears" })
+                                    <label for="electric-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.Electric.Amount)
+                            @Html.ValidationMessageFor(model => model.Electric)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.Electric.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "electric-arrears", @id = "electric-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Electric.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="water">Water</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Water.Amount, new { @class = "js-payment-input", @type = "text", @name = "water", @id = "water", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Water.Frequency, frequencies, new { @name = "water-select", @id = "water-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.Water.InArrears, new { @name = "checkbox", @id = "water-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "water-arrears" })
+                                    <label for="water-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+
+                            @Html.ValidationMessageFor(model => model.Water.Amount)
+                            @Html.ValidationMessageFor(model => model.Water)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.Water.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "water-arrears", @id = "water-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Water.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="child-maintenance">Child maintenance</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.ChildMaintenance.Amount, new { @class = "js-payment-input", @type = "text", @name = "child-maintenance", @id = "child-maintenance", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.ChildMaintenance.Frequency, frequencies, new { @name = "child-maintenance-select", @id = "child-maintenance-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.ChildMaintenance.InArrears, new { @name = "checkbox", @id = "child-maintenance-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "child-maintenance-arrears" })
+                                    <label for="child-maintenance-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.ChildMaintenance.Amount)
+                            @Html.ValidationMessageFor(model => model.ChildMaintenance)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.ChildMaintenance.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "child-maintenance-arrears", @id = "child-maintenance-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.ChildMaintenance.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="court-fines">Court fines</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.CourtFines.Amount, new { @class = "js-payment-input", @type = "text", @name = "court-fines", @id = "court-fines", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.CourtFines.Frequency, frequencies, new { @name = "court-fines-select", @id = "court-fines-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.CourtFines.InArrears, new { @name = "checkbox", @id = "court-fines-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "court-fines-arrears" })
+                                    <label for="court-fines-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.CourtFines.Amount)
+                            @Html.ValidationMessageFor(model => model.CourtFines)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.CourtFines.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "court-fines-arrears", @id = "court-fines-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.CourtFines.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form__element form__element--2row form__element--2row--checkbox js-field-parent">
+                            <label for="ccjs">CCJs</label>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Ccjs.Amount, new { @class = "js-payment-input", @type = "text", @name = "ccjs", @id = "ccjs", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Ccjs.Frequency, frequencies, new { @name = "ccjs-select js-payment-frequency", @id = "ccjs-select js-payment-frequency", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="form__element">
+                                <div class="checkbox-wrapper">
+                                    @Html.CheckBoxFor(model => model.Ccjs.InArrears, new { @name = "checkbox", @id = "ccjs-in-arrears", @class = "js-field arrears-checkbox", @value = "true", @data_amount_field = "ccjs-arrears" })
+                                    <label for="ccjs-in-arrears">In arrears</label>
+                                    <div class="custom-checkbox"></div>
+                                </div>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.Ccjs.Amount)
+                            @Html.ValidationMessageFor(model => model.Ccjs)
+
+                            <div class="js-field-visible form__element--arrears">
+                                <div class="form__element form__element--2row">
+                                    <div class="form__element__money">
+                                        <div class="currency">&pound;</div>
+                                        @Html.TextBoxFor(model => model.Ccjs.ArrearsAmount, new { @class = "js-payment-input arrears-amount", @type = "text", @name = "ccjs-arrears", @id = "ccjs-arrears", @placeholder = "0.00", @data_category = "household", @autocomplete = "off" })
+                                    </div>
+                                    <div class="form__element">
+                                        <p>If you are paying extra to get up to date please tell us the monthly top up amount</p>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Ccjs.ArrearsAmount)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8 col-lg-5">
+                <div class="content-wrapper js-sticky">
+                    <div class="info-box-wrapper">
+                        <div class="info-box info-box--sidebar js-budget-info-box js-budget-income-info-box" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4 class="js-budget-term">Monthly income</h4>
+                                    </div>
+                                </div>
+                                <div class="info-box__highlight">
+                                    <p>Total: <span class="js-budget-total">£0.00</span></p>
+                                </div>
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>Earnings: <span class="js-budget-earnings">£0.00</span></li>
+                                    <li>Benefits: <span class="js-budget-benefits">£0.00</span></li>
+                                    <li>Pensions: <span class="js-budget-pensions">£0.00</span></li>
+                                    <li>Other: <span class="js-budget-other">£0.00</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box-wrapper">
+                        <div class="info-box info-box--sidebar js-budget-info-box js-budget-outgoings-info-box" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4 class="js-budget-term">Monthly outgoings</h4>
+                                    </div>
+                                </div>
+                                <div class="info-box__highlight">
+                                    <p>Total: <span class="js-budget-total">£0.00</span></p>
+                                </div>
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>Priority bills: <span class="js-budget-bills">£0.00</span></li>
+                                    <li>Expenditure: <span class="js-budget-expenditure">£0.00</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="js-sticky-width"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-10 col-lg-7">
+                <div class="content-wrapper content-wrapper--padding-reset">
+                    <div class="content__block">
+                        <div class="form__element form__element--row form__element--button">
+                            <button type="submit" name="submit" class="btn btn--primary">Next <i class="jw-icon-arrow"></i></button>
+                            @if (Model.EnabledPartialSave)
+                            {
+                                <button type="submit" name="submit" class="btn btn--primary" value="saveforlater">Save for Later</button>
+                            }
+                            @Html.ActionLink("Back", "YourIncome", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] },new { @class = "btn btn--link" })
+                        </div>
+
+                        @if (Model.PartialSavedEvent && Model.HasErrorPartialSavedIAndE)
+                        {
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p style="color:red;font-weight:bold;">Sorry, we were unable to save your budget details, please try.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

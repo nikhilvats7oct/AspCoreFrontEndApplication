@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           attributeFormDefault="qualified"
+           elementFormDefault="qualified"
+            xmlns:CO="urn:MyNamespace">
+  <xs:import id="common" namespace="urn:MyNamespace" schemaLocation="Request.xsd" />
+  <xs:element name="tokenregistrationrequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType >
+      <xs:all>
+        <xs:element name="javascriptenabled" type="CO:javascriptEnabled" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="merchantreference"  type="CO:merchantReference" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="returnurl" type="CO:returnUrl" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="merchant" type="CO:merchant" minOccurs="0" maxOccurs="1"></xs:element>
+        <xs:element name="template" type="CO:template" minOccurs="0" maxOccurs="1"></xs:element>
+        <xs:element name="accountid" type="xsd:decimal" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="allowedpaymentschemes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="processCPC" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="showpaymentresult" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="tokenexpirationdate" minOccurs="0" maxOccurs="1">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="8"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

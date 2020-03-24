@@ -1,0 +1,88 @@
+﻿@using FinancialPortal.Web.Settings
+@using FinancialPortal.Web.Validation
+@using Microsoft.Extensions.Configuration
+@model FinancialPortal.Web.ViewModels.RegisterVm
+@inject CmsEndpoints CmsEndpoints
+
+@{
+    ViewBag.Title = "Complete Registration";
+}
+
+@if (ViewData.ModelState.Any(x => x.Key == string.Empty))
+{
+    <div class="notification notification--error js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Oops</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>@Html.Raw(Model.NotificationMessage)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Nearly there</h2>
+                    <p>To make sure you’re all set up, just add your email address and password again. You’ll need these every time you login.</p>
+                    @using (Html.BeginForm("CompleteRegistration", "Register", FormMethod.Post, new { @class = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.LowellReference)
+                        <div class="form__element">
+                            @Html.LabelFor(model => model.EmailAddress, "Email address")
+                            @Html.TextBoxFor(model => model.EmailAddress, new { placeholder = "myemail@example.co.uk", id = "email" })
+                            @Html.ValidationMessageFor(model => model.EmailAddress)
+                        </div>
+                        <div class="form__element">
+                            @Html.LabelFor(model => model.Password, "Password")
+                            @Html.PasswordFor(model => model.Password, new { @class = "js-password", placeholder = "password", id = "password" })
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
+                        <div class="form__element">
+                            @Html.LabelFor(model => model.ConfirmPassword, "Confirm your password")
+                            @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "js-password", placeholder = "password", id = "password-confirm" })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                        </div>
+                        <div style="visibility: hidden; display: none;">
+                            @Html.TextBoxFor(m => m.HoneyPotTextBox)
+                        </div>
+                        <div class="form__element">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" name="show-password" id="show-password" value="" class="js-show-password" />
+                                <label for="show-password">Show password</label>
+                                <div class="custom-checkbox"></div>
+                            </div>
+                        </div>
+                        <div class="form__element">
+                            <div class="checkbox-wrapper">
+                                @Html.CheckBoxFor(model => model.TsAndCsAccepted)
+                                @Html.HiddenFor(model => model.TsAndCsAccepted, new Dictionary<string, object> { { "data-val", "true" }, { "data-val-required", ValidationMessages.NotAcceptedTermsAndConditions } })
+                                <label for="@Html.NameFor(model => model.TsAndCsAccepted)" id="@Html.IdFor(model => model.TsAndCsAccepted)" style="padding-left: 10px">
+                                    I have read and accept the
+                                    <a target="_blank" href="@CmsEndpoints.TermsAndConditions">Terms &amp; Conditions</a>
+                                </label>
+                                <div class="custom-checkbox"></div>
+                                @Html.ValidationMessageFor(model => model.TsAndCsAccepted)
+                            </div>
+                        </div>
+                        <div class="form__element form__element--row form__element--button">
+                            <button type="submit" class="btn btn--primary">Register <i class="jw-icon-arrow"></i></button>
+                            <a class="btn btn--link" href="@Url.Action("Index", "Home")">Cancel</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

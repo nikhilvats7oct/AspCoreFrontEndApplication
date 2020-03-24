@@ -1,0 +1,37 @@
+.jw-wrapper {
+    overflow: hidden;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: bottom;
+
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        &[src$=".svg"] {
+            width: 100%;
+        }
+    }
+}
+
+hr {
+    border: 1px solid #434a4f;
+    margin: 0 0 30px 0;
+    width: 100%;
+
+    &.light {
+        border-color: #A2D4D8;
+        margin: 50px 0 0 0;
+    }
+
+    &.transparent {
+        border-color: transparent;
+        margin: 50px 0 0 0;
+    }
+}
+
+.fixed-bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}

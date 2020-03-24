@@ -1,0 +1,78 @@
+.video-card {
+    @include card-styling($heading-fs: 2.8rem, $heading-lh: 3.2rem, $content-bg-color: transparent); 
+    background-color: $brand-off-blue;
+
+    &__video {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 50px;
+        height: calc(100% - 100px);
+        flex-grow: 1;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        @include media-breakpoint-down(md) {
+            margin: 25px;
+            height: calc(100% - 50px);
+        }
+
+        @include media-breakpoint-down(sm) {
+            min-height: 300px;
+            margin: 20px;
+            height: calc(100% - 40px);
+            margin-bottom: 0;
+        }
+    }
+
+    &__transcript {
+        color: inherit;
+        &-button{
+            margin-top: 25px;
+            i{
+                transition: transform 0.5s ease-in-out;
+            }
+
+            &.active {
+                i {
+                    transform: rotateZ(-180deg);
+                }
+            }
+        }
+
+        &-wrapper {
+            color: inherit;
+            margin: 0 50px;
+
+            @include media-breakpoint-down(md) {
+                margin: 0 25px;
+            }
+
+            @include media-breakpoint-down(sm) {
+                margin: 0 20px;
+            }
+        }
+    }
+
+    > .row {
+        color: inherit;
+
+        > .col-12 {
+            color: inherit;
+
+            .row {
+                color: inherit;
+        
+                > .col-12 {
+                    color: inherit;
+
+                }
+            }
+
+            > .video-card__content {
+                color: inherit;
+            }
+        }
+    } 
+}

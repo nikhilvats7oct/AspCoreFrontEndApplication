@@ -1,0 +1,50 @@
+﻿@model FinancialPortal.Web.ViewModels.PaymentOptionsVm
+
+<!-- Displayed in banner at the top -->
+
+@if (@Model.ArrearsMessage != null)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Account In Arrears</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>@Html.Raw(@Model.ArrearsMessage)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.HasNonDirectDebitPlanInPlace)
+{
+    <p>
+        <div class="notification notification js-notification">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="notification__message">
+                            <div class="notification__message__heading">
+                                <p>Direct Debit Plan</p>
+                            </div>
+                            <div class="notification__message__body">
+                                <p>
+                                    If you don't currently have a Direct Debit plan, you can change your current plan to Direct Debit by selecting the option below.
+                                    If you have an accepted discount on your current plan this will be automatically transferred to your new Direct debit plan.
+                                    Remember you can register at any time to see your existing account and plan details.
+                                    Contact us if you have any questions on payment options.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p>
+}

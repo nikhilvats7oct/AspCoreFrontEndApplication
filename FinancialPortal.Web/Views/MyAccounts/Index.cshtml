@@ -1,0 +1,213 @@
+﻿@using System.Globalization;
+
+@model FinancialPortal.Web.ViewModels.MyAccountsVm
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewBag.Title = "My Accounts";
+}
+
+<main id="app" class="jw-wrapper my-account-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="content-wrapper content-wrapper--account">
+                    <div class="content__block">
+                        <h2>My accounts</h2>
+                       
+                            <p class="mb-3">Choose an account to check your payments or make any changes. You can use our 
+                                <a asp-controller="BudgetCalculator" asp-action="Options" asp-route-id="@(Model.LowellFinancialAccountSurrogateKey ?? Guid.NewGuid())">budget calculator</a> if you need a hand with working out how much you can afford to pay.
+                            </p>
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            @if (Model.LowellFinancialAccountSurrogateKey.HasValue)
+            {
+                if (Model.IncomeAndExpenditureExpired || !Model.IncomeAndExpenditureSubmitted)
+                {
+                    <div class="col-xs-12 col-md-6 col-xl-4">
+                        <div class="info-box info-box--full" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__icon">
+                                        <i class="jw-icon-caution"></i>
+                                    </div>
+                                    <div class="info-box__text">
+                                        <h4>You have not recently completed a budget</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-box__bottom">
+                                <a href="@Url.Action("Options", "BudgetCalculator", new { id = Model.LowellFinancialAccountSurrogateKey.Value })" class="btn btn--secondary">
+                                    Please update your budget now
+                                    <i class="jw-icon-arrow"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            @foreach (var account in Model.Accounts)
+            {
+                <div class="col-xs-12 col-md-6 col-xl-4">
+
+                    <div class="info-box @account.Class" data-mh="info-box">
+                        <div class="info-box__top">
+                            <div class="info-box__heading">
+                                @if (account.ShowWarningSymbol)
+                                {
+                                    <div class="info-box__icon">
+                                        <i class="jw-icon-caution"></i>
+                                    </div>
+                                }
+                                <div class="info-box__text">
+                                    <h4>@account.OriginalCompanyText</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-box__body">
+                            <ul>
+                                <li>
+                                    @account.AccountReferenceCaption
+                                    <span>@account.AccountReferenceText</span>
+                                </li>
+                                <li>
+                                    @account.OutstandingBalanceCaption
+                                    <span>@account.OutstandingBalanceText</span>
+                                </li>
+                                @if (account.DiscountedBalanceTextOptional != null)
+                                {
+                                    <li>
+                                        @account.DiscountedBalanceCaption
+                                        <span>@account.DiscountedBalanceTextOptional</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="info-box__hint">
+                            <div class="info-box__icon">
+                                <i class="jw-icon-info"></i>
+                            </div>
+                            <div class="info-box__text">
+                                <p>@account.AccountStatusText@account.PlanDescription</p>
+                            </div>
+                        </div>
+
+                        @if (account.PlanPendingTransfer)
+                        {
+                            <div class="info-box__hint">
+                                <div class="info-box__icon">
+                                    <i class="jw-icon-info"></i>
+                                </div>
+                                <div class="info-box__text">
+                                    <p>Once this debt is paid off, the payment may be auto transferred to one of your other account(s).</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(account.PlanTransferredFromMessage))
+                        {
+                            <div class="info-box__hint">
+                                <div class="info-box__icon">
+                                    <i class="jw-icon-info"></i>
+                                </div>
+                                <div class="info-box__text">
+                                    <p>@account.PlanTransferredFromMessage</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if (@account.ArrearsMessage != null)
+                        {
+                            <div class="info-box__hint">
+                                <div class="info-box__icon">
+                                    <i class="jw-icon-info"></i>
+                                </div>
+                                <div class="info-box__text">
+                                    <p>@Html.Raw(@account.ArrearsMessage)</p>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="info-box__bottom @account.ClassBottom">
+
+                            @if (account.IsDiscountLinkAvailable)
+                            {
+                                <div class="info-box__discount">
+                                    <p>
+                                        <a href="@Url.Action("Index", "PaymentOptions", new { id=account.LowellReferenceSurrogateKey })">
+                                            Discount Available
+                                        </a>
+                                        <br />
+                                        @account.DiscountAvailableLinkTextOptional
+                                    </p>
+                                </div>
+                            }
+
+                            @if (account.IsSolicitorsRedirectLinkAvailable)
+                            {
+                                <p>
+                                    Referred to Lowell Solicitors.<br />
+                                    You can contact Lowell Solicitors by calling 0113 335 334, or visit their <a href="@account.SolicitorsRedirectLink">website</a> for more information.
+                                </p>
+                            }
+
+                            <div>
+                                <a href="@Url.Action("Details", new {id = account.LowellReferenceSurrogateKey})" class="btn btn--primary btn-margin-bottom-10px">
+                                    @account.DetailsLinkText
+                                    <i class="jw-icon-arrow"></i>
+                                </a>
+
+                                @if (account.IsPaymentButtonAvailable)
+                                {
+                                    <a href="@Url.Action("Index", "PaymentOptions", new { id=account.LowellReferenceSurrogateKey })" class="btn btn--secondary btn-margin-bottom-10px">
+                                        Make a Payment
+                                        <i class="jw-icon-arrow"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <a id="accounts-modal" href="#my-accounts-modal" data-modal="#my-accounts-modal" data-modal-type="inline" hidden></a>
+            @if (Model.NewAccounts.Any())
+            {
+                @Html.Partial("Partials/MyAccountsModal", Model.NewAccounts)
+            }
+        </div> <!-- Row -->
+
+    </div> <!-- Container -->
+</main>
+
+@section Scripts
+{
+    @if (Model.NewAccounts.Any())
+    {
+        <script>
+            $(function () {
+
+                $('#accounts-modal').click();
+
+                var closeBtn = $('.jw-icon-cross');
+
+                $(closeBtn).css('margin-top', 0);
+                $(closeBtn).css('margin-right', 0);
+                $(closeBtn).addClass('pull-right');
+                $(closeBtn).remove();
+
+                closeBtn.appendTo('#closeContainer');
+
+            });
+        </script>
+    }
+}

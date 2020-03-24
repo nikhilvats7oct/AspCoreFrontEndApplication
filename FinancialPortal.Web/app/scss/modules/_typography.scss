@@ -1,0 +1,110 @@
+html,body {
+    font-family: $base-font;
+    font-size: 62.5%;
+}
+
+header, main, footer, div {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    color: $brand-new-grey;    
+}
+
+h1, h2, h3,
+h4, h5, h6 {
+    margin-top: 0;
+    font-weight: 300;
+}
+
+h1 {
+    font-size: 5rem;
+    line-height: 6rem;
+}
+
+h2 {
+    font-size: 3.2rem;
+    line-height: 3.8rem;
+    margin-bottom: 1.4rem;
+}
+
+h3 {
+    font-size: 3rem;
+    line-height: 3.6rem;
+    margin-bottom: 1rem;
+}
+
+h4 {
+    font-size: 2rem;
+    line-height: 2.4rem;
+    margin-bottom: 1rem;
+}
+
+h5 {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+    margin-bottom: 1rem;
+}
+
+h6 {
+    font-size: 1.5rem;
+    line-height: 2.4rem;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    font-size: 3.2rem;
+    line-height: 3.6rem;
+    color: $brand-primary-aa;
+}
+
+.subtitle-h3 {
+    font-size: 2.5rem;
+    line-height: 3.6rem;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+p {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    margin-top: 0;
+
+    &.small {
+        font-size: 1.2rem;
+        line-height: 2rem;
+    }
+
+    a {
+        font-weight: 700;
+    }
+}
+
+a {
+    color: $brand-new-grey;
+    text-decoration: underline;
+    transition: color 0.3s ease-in-out;
+    display: inline-block;
+    font-weight: bold;
+
+    &:hover:not(.btn) {
+        color: $brand-primary-darker-hover;
+    }
+}
+
+.label {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.9rem;
+    text-transform: uppercase;
+}
+
+.highlight {
+    color: $brand-new-grey;
+}
+
+.grey {
+    color: $brand-new-grey;
+}
+
+.bold {
+    font-weight: 600;
+}

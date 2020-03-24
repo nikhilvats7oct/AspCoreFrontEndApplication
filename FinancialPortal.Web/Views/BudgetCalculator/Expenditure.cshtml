@@ -1,0 +1,388 @@
+﻿@model FinancialPortal.Web.ViewModels.ExpendituresVm
+
+@{
+    ViewBag.Title = "Your bills and outgoings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ 
+    IEnumerable<SelectListItem> frequencies = new List<SelectListItem>() 
+    {
+        new SelectListItem {Text = "Monthly", Value = "monthly"},
+        new SelectListItem {Text = "Weekly", Value = "weekly"},
+        new SelectListItem {Text = "Fortnightly", Value = "fortnightly"},
+        new SelectListItem {Text = "Every 4 weeks", Value = "4week"}
+    };
+}
+
+@if (Model.PartialSavedEvent && Model.PartialSavedIAndE)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Budget calculator saved</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>Are you sure you want to quit your session? We’ll save this information so you can come back anytime in the next 30 days to complete your budget assessment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+    @using (Html.BeginForm("Expenditure", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form js-budget-calc" }))
+    {
+        <div class="js-income">
+            <input type="hidden" name="earnings" value="@Model.IncomeVmSummary.Salary" disabled />
+            <input type="hidden" name="benefits" value="@Model.IncomeVmSummary.Benefits" disabled />
+            <input type="hidden" name="pensions" value="@Model.IncomeVmSummary.Pension" disabled />
+            <input type="hidden" name="other" value="@Model.IncomeVmSummary.Other" disabled />
+            <input type="hidden" name="total" value="@Model.IncomeVmSummary.Total" disabled />
+            <input type="hidden" name="children" value="false" disabled />
+        </div>
+        <div class="js-outgoings">
+            <input type="hidden" name="household" value="@Model.OutgoingsVmSummary.HouseholdBills" disabled />
+            <input type="hidden" name="expenditure" value="@Model.OutgoingsVmSummary.Expenditures" disabled />
+            <input type="hidden" name="total" value="@Model.OutgoingsVmSummary.Total" disabled />
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-10 col-lg-7">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Other expenditure</h2>
+                        <p>Tell us more about the money you're spending on other things like food. <br /><span class="highlight">If anything doesn’t apply to you, leave it blank.</span></p>
+                        <div class="step">
+                            <div class="step__number step__number--active">1</div>
+                            <div class="step__number step__number--active">2</div>
+                            <div class="step__number step__number--active">3</div>
+                            <div class="step__number step__number--active">4</div>
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="food-housekeeping">Food and housekeeping</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This can include groceries, nappies, baby items, school/work meals, alcohol/smoking products, vet bills, laundry and house repairs/maintenance.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.FoodAndHouseKeeping.Amount,
+                                    new
+                                         {
+                                        @class = "js-payment-input",
+                                        @type = "text",
+                                        @name = "food-housekeeping",
+                                        @id = "food-housekeeping",
+                                        @placeholder = "0.00",
+                                        @data_category = "expenditure",
+                                        @data_warn = "true",
+                                        @data_oldvalue = Model.FoodAndHouseKeeping.Amount,
+                                        @data_min = Model.FoodAndHouseKeepingTriggerMin,
+                                        @data_max = Model.FoodAndHouseKeepingTriggerMax
+                                         })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.FoodAndHouseKeeping.Frequency, frequencies, new { @name = "food-housekeeping-select", @id = "food-housekeeping-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="js-warning">
+                                <div class="form__element__notifcation">
+                                    <i class="jw-icon-caution"></i>
+                                    <span>Please check. This value seems <span class="js-warning-value"></span></span>
+                                    <i class="jw-icon-cross"></i>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.FoodAndHouseKeeping)
+                            @Html.ValidationMessageFor(model => model.FoodAndHouseKeeping.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="personal-costs">Personal costs</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This can include, clothing, footwear, hairdressing and toiletries etc.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.PersonalCosts.Amount, new { @class = "js-payment-input", @type = "text", @name = "personal-costs", @id = "personal-costs", @placeholder = "0.00", @data_category = "expenditure", @data_warn = "true", @autocomplete = "off", @data_min = Model.PersonalCostsTriggerMin, @data_max = Model.PersonalCostsTriggerMax })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.PersonalCosts.Frequency, frequencies, new { @name = "personal-costs-select", @id = "personal-costs-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="js-warning">
+                                <div class="form__element__notifcation">
+                                    <i class="jw-icon-caution"></i>
+                                    <span>Please check. This value seems <span class="js-warning-value"></span></span>
+                                    <i class="jw-icon-cross"></i>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.PersonalCosts)
+                            @Html.ValidationMessageFor(model => model.PersonalCosts.Amount)
+                        </div>
+
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="comms-leisure">Communications and leisure</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This can include landline/internet, TV, mobile phone, birthdays, leisure, pocket money, gifts and subscriptions.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.CommunicationsAndLeisure.Amount, new { @class = "js-payment-input", @type = "text", @name = "comms-leisure", @id = "comms-leisure", @placeholder = "0.00", @data_category = "expenditure", @data_warn = "true", @autocomplete = "off", @data_min = Model.CommunicationsAndLeisureTriggerMin, @data_max = Model.CommunicationsAndLeisureTriggerMax })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.CommunicationsAndLeisure.Frequency, frequencies, new { @name = "comms-leisure-select", @id = "comms-leisure-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            <div class="js-warning">
+                                <div class="form__element__notifcation">
+                                    <i class="jw-icon-caution"></i>
+                                    <span>Please check. This value seems <span class="js-warning-value"></span></span>
+                                    <i class="jw-icon-cross"></i>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CommunicationsAndLeisure)
+                            @Html.ValidationMessageFor(model => model.CommunicationsAndLeisure.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="travel-transport">Travel and transport</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This can include public transport, car insurance, road tax, MOT. maintenance, fuel, parking, breakdown cover and hire purchase or PCP.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.TravelAndTransport.Amount, new { @class = "js-payment-input", @type = "text", @name = "travel-transport", @id = "travel-transport", @placeholder = "0.00", @data_category = "expenditure", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.TravelAndTransport.Frequency, frequencies, new { @name = "travel-transport-select", @id = "travel-transport-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.TravelAndTransport)
+                            @Html.ValidationMessageFor(model => model.TravelAndTransport.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="care-health">Care and health costs</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This can include outgoings such as childcare, adult care, prescriptions and contact lenses.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.CareAndHealthCosts.Amount, new { @class = "js-payment-input", @type = "text", @name = "care-health", @id = "care-health", @placeholder = "0.00", @data_category = "expenditure", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.CareAndHealthCosts.Frequency, frequencies, new { @name = "care-health-select", @id = "care-health-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CareAndHealthCosts)
+                            @Html.ValidationMessageFor(model => model.CareAndHealthCosts.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="pensions-insurance">Insurance</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This will include all insurances (i.e household, car and life insurances)</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.PensionsAndInsurance.Amount, new { @class = "js-payment-input", @type = "text", @name = "pensions-insurance", @id = "pensions-insurance", @placeholder = "0.00", @data_category = "expenditure", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.PensionsAndInsurance.Frequency, frequencies, new { @name = "pensions-insurance-select", @id = "pensions-insurance-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.PensionsAndInsurance)
+                            @Html.ValidationMessageFor(model => model.PensionsAndInsurance.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="school-costs">School costs</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This can include outgoings such as uniforms, bus fare, dinner money, and after school clubs.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.SchoolCosts.Amount, new { @class = "js-payment-input", @type = "text", @name = "school-costs", @id = "school-costs", @placeholder = "0.00", @data_category = "expenditure", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.SchoolCosts.Frequency, frequencies, new { @name = "school-costs-select", @id = "school-costs-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.SchoolCosts)
+                            @Html.ValidationMessageFor(model => model.SchoolCosts.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="professional-costs">Professional costs</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>This can include Union fees and courses etc.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Professional.Amount, new { @class = "js-payment-input", @type = "text", @name = "professional-costs", @id = "professional-costs", @placeholder = "0.00", @data_category = "expenditure", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Professional.Frequency, frequencies, new { @name = "professional-costs-select", @id = "professional-costs-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Professional)
+                            @Html.ValidationMessageFor(model => model.Professional.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="savings">Savings</label>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Savings.Amount, new { @class = "js-payment-input", @type = "text", @name = "savings", @id = "savings", @placeholder = "0.00", @data_category = "expenditure", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Savings.Frequency, frequencies, new { @name = "savings-select", @id = "savings-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Savings)
+                            @Html.ValidationMessageFor(model => model.Savings.Amount)
+                        </div>
+
+                        <div class="form__element form__element--2row js-field-parent">
+                            <div class="form__element__info">
+                                <label for="other-payments">Other</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p>Vets bills, rental items, laundry, etc.</p>
+                            </div>
+                            <div class="form__element__money">
+                                <div class="currency">&pound;</div>
+                                @Html.TextBoxFor(model => model.Other.Amount, new { @class = "js-payment-input", @type = "text", @name = "other-payments", @id = "other-payments", @placeholder = "0.00", @data_category = "expenditure", @autocomplete = "off" })
+                            </div>
+                            <div class="form__element">
+                                <div class="select-wrapper">
+                                    @Html.DropDownListFor(m => m.Other.Frequency, frequencies, new { @name = "other-payments-select", @id = "other-payments-select", @class = "js-select js-payment-frequency" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Other)
+                            @Html.ValidationMessageFor(model => model.Other.Amount)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8 col-lg-5">
+                <div class="content-wrapper js-sticky">
+                    <div class="info-box-wrapper">
+                        <div class="info-box info-box--sidebar js-budget-info-box js-budget-income-info-box" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4 class="js-budget-term">Monthly income</h4>
+                                    </div>
+                                </div>
+                                <div class="info-box__highlight">
+                                    <p>Total: <span class="js-budget-total">£0.00</span></p>
+                                </div>
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>Earnings: <span class="js-budget-earnings">£0.00</span></li>
+                                    <li>Benefits: <span class="js-budget-benefits">£0.00</span></li>
+                                    <li>Pensions: <span class="js-budget-pensions">£0.00</span></li>
+                                    <li>Other: <span class="js-budget-other">£0.00</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box-wrapper">
+                        <div class="info-box info-box--sidebar js-budget-info-box js-budget-outgoings-info-box" data-mh="info-box">
+                            <div class="info-box__top">
+                                <div class="info-box__heading">
+                                    <div class="info-box__text">
+                                        <h4 class="js-budget-term">Monthly outgoings</h4>
+                                    </div>
+                                </div>
+                                <div class="info-box__highlight">
+                                    <p>Total: <span class="js-budget-total">£0.00</span></p>
+                                </div>
+                            </div>
+                            <div class="info-box__body">
+                                <ul>
+                                    <li>Priority bills: <span class="js-budget-bills">£0.00</span></li>
+                                    <li>Expenditure: <span class="js-budget-expenditure">£0.00</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="js-sticky-width"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-10 col-lg-7">
+                <div class="content-wrapper content-wrapper--padding-reset">
+                    <div class="content__block">
+                        <div class="form__element form__element--row form__element--button">
+                            <button type="submit" name="submit" class="btn btn--primary">Calculate my budget <i class="jw-icon-arrow"></i></button>
+                            @if (Model.EnabledPartialSave)
+                            {
+                                <button type="submit" name="submit" class="btn btn--primary" value="saveforlater">Save for Later</button>
+                            }
+
+                         
+                            @Html.ActionLink("Back", "BillsAndOutgoings", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] },new {@class="btn btn--link" })
+                        </div>
+
+                        @if (Model.PartialSavedEvent && Model.HasErrorPartialSavedIAndE)
+                        {
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p style="color:red;font-weight:bold;">Sorry, we were unable to save your budget details, please try.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

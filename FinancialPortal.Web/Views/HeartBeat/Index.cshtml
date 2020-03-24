@@ -1,0 +1,55 @@
+﻿@model FinancialPortal.Web.Models.DataTransferObjects.HeartBeatDto
+@{
+    ViewBag.Title = "Heartbeat";
+}
+
+<main id="app" class="jw-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Checking all services</h2>
+                        <p>Results from the other services</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="info-box @Model.HeaderColour" data-mh="info-box">
+                    <div class="info-box__top">
+                        <div class="info-box__heading">
+                            <div class="info-box__text">
+                                <h4>@Html.Encode(Model.ServiceName)</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box__body">
+                        <ul>
+                            <li>
+                                My Run Time:
+                                <span>@Html.Encode(Model.RunningElapsedTime.ToString(@"hh\:mm\:ss\.ff"))</span>
+                            </li>
+                            <li>
+                                Round Trip Time:
+                                <span>@Html.Encode(Model.FriendlyDisplayElapsedTime)</span>
+                            </li>
+                            <li>
+                                Status:
+                                <span>@Html.Encode(Model.Status)</span>
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.Details))
+                            {
+                                <li>
+                                    Details:
+                                    <span>@Html.Encode(Model.Details)</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

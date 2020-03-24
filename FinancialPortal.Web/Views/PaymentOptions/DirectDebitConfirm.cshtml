@@ -1,0 +1,121 @@
+﻿@using FinancialPortal.Web.ViewModels
+@model FinancialPortal.Web.ViewModels.DirectDebitPlanOverviewVm
+@{
+    ViewBag.Title = "Confirm";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 col-xl-7">
+            <div class="content-wrapper">
+                <div class="content__block content__block--pb-none">
+                    <h2>Your payment plan’s almost set up</h2>
+                    <p>Please check all the details are correct before going ahead.</p>
+                    <div class="step">
+                        <div class="step__number step__number--active">1</div>
+                        <div class="step__number step__number--active">2</div>                        
+                        <div class="step__number step__number--active">3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-xs-7">
+            <div class="content-wrapper content-wrapper--padding-reset">
+                <div class="content__block">
+                    <h2>Your payment details</h2>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">Your Lowell Reference</h5>
+                        <p>@Model.LowellReference</p>
+                    </div>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">Amount</h5>
+                        <p>&pound;@Model.PaymentAmount</p>
+                    </div>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">First payment date </h5>
+                        <p>@Model.StartDate</p>
+                    </div>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">Payment term </h5>
+                        <p>@($"{Model.TermYears} years and {Model.TermMonths} months")</p>
+                    </div>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">Type of payment</h5>
+                        <p>Direct Debit</p>
+                    </div>
+                    <div class="form__element">
+                        @using (Html.BeginForm("Change", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form" }))
+                        {
+                            @* State of payment options view model to be restored (obtained from serialised data stashed in Direct Debit Detail VM *@
+                            @*TODO: THIS NEEDS FIXING - DirectDebitDetailsVm directDebitDetailsVm = DeserialiseModel<DirectDebitDetailsVm>(Model.DirectDebitDetailsFilledInState);
+                            <input type="hidden" name="@nameof(PaymentOptionsStateVm.FilledInState)" value="@directDebitDetailsVm.PaymentOptionsFilledInState" />*@
+
+
+                            <button type="submit" class="btn btn--link">Change Details</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-5">
+            <div class="content-wrapper content-wrapper--off-white content-wrapper--off-white--top content-wrapper--padding-reset">
+                <div class="content__block">
+                    <h2>Your bank details</h2>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">Account holder's name</h5>
+                        <p>@Model.AccountHoldersName</p>
+                    </div>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">Sort code</h5>
+                        <p>@Model.SortCode</p>
+                    </div>
+                    <div class="form__element form__element--label">
+                        <h5 class="highlight bold">Account number</h5>
+                        <p>@Model.AccountNumber</p>
+                    </div>
+                    <div class="form__element">
+                        @using (Html.BeginForm("DirectDebitChange", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form" }))
+                        {
+                            @* State of direct debit view model to be restored *@
+                            <input type="hidden" name="@nameof(DirectDebitDetailsStateVm.FilledInState)" value="@Model.DirectDebitDetailsFilledInState" />
+
+                            <button type="submit" class="btn btn--link">Change Details</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="content-wrapper content-wrapper--padding-reset">
+                <div class="content__block">
+                    <div class="form__element form__element--row form__element--button">
+
+                        @* 'Complete' form *@
+                        @using (Html.BeginForm("DirectDebitComplete", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form dd-confirm-setup-form"  }))
+                        {
+                            @* State of direct debit view model to be restored *@
+                            <input type="hidden" name="@nameof(DirectDebitDetailsStateVm.FilledInState)" value="@Model.DirectDebitDetailsFilledInState" />
+
+                            <button type="submit" class="btn btn--primary">Set up my plan <i class="jw-icon-arrow"></i></button>
+                        }
+
+                        @* 'Cancel' form *@
+                        @using (Html.BeginForm("DirectDebitConfirmCancel", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form dd-confirm-cancel-form" }))
+                        {
+                            @* State of direct debit view model to be restored *@
+                            <input type="hidden" name="@nameof(DirectDebitDetailsStateVm.FilledInState)" value="@Model.DirectDebitDetailsFilledInState" />
+
+                            <button type="submit" formnovalidate class="btn btn--link">Cancel</button>
+                        }
+                        
+                        <div style="clear:both"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

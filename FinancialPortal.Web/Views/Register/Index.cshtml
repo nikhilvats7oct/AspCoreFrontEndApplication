@@ -1,0 +1,148 @@
+﻿@model FinancialPortal.Web.ViewModels.DataProtectionVm
+
+@{
+    ViewBag.Title = "Register";
+}
+
+@if (ViewData.ModelState.Any(x => x.Key == string.Empty))
+{
+    <div class="notification notification--error js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        <div class="notification__message__heading">
+                            <p>Oops</p>
+                        </div>
+                        <div class="notification__message__body">
+                            <p>@Html.Raw(Model.NotificationMessage)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6 order-first order-md-last">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Register your account</h2>
+                    <p>Register to create an online account, set up a payment plan and keep track of your progress. Manage your account without even having to pick up the phone.</p>
+                    @using (Html.BeginForm("Index", "Register", FormMethod.Post, new { @class = "form register-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form__element">
+                            <div class="label-wrapper">
+                                @Html.LabelFor(m => m.LowellReference, "Your Lowell reference number")
+                                <a href="#reference-number-modal" data-modal="#reference-number-modal" data-modal-type="inline">What's this</a>
+                            </div>
+                            @Html.TextBoxFor(model => model.LowellReference, new { placeholder = "eg. 1238948334", id = "reference-number", autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.LowellReference)
+                        </div>
+                        <div class="form__element">
+                            @Html.LabelFor(m => m.DateOfBirth, "Date of birth")
+                            <div class="form__element__dob">
+                                @Html.TextBoxFor(m => m.DateOfBirth, new { @name = "date-of-birth", @style = "width: 0;height: 0; position: absolute;", @class = "date-of-birth-text" })
+                                <div class="select-wrapper day">
+                                    @Html.DropDownListFor(m => m.Day, new SelectList(Model.Days, "Key", "Value", Model.Day), new { @name = "dropdown-day", @class = "js-select-dob dropdown-day" })
+                                </div>
+                                <div class="select-wrapper month">
+                                    @Html.DropDownListFor(m => m.Month, new SelectList(Model.Months, "Key", "Value", Model.Month), new { @name = "dropdown-month", @class = "js-select-dob dropdown-month" })
+                                </div>
+                                <div class="select-wrapper year">
+                                    @Html.DropDownListFor(m => m.Year, new SelectList(Model.Years, "Key", "Value", Model.Year), new { @name = "dropdown-year", @class = "js-select-dob dropdown-year" })
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.DateOfBirth)
+                        </div>
+                        <div class="form__element">
+                            @Html.LabelFor(m => m.Postcode, "Postcode")
+                            @Html.TextBoxFor(model => model.Postcode, new { placeholder = "eg. LS18 4AA", id = "postcode", @class = "js-postcode", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Postcode)
+                        </div>
+                        <div style="visibility: hidden; display: none;">
+                            @Html.TextBoxFor(m => m.HoneyPotTextBox)
+                        </div>
+                        <div class="form__element form__element--row form__element--button">
+                            <button type="submit" class="btn btn--primary">Next <i class="jw-icon-arrow"></i></button>
+                            <a class="btn btn--link" href="@Url.Action("Index", "Home")">Cancel</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-lg-5 order-md-last order-last mb-3 mt-4">
+            <div class="content-wrapper">
+                <div class="info-box-wrapper">
+                    <div class="info-box info-box--sidebar info-box--benefits" data-mh="info-box" style="">
+                        <div class="info-box__top">
+                            <div class="info-box__heading">
+                                <div class="info-box__text">
+                                    <h3 class="js-payment-account">Benefits of having<br>an online account</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-box__body">
+
+                            <div class="row mt-5 mb-5">
+                                <div class="col-2 number-item">1</div>
+                                <div class="col-10">
+                                    <p class="text">
+                                        Use our budget calculator to work out what you can afford
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row mt-5 mb-5">
+                                <div class="col-2 number-item">2</div>
+                                <div class="col-10">
+                                    <p class="text">
+                                        Setup a repayment plan on your own terms
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row mt-5 mb-5">
+                                <div class="col-2 number-item">3</div>
+                                <div class="col-10">
+                                    <p class="text">
+                                        Check and amend your repayment plan whenever you want
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.Partial("Partials/LowellReferenceLocation")
+    </div>
+</div>
+
+
+@section scripts{
+    @*The following script must be executed after Jquery Validation and Jquery Unobtrusive scripts are loaded.*@
+    <script>
+        $(document).ready(function () {
+            $.validator.addMethod(
+                "date",
+                function (value, element) {
+                    var parsedDate = window.moment(value, "DD-MMMM-YYYY");
+                    return this.optional(element) || parsedDate.isValid();
+                },
+                "Please enter a date in the format dd/mm/yyyy"
+            );
+
+            $('.date-of-birth-text').on('change',
+                function (e) {
+                    $(this).attr('value', $(this).val());
+                });
+
+        });
+    </script>
+}

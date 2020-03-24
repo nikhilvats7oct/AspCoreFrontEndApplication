@@ -1,0 +1,175 @@
+﻿@model FinancialPortal.Web.ViewModels.HouseholdStatusVm
+
+@{
+    ViewBag.Title = "BudgetCalculator";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.SavedIAndE == true)
+{
+    <div class="notification notification--warning js-notification">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="notification__message">
+                        @if (Model.PartialSavedIAndE)
+                        {
+                            <div class="notification__message__heading">
+                                <p>Hello!</p>
+                            </div>
+                            <div class="notification__message__body">
+                                <p>Your saved assessment from your previous session is displayed below. Please complete calculating your budget.</p>                                
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="notification__message__heading">
+                                <p>Attention Required!</p>
+                            </div>
+                            <div class="notification__message__body">
+                                <p>We have displayed your last saved budget details where possible.</p>
+                                <p>Please check and complete all applicable fields.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container">
+    @using (Html.BeginForm("HouseholdStatus", "BudgetCalculator", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form js-budget-calc" }))
+    {
+    <div class="js-household">
+        <input type="hidden" name="circumstances" value="@Model.EmploymentStatus" />
+        <input type="hidden" name="adults" value="@Model.AdultsInHousehold" />
+        <input type="hidden" name="children_0_16" value="@Model.ChildrenUnder16" />
+        <input type="hidden" name="children_17_18" value="@Model.ChildrenOver16" />
+        <input type="hidden" name="housing" value="@Model.HousingStatus" />
+        @Html.HiddenFor(m => m.ExternallyLaunched)
+
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="content-wrapper">
+                    <div class="content__block">
+                        <h2>Budget Calculator</h2>
+                        <p>Our budget calculator is the easy way to work out what you can afford to pay.</p>
+                        <p>You’ll need details of money coming in, like your wage, benefits and a pension if you have one. Plus, money you spend to live, like rent, mortgage and utility bills, as well as food. So please have this information ready.</p>
+                        <p class="highlight">It’ll take around 20 minutes and gives a clear picture of your budget and how to move forward.</p>
+
+                        <div class="step">
+                            <div class="step__number step__number--active">1</div>
+                            <div class="step__number">2</div>
+                            <div class="step__number">3</div>
+                            <div class="step__number">4</div>
+                        </div>
+
+                        <div class="form__element">
+                            <h3>Household Details</h3>
+                            <label>What’s your empolyment status?</label>
+                            <div class="select-wrapper">
+                                <select name="EmploymentStatus" id="circumstances" class="js-select js-select-style-only"  data-val="true" data-val-required="Please select a circumstance that applies to you">
+                                    <option selected value="">Please select</option>
+                                    <option value="employed-full-time">Employed full-time</option>
+                                    <option value="employed-part-time">Employed part-time</option>
+                                    <option value="self-employed">Self-Employed</option>
+                                    <option value="illness-disability-related">Illness/Disability related</option>
+                                    <option value="unemployed">Unemployed</option>
+                                    <option value="retired">Retired</option>
+                                    <option value="carer">Carer</option>
+                                    <option value="student">Student</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.EmploymentStatus)
+                        </div>
+
+                        <div class="form__element">
+                            <div class="form__element__info">
+                                <label for="benefits">Including yourself, how many people in your household are dependent on you?</label>
+                                <i class="jw-icon-info-lg highlight js-toggle"></i>
+                            </div>
+                            <div class="form__element__info--toggle js-toggle-visible">
+                                <p><strong>Dependants</strong> are the people living at your address, who rely on you for financial support. Usually spouses, children or elderly parents. They can also be siblings and step children.</p>
+                            </div>
+                            <div class="form__element__3col">
+                                <div class="form__element">
+                                    <label>Adults</label>
+                                    <div class="select-wrapper">
+                                        <select name="AdultsInHousehold" id="adults" class="js-select js-select-style-only">
+                                            <option selected value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form__element">
+                                    <label>Children under 16</label>
+                                    <div class="select-wrapper">
+                                        <select name="ChildrenUnder16" id="children-0-16" class="js-select js-select-style-only">
+                                            <option selected value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form__element">
+                                    <label>Children 16-18</label>
+                                    <div class="select-wrapper">
+                                        <select name="ChildrenOver16" id="children-17-18" class="js-select js-select-style-only">
+                                            <option selected value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.AdultsInHousehold)
+                        </div>
+
+                        <div class="form__element">
+                            <label for="reference-number">What’s your housing status?</label>
+                            <div class="select-wrapper">
+                                <select name="HousingStatus" id="housing" class="js-select js-select-style-only" data-val="true" data-val-required="Please select a housing status that applies to you">
+                                    <option selected="" value="">Please select</option>
+                                    <option value="mortgage">Mortgage</option>
+                                    <option value="homeowner">Homeowner</option>
+                                    <option value="tenant-private">Tenant - Private</option>
+                                    <option value="tenant-social">Tenant - Social</option>
+                                    <option value="living-with-parents">Living with parents</option>
+                                    <option value="homeless">Homeless</option>
+                                    <option value="other">Other</option>
+                                </select>
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.HousingStatus)
+                        </div>
+                        <div class="form__element form__element--row form__element--button">
+                            <button type="submit" class="btn btn--primary">Next <i class="jw-icon-arrow"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

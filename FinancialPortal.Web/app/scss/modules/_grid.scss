@@ -1,0 +1,23 @@
+// Grid vars
+$grid-gutter-width: 30px !default;
+
+// $grid-breakpoints: (
+//     xxs: 0,
+//     xs: 375px,
+//     sm: 576px,
+//     md: 840px,
+//     lg: 1024px,
+//     xl: 1200px,
+//     xxl: 1500px,
+//     max: 99999px
+// );
+
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1170px
+);
+
+@import 'bootstrap/scss/bootstrap-grid';
+@import "bootstrap/scss/utilities/spacing";

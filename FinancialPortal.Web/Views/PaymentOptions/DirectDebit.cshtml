@@ -1,0 +1,113 @@
+﻿@inject CmsEndpoints CmsEndpoints
+
+@using FinancialPortal.Web.Settings
+@using FinancialPortal.Web.Validation
+@using FinancialPortal.Web.ViewModels
+@model FinancialPortal.Web.ViewModels.DirectDebitDetailsVm
+
+@{
+    ViewBag.Title = "Direct Debit";
+}
+
+@if (@Model.MessageForUser != null)
+{
+<div class="notification notification--error js-notification">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="notification__message">
+                    <div class="notification__message__heading">
+                        <p>Oops</p>
+                    </div>
+                    <div class="notification__message__body">
+                        <p>@Html.Raw(Model.MessageForUser)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+<div class="container">
+    @using (Html.BeginForm("DirectDebit", "PaymentOptions", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post, true, new { @class = "form" }))
+    {
+    @* State of direct debit view model to be restored *@
+    <input type="hidden" name="@nameof(DirectDebitDetailsVm.InitialState)" value="@Model.InitialState" />
+    <input type="hidden" name="@nameof(DirectDebitDetailsVm.PaymentOptionsFilledInState)" value="@Model.PaymentOptionsFilledInState" />
+
+    <div class="payment-details">
+        <input type="hidden" name="account" value="Tesco CC">
+        <input type="hidden" name="paymentAmount" value="1.00">
+        <input type="hidden" name="balance" value="50.00">
+        <input type="hidden" name="paymentDate" value="02-12-2018">
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Let’s set up your payment plan</h2>
+                    <p>
+                        <b> First tell us your bank account details</b>
+                    </p>
+                    <div class="step">
+                        <div class="step__number step__number--active">1</div>
+                        <div class="step__number step__number--active">2</div>
+                        <div class="step__number">3</div>
+                    </div>
+                    <div class="form__element">
+                        @Html.LabelFor(x => x.AccountHoldersName, "Account holder's name")
+                        @Html.TextBoxFor(x => x.AccountHoldersName, new { placeholder = "e.g. Your full name", tabIndex = 1 })
+                        @Html.ValidationMessageFor(m => m.AccountHoldersName, "")
+                        <a href="" class="form__element__more-info"></a>
+                    </div>
+                    <div class="form__element">
+                        @Html.LabelFor(x => x.SortCode, "Sort code")
+                        @Html.TextBoxFor(x => x.SortCode, new { placeholder = "e.g. 112233", tabIndex = 2 })
+                        @*TODO: FIX THIS @Html.Raw(HttpUtility.HtmlDecode(Html.ValidationMessageFor(m => m.SortCode).ToHtmlString()))*@
+                        @Html.ValidationMessageFor(m => m.SortCode, "")
+                        <a href="" class="form__element__more-info"></a>
+                    </div>
+                    <div class="form__element">
+                        @Html.LabelFor(x => x.AccountNumber, "Account number")
+                        @Html.TextBoxFor(x => x.AccountNumber, new { placeholder = "e.g. 12345678", tabIndex = 3 })
+                        @Html.ValidationMessageFor(m => m.AccountNumber, "")
+                        <a href="" class="form__element__more-info"></a>
+                    </div>
+                    <div class="form__element form__element--direct-debit">
+                        <div class="checkbox-wrapper">
+                            @Html.CheckBoxFor(x => x.AcceptDirectDebitGuarantee, new { tabIndex = 4 })
+
+                            @*
+                                Html helper above will automatically render input type=checkbox and input type=hidden with the
+                                same name. Refer to MS documentation or class documentation for more information on why it's doing this.
+
+                                Unfortunately the hidden element does not have any of the validation data attributes from the original check box
+                                This makes Jquery validate confused since there are 2 elements with name attribute and it will validate the final one
+                                But in this case the final one is the hidden element with no validation attributes hence jquery validate does not validate
+                                at all. Hence the following manual hidden element with validation attribute to force jquery validate to validate this.
+                            *@
+
+                            @Html.HiddenFor(x => x.AcceptDirectDebitGuarantee, new Dictionary<string, object> { { "data-val", "true" }, { "data-val-required", $"{ValidationMessages.NotAcceptedDirectDebitGuarantee}" } })
+                            @Html.LabelFor(x => x.AcceptDirectDebitGuarantee, "Yes, I confirm that I’m the account holder and I’m authorised to set up Direct Debit payments on this account.")
+
+                            <div class="custom-checkbox"></div>
+                            @Html.ValidationMessageFor(m => m.AcceptDirectDebitGuarantee, "")
+                        </div>
+                        <div class="form__element__direct-debit">
+                            <img src="/images/direct-debit-logo.png" width="100">
+                            <p><a target="_blank" href="@CmsEndpoints.DirectDebitGuarantee">Direct Debit Guarantee</a></p>
+                        </div>
+                    </div>
+                    <div class="form__element form__element--row form__element--button">
+                        <button type="submit" class="btn btn--primary" tabindex="5">Next <i class="jw-icon-arrow"></i></button>
+
+                        <input value="Cancel" formnovalidate type="submit" tabindex="6" class="btn btn--link" formaction="@Url.Action("DirectDebitCancel", new { id = ViewContext.RouteData.Values["id"] })" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

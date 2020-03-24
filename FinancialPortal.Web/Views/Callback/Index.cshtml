@@ -1,0 +1,184 @@
+﻿@model FinancialPortal.Web.ViewModels.CallbackVm
+
+@{
+    ViewBag.Title = "Callback";
+    Layout = null;
+}
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="@Url.Content("~/css/main.css")">
+</head>
+<body>
+    <div class="container m-0">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6 p-0">
+                <div class="content-wrapper p-0">
+                    <div class="content__block pt-0">
+                        @if (!Model.HasCallbackRequestBeenSentSuccessfully)
+                        {
+                            <div class="row clsbtn-callback">
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <h3>Request a callback</h3>
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <a id="btnCallback" class="btn btn--primary">
+                                        Call me back
+                                        <i class="jw-icon-arrow"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+
+                        @Html.HiddenFor(m=>m.SlotsAvailableForCurrentDay)
+                        
+                        @Html.HiddenFor(m=>m.FirstAvailableDate)
+
+                        @if (Model.HasCallbackRequestBeenSentSuccessfully)
+                        {
+                            <div>
+                                <h3>Request a callback</h3>
+                            </div>
+                            <div>
+                                <p>
+                                    Thank you for your call back request.
+                                </p>
+                            </div>
+                            <div class="col-6" style="overflow: hidden; text-align: center; padding:10px;">
+                                <span>
+                                    <i class="jw-icon-tick"
+                                       style="border-radius: 50%; width: 36px; height: 36px; padding: 8px; background: #fff; border: 1px solid #eff9e9; color: #b1e095; text-align: center; font-size: 32px;" aria-hidden="true">
+                                    </i>
+                                </span>
+                            </div>
+                        }
+
+                        <div class="clsform-callback d-none">
+                            <h2><b>Request a callback</b></h2>
+                            <span><i class="fa fa-check" aria-hidden="true"></i></span>
+
+                            @if (!Model.HasCallbackRequestBeenSentSuccessfully)
+                            {
+                                <p>
+                                    To make sure we have the right information please complete the form below (you may still be contacted by Lowell outside of the arranged timeslot).
+                                </p>
+
+
+                                using (Html.BeginForm("SendCallback", "Callback", FormMethod.Post, new { @class = "form" }))
+                                {
+
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.FullName, "Your details")
+                                        @Html.TextBoxFor(model => model.FullName, new { placeholder = "Full Name", maxlength = 100 })
+                                        @Html.ValidationMessageFor(model => model.FullName)
+                                    </div>
+
+                                    <div class="form__element">
+
+                                        @foreach (var opt in Model.AccountHolderStatuses)
+                                        {
+                                            var id = Guid.NewGuid().ToString("N");
+
+                                            <div class="radio-wrapper">
+                                                @Html.RadioButtonFor(x => x.AccountHolderStatus, @opt.Key, new { id = @id })
+
+                                                <label for="@id">@opt.Value</label>
+                                                <div class="custom-radio"></div>
+                                            </div>
+                                        }
+
+                                        @Html.ValidationMessageFor(model => model.AccountHolderStatus)
+                                    </div>
+
+                                    <div class="form__element mb-1">
+                                        <h5><b>Account Holder Information</b></h5>
+                                    </div>
+
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.LowellReferenceNumber, "Account Reference")
+                                        @Html.TextBoxFor(model => model.LowellReferenceNumber, new { placeholder = "eg. 1238948334", maxlength = 15 })
+                                        @Html.ValidationMessageFor(model => model.LowellReferenceNumber)
+                                    </div>
+
+                                    <div class="form__element">
+                                        @Html.LabelFor(model => model.PreferredTelephoneNumber, "Contact number")
+                                        @Html.TextBoxFor(model => model.PreferredTelephoneNumber, new { placeholder = "Contact number", maxlength = 17 })
+                                        @Html.ValidationMessageFor(model => model.PreferredTelephoneNumber)
+                                    </div>
+
+                                    <div class="form__element">
+
+                                        @foreach (var opt in Model.CallbackOptions)
+                                        {
+                                            var id = Guid.NewGuid().ToString("N");
+
+                                            <div class="radio-wrapper">
+                                                @Html.RadioButtonFor(x => x.CallmeNow, @opt.Key, new { id = @id, @class = @opt.Key })
+
+                                                <label for="@id">@opt.Value</label>
+                                                <div class="custom-radio"></div>
+                                            </div>
+                                        }
+
+                                        @Html.ValidationMessageFor(model => model.CallbackOptions)
+                                    </div>
+
+                                    <div class="form__element clscallmenowmsg d-none">
+                                        @Html.LabelFor(m => m.CallmeNow, "We'll aim to be in touch within the next hour. In busy periods this may take a little longer.")
+                                    </div>
+
+                                    <div class="clscallbackdate d-none">
+                                        <div class="form__element mb-2 ">
+                                            @Html.Label("Choose an available date below")
+                                        </div>
+
+                                        <div class="form__element">
+                                            @Html.TextBoxFor(model => model.CallbackDate, new { type = "text", name = "CallbackDate", @readonly = "readonly", @class = "js-datepicker-callback", autocomplete = "off", placeholder = "DD-MM-YYYY", maxlength = 10 })
+                                            @Html.ValidationMessageFor(m => m.CallbackDate)
+                                        </div>
+                                    </div>
+
+                                    <div class="form__element clscallbacktime d-none">
+                                        @Html.LabelFor(m => m.TimeSlot, "Select a callback time slot")
+
+                                        <div class="form__element mb-2">
+                                            @Html.TextBoxFor(m => m.TimeSlot, new { @name = "timeslot", @style = "width: 0;height: 0; position: absolute;", @class = "time-slot-text" })
+                                            <div class="select-wrapper " id="dvsundaytimeslots" style="display:none;">
+                                                @Html.DropDownListFor(m => m.TimeSlotSunday, new SelectList(Model.TimeSlotsSunday, "Key", "Value", Model.TimeSlot), new { @name = "dropdown-timeslot", @class = "js-select-dob  dropdown-month js-select-timeslot" })
+                                                @Html.ValidationMessageFor(m => m.TimeSlot)
+                                            </div>
+                                            <div class="select-wrapper" id="dvtodaytimeslots">
+                                                @Html.DropDownListFor(m => m.TimeSloFirstDay, new SelectList(Model.TimeSlotsFirstAvailableDay, "Key", "Value", Model.TimeSlot), new { @name = "dropdown-timeslot", @class = "js-select-dob  dropdown-month js-select-timeslot" })
+                                                @Html.ValidationMessageFor(m => m.TimeSlot)
+                                            </div>
+                                            <div class="select-wrapper" id="dvweekdaytimeslots" style="display:none;">
+                                                @Html.DropDownListFor(m => m.TimeSlotWeekday, new SelectList(Model.TimeSlotsWeekday, "Key", "Value", Model.TimeSlot), new { @name = "dropdown-timeslot", @class = "js-select-dob  dropdown-month js-select-timeslot" })
+                                                @Html.ValidationMessageFor(m => m.TimeSlot)
+                                            </div>
+                                            <div class="select-wrapper" id="dvsaturdaytimeslots" style="display:none;">
+                                                @Html.DropDownListFor(m => m.TimeSlotSaturday, new SelectList(Model.TimeSlotsSaturday, "Key", "Value", Model.TimeSlot), new { @name = "dropdown-timeslot", @class = "js-select-dob  dropdown-month js-select-timeslot" })
+                                                @Html.ValidationMessageFor(m => m.TimeSlotSaturday)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <button type="submit" class="btn btn--primary">Submit Request</button>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="@Url.Content("~/js/main.min.js")"></script>
+    <script src="@Url.Content("~/js/additionalscript-min.js")"></script>
+    <script src="~/js/callback.js"></script>
+</body>
+
+

@@ -1,0 +1,48 @@
+﻿@model FinancialPortal.Web.ViewModels.LoginVm
+
+@{
+    ViewBag.Title = "Confirm Email";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    @if (ViewData.ModelState.Any(x => x.Key == string.Empty))
+                    {
+                        <h2>Your account is already active!</h2>
+                    }
+                    else
+                    {
+                        <h2>You're registered</h2>
+                    }
+                        <p>Simply enter your password to access your account and get going.  </p>
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.EmailAddress)
+                        <div class="form__element">
+                            @Html.LabelFor(model => model.Password, "Enter your password")
+                            @Html.PasswordFor(model => model.Password, new { @class = "js-password", placeholder = "password", id = "password" })
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
+                        <div style="visibility: hidden; display: none;">
+                            @Html.TextBoxFor(m => m.HoneyPotTextBox)
+                        </div>
+                        <div class="form__element">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" name="show-password" id="show-password" value="" class="js-show-password" />
+                                <label for="show-password">Show password</label>
+                                <div class="custom-checkbox"></div>
+                            </div>
+                        </div>
+                        <div class="form__element form__element--row">
+                            <button type="submit" class="btn btn--primary">Login <i class="jw-icon-arrow"></i></button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

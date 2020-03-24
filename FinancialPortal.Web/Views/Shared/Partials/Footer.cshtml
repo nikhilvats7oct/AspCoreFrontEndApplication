@@ -1,0 +1,65 @@
+@* IMPORTANT - if changed, must copy into plain HTML pages in root *@
+@* Replace configuration with live values from Web.Production.config *@
+@using FinancialPortal.Web.Settings
+@using Microsoft.Extensions.Configuration
+@inject CmsEndpoints CmsEndpoints;
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-md-2">
+                <img src="~/images/logos/lowell-logo-white-red.png" alt="Lowell Logo" />
+            </div>
+            <div class="col-12 col-md-10">
+                <div class="footer__bottom">
+                    <div class="row">
+                        <div class="col-6 col-md-12">
+                            <div class="footer__bottom__copy">
+                                <p>&copy; Copyright @DateTime.Now.Year</p>
+                            </div>
+                        </div>
+                        <div class="col-6 d-md-none d-lg-none justify-content-end d-flex">
+                            <div class="footer__bottom__back">
+                                <a target="_blank" href="@CmsEndpoints.HomePage">Lowell.co.uk</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <nav class="footer__bottom__links footer__bottom__links--stack">
+                                <ul>
+                                    <li><a target="_blank" href="@CmsEndpoints.TalkToUs">Contact us</a> </li>
+                                    <li><a target="_blank" href="@CmsEndpoints.HelpAndSupport">Help &amp; Support</a></li>
+                                    <li><a target="_blank" href="@CmsEndpoints.TermsAndConditions">Terms &amp; Conditions</a></li>
+                                    <li><a target="_blank" href="@CmsEndpoints.PrivacyPolicy">Our Privacy Promise</a></li>
+                                    <li><a target="_blank" href="@CmsEndpoints.CustomerPrivacyNotice">Customer Privacy Notice</a></li>
+                                    <li><a target="_blank" href="@CmsEndpoints.ModernSlavery">Modern Slavery</a></li>
+                                    <li><a target="_blank" href="@CmsEndpoints.CookiePolicy">Cookie Policy</a></li>
+                                    <li><a target="_blank" href="@CmsEndpoints.LowellGroup">Lowell Group</a></li>
+                                    <li><a href="#" data-modal="#cookiePreferenceModal" data-modal-type="inline" class="btn-cookie-preferences" id="footer-cookie-pref-btn">Cookie Preferences</a></li>
+                                </ul>
+                            </nav>
+                            <div class="footer__bottom__legals d-none d-md-flex d-lg-flex">
+                                <p>Lowell Portfolio I Ltd and Lowell Financial Ltd are companies registered in England and Wales under Company Reg. No: 4857418 and 4558936 respectively. They are authorised and regulated by the Financial Conduct Authority in respect of consumer credit regulated accounts. Registered Offices: Ellington House, 9 Savannah Way, Leeds, LS10 1AB.</p>
+                            </div>
+                        </div>
+                        <div class="d-none col-md-4 d-md-flex d-lg-flex justify-content-end">
+                            <div class="footer__bottom__back">
+                                <a target="_blank" href="@CmsEndpoints.HomePage">Lowell.co.uk</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 d-md-none d-lg-none">
+                            <div class="footer__bottom__legals">
+                                <p>Lowell Portfolio I Ltd and Lowell Financial Ltd are companies registered in England and Wales under Company Reg. No: 4857418 and 4558936 respectively. They are authorised and regulated by the Financial Conduct Authority in respect of consumer credit regulated accounts. Registered Offices: Ellington House, 9 Savannah Way, Leeds, LS10 1AB.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

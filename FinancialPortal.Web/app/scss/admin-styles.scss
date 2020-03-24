@@ -1,0 +1,37 @@
+@import "modules/fonts";
+
+.umb-control {
+    // Normalize
+    @import "normalize-scss/sass/normalize/import-now";
+
+    // Utils
+    @import "utils/variables";
+    @import "utils/mixins";
+    @import "utils/functions";
+
+    // Modules
+    @import "modules/icons";
+    @import "modules/grid";
+    @import "modules/buttons";
+    @import "modules/forms";
+    @import "modules/tables";
+    @import "modules/lists";
+
+    @import "partials/structure";
+    @import "partials/components";   
+
+    @import "utils/helpers";
+
+    // Overrides
+    .hero {
+        height: 450px;
+
+        &--small {
+            height: 250px;
+        }
+
+        > .container > .row > [class*="col"] {
+            max-width: calc(50% - 30px);
+        }
+    }
+}

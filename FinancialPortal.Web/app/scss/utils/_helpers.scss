@@ -1,0 +1,98 @@
+.component {
+    margin-bottom: 20px;
+}
+
+.js-cookie-text,
+.js-notification,
+.js-toggle-visible,
+.js-field-visible {
+    display: none;
+}
+
+.js-warning {
+    width: 100%;
+}
+
+.form {
+    .js-child-field,
+    .js-warning,
+    .js-discount-info {
+        display: none;
+    }
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
+}
+
+.full-width {
+    max-width: 100% !important;
+}
+
+.mt-10-sm {
+    @include media-breakpoint-down(md) {
+        margin-top: 10px;
+    }
+}
+
+.container.no-padding {
+    padding: 0;
+}
+
+.bg-colour {
+    @each $class, $colour in $colour-map {
+        &--#{$class}{
+            background-color: $colour;
+            color: white;
+            
+            @if ($class == 'yellow' or $class == 'green'){
+                color: $brand-grey;
+
+                .btn--white.btn--outline {
+                    color: $brand-grey;
+                    border-color: $brand-grey;
+
+                    &:hover {
+                        border-color: white;
+                        color: $brand-primary; 
+                    }
+                }
+            }
+        }
+    }
+}
+
+[class^="col"] {
+    .form .form__element:last-of-type {
+        margin-bottom: 30px;
+    }
+}
+
+.js-sticky-width {
+    height: 1px;
+    visibility: hidden;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+
+    &--absolute {
+        position: absolute;
+    }
+}
+
+.ios10 {
+    button.btn {
+        display: inline-block;
+
+        i {
+            display: inline-block;
+            vertical-align: baseline
+        }
+    }
+}
+
+.u-pre-line {
+    white-space: pre-line;
+}

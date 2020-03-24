@@ -1,0 +1,72 @@
+﻿@model FinancialPortal.Web.ViewModels.AmendDirectDebitConfirmVm
+
+@{
+    ViewBag.Title = "Confirm Plan Changes";
+}
+
+<div class="container">
+    @using (Html.BeginForm("Complete", "AmendDirectDebtPlan", new { id = ViewContext.RouteData.Values["id"] }, FormMethod.Post))
+    {
+        // Filled in form state - deserialised by Complete action
+        @Html.HiddenFor(x => Model.FilledInState)
+
+        <div class="payment-details">
+            <input type="hidden" name="account" value="@Model.ClientName" />
+            <input type="hidden" name="paymentAmount" value="@Model.RegularAccountPaymentAmount" />
+            <input type="hidden" name="balance" value="@Model.OutstandingBalance" />
+            <input type="hidden" name="paymentDate" value="@Model.PlanStartDate" />
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-xl-7">
+                <div class="content-wrapper">
+                    <div class="content__block content__block--pb-none">
+                        <h2>Check your changes</h2>
+                        <p>Please make sure your details are correct and confirm them to go ahead.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 col-xs-7">
+                <div class="content-wrapper content-wrapper--padding-reset">
+                    <div class="content__block">
+                        <h2>Your payment plan</h2>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Reference</h5>
+                            <p>@Model.LowellReference</p>
+                        </div>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Amount</h5>
+                            <p>&pound;@Model.RegularAccountPaymentAmount @Model.PlanFrequency</p>
+                        </div>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Start date</h5>
+                            <p>@Model.PlanStartDate.ToString("d")</p>
+                        </div>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Payment term</h5>
+                            <p>@($"{Model.TermYears} years and {Model.TermMonths} months")</p>
+                        </div>
+                        <div class="form__element form__element--label">
+                            <h5 class="highlight bold">Payment type</h5>
+                            <p>Direct Debit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="content-wrapper content-wrapper--padding-reset">
+                    <div class="content__block">
+                        <div class="form__element form__element--row form__element--button">
+                            <button type="submit" class="btn btn--primary">Confirm Change <i class="jw-icon-arrow"></i></button>
+                            <input value="Cancel" type="submit" class="btn btn--link" formaction="@Url.Action("ConfirmCancel", new {id = ViewContext.RouteData.Values["id"]})" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

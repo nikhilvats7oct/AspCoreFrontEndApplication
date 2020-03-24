@@ -1,0 +1,63 @@
+﻿@using System.Globalization
+@model FinancialPortal.Web.ViewModels.ErrorViewModel
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="error js-error">
+                <h1 class="error__heading">503</h1>
+                <p class="error__content">Looks like we're having some server issues.</p>
+                <a href="/" class="btn btn--primary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model != null && Model.ShowOccurrenceInformation)
+{
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="info-box info-box--error" data-mh="info-box">
+                    <div class="info-box__top">
+                        <div class="info-box__heading">
+                            <div class="info-box__icon">
+                                <i class="jw-icon-caution"></i>
+                            </div>
+                            <div class="info-box__text">
+                                <h4>Error Information</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box__body">
+                        <div class="info-box__hint">
+                            <div class="info-box__text">
+                                <p>
+                                    Date/Time:<br />
+                                    @DateTime.Now.ToString("G", CultureInfo.CurrentCulture)
+                                </p>
+
+                                @* Should handle model being missing if navigate to view without it being set *@
+                                @if (@Model?.ExceptionOccurrenceId != null)
+                                {
+                                    <p>
+                                        <br />
+                                        Occurrence ID:<br />
+                                        @Model.ExceptionOccurrenceId
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

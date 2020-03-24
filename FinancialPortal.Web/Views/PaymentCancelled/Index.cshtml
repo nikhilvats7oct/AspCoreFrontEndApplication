@@ -1,0 +1,35 @@
+﻿@using System.Configuration
+@using FinancialPortal.Web.Settings
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Configuration
+@inject PortalSetting PortalSetting
+
+@{
+    ViewBag.Title = "Payment Cancelled";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Your payment setup has been cancelled</h2>
+                    <p>Remember you can set this up again at any time.</p>
+                    <p>If you'd like to speak to someone, <a target="_blank" href="@PortalSetting.TalkToUsUrl">talk to us</a> and we'll be happy to help</p>
+                    <div class="row">
+                        <div class="col-12">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                            <a href="@Url.Action("Index", "MyAccounts")" class="btn btn--primary">Back to My Accounts<i class="jw-icon-arrow"></i></a>
+                            }
+                            else
+                            {
+                            <a href="@Url.Action("Index", "Home")" class="btn btn--primary">Back to Homepage<i class="jw-icon-arrow"></i></a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

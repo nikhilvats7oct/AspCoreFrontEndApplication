@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tokenregistrationrequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<merchant>
+<merchantid>{systemid}</merchantid>
+<systemguid>{systemguid}</systemguid>
+</merchant>
+<merchantreference>{merchantreference}</merchantreference>
+{returnurlxml}
+<template>
+	<merchanttemplateid>{merchanttemplateid}</merchanttemplateid>
+	<languagetemplateid>{languagetemplateid}</languagetemplateid>
+</template>
+<accountid>{accountid}</accountid>
+<allowedpaymentschemes>{allowedpaymentschemes}</allowedpaymentschemes>
+<processCPC>false</processCPC>
+<tokenexpirationdate>{tokenexpirationdate}</tokenexpirationdate>
+<showpaymentresult>false</showpaymentresult>
+</tokenregistrationrequest>

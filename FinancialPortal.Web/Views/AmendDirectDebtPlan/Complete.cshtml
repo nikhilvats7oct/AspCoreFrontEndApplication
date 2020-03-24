@@ -1,0 +1,25 @@
+﻿@using FinancialPortal.Web.Settings
+@model FinancialPortal.Web.ViewModels.AmendDirectDebitVm
+@inject PortalSetting PortalSetting
+@{
+    ViewBag.Title = "Complete";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>
+                        Great.
+                        Your plan has been changed.
+                    </h2>
+
+                    <p>Your next payment will be taken as normal, on @Model.PlanStartDate.ToString("dd MMM yyyy"). If you’d like to change your payment plan again, <a target="_blank" href="@PortalSetting.TalkToUsUrl">talk to us</a> </p>
+                    <a href="@Url.Action("Index", "MyAccounts")" class="btn btn--primary">Back to My Accounts <i class="icon-arrow"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

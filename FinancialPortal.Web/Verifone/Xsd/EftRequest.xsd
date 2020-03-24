@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+            xmlns:CO="urn:MyNamespace">
+  <xs:import id="common" namespace="urn:MyNamespace" schemaLocation="Request.xsd" />
+  <xsd:element name="eftrequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+      <xs:documentation>
+        Inherits Request
+      </xs:documentation>
+      <xs:documentation>
+        The eftrequest holds all the EFT specific data.
+      </xs:documentation>
+    </xs:annotation>
+    <xsd:complexType mixed="true">
+      <xsd:all>
+        <xs:element name="javascriptenabled" type="CO:javascriptEnabled" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Defines if the customer has JavaScript enabled. Options: Y – Enabled, N – Disabled, U – Unknown.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="merchantreference"  type="CO:merchantReference" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Merchant’s reference number for the transaction.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="returnurl" type="CO:returnUrl" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>URL customer is redirected to after payment.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="merchant" type="CO:merchant" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Merchant Class
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="template" type="CO:template" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>The template class holds all PayPage template data.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xsd:element name="accountid" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Allocated by Commidea.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:decimal">
+              <xs:totalDigits value="18"/>
+              <xs:minInclusive value="1"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xsd:element>
+        <xsd:element name="allowedpaymentmethods" type="xsd:string" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Comma delimited list of payment methods to offer the customer: 1 – EFT, 2 – PayPal, 11 – SVS.
+            </xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="authcode" type="xsd:string" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>To be supplied when processing a charge only transaction.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="capturemethod" type="CaptureMethod" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Per transaction override of the account’s default capture method.
+            </xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="processingidentifier" type="ProcessingIdentifier" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Per transaction override of the account’s default processing identifier options: 1 – Auth and Charge, 2 – Auth Only
+              3 – Charge Only. If a processing identifier of ‘3’ is passed then a token ID must be supplied, along with an authorisation code
+            </xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="transactionvalue" type="xsd:decimal" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Value of the transaction to be processed.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="allowedpaymentschemes" type="xsd:string" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Comma delimited list of payment schemes to offer the customer: 1 – Amex, 2 – Visa, 3 – MasterCard, 4 – Maestro, 5 – Diners, 
+              6 – Visa Debit, 7 – JCB, 8 – BT Test Host, 9 – Time, 10 – Solo, 11 – Electron, 21 – Visa CPC, 23 – AllStar CPC
+              24 – EDC/Maestro, 25 – Laser, 26 – LTF, 27 – CAF, 28 – Creation, 29 – Clydesdale, 31 – BHS Gold, 32 – Mothercare Card, 
+              33 – Burton Menswear, 35 – BA AirPlus, 36 – Amex CPC.
+            </xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="enableUpdateToken" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Boolean to control whether or not to permit the cardholder to view and amend token details within the Token Payment page.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="allowCharityPayments" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Overrides setting on the account to show charity payment functionality on the Payment Page.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="enableRedFraudCheck" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Indicates whether a Red Fraud Check should be performed. If True, Red Fraud data must be provided within the post data.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="description" type="xsd:string"  minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Transaction description.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="showorderconfirmation" type="xsd:boolean" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Whether to show the order confirmation screen.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="showpaymentresult" type="xsd:boolean" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Whether to show the payment result screen.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="registertoken" type="xsd:boolean" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Whether to register customers card details for token.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="starpan" type="xsd:string" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>This will be displayed to the customer so that they can check that the token passed is for the card they wish to use.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="processCPC" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xsd:annotation>
+            <xsd:documentation>
+              Boolean to define if the merchant wishes for PayPage to attempt to process the card as CPC if possible (default value of true if not defined): 
+              True = Process as CPC, False = Process as normal EFT card. This setting will default to ‘True’ if the field is not defined within the EFT Request.
+              A VGIS reference will be returned within the notification if this field is set to true. If a non-CPC card is processed then the VGIS reference of ‘9999’.
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+		<xsd:element name="provideAAD" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Boolean to advice Payment Page that the merchant intends to pass the visa additional authorisation data.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="hideBillingDetails" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Boolean to control displaying the billing details within PayPage. Please note: upon setting this field to true, all of the address class fields are required, other than email.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="hideDeliveryDetails" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Boolean to control displaying the delivery details within PayPage. Please note: upon setting this field to true, all of the delivery address class fields are required.</xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="hidepaymentresultsuccess" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Boolean to provide ability to toggle the payment result screen appearing after a successful transaction result has been established:
+              True = If payment is successful, return to ReturnURL without showing payment result screen, False = If payment is successful, show payment result screen.
+              This setting is overridden by the Show Payment Result setting
+            </xs:documentation>
+          </xs:annotation>
+        </xsd:element>
+        <xsd:element name="tokenid" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>For use when the customer’s payment details have been previously stored with Commidea via a token registration.</xs:documentation>
+          </xs:annotation>
+          <xsd:simpleType>
+            <xs:restriction base="xs:decimal">
+              <xs:totalDigits value="18"/>
+              <xs:minInclusive value="0"/>
+            </xs:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element name="transactioncurrencycode" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>For backwards compatibility only.</xs:documentation>
+          </xs:annotation>
+          <xsd:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="4"/>
+            </xs:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element name="tokenexpirationdate" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Expiry date after which the token will no longer be valid and will be removed from the ICP Server.
+              e.g. for 31st December 2020: 31122020.
+            </xs:documentation>
+          </xs:annotation>
+           <xsd:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="8"/>
+            </xs:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element name="customer" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>The customer class holds all the customer specific data.</xs:documentation>
+          </xs:annotation>
+          <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+              <xsd:element name="firstname" type="xsd:string" />
+              <xsd:element name="lastname" type="xsd:string" />
+              <xsd:element name="address" type="address" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>The address class holds customer address information.</xs:documentation>
+                </xs:annotation>
+              </xsd:element>
+              <xsd:element name="deliveryaddress" type="address" minOccurs="0" maxOccurs="1"/>
+              <xsd:element name="email" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+              <xsd:element name="basket" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>The basket class holds the customer basket information.</xs:documentation>
+                </xs:annotation>
+                <xsd:complexType>
+                  <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="totalamount" type="xsd:decimal"  minOccurs="1" maxOccurs="1">
+                      <xs:annotation>
+                        <xs:documentation>Total order amount.</xs:documentation>
+                      </xs:annotation>
+                    </xsd:element>
+                    <xsd:element name="shippingamount" type="xsd:decimal"  minOccurs="1" maxOccurs="1">
+                      <xs:annotation>
+                        <xs:documentation>Total shipping amount.</xs:documentation>
+                      </xs:annotation>
+                    </xsd:element>
+                    <xsd:element name="vatamount" type="xsd:decimal"  minOccurs="1" maxOccurs="1">
+                      <xs:annotation>
+                        <xs:documentation>Total VAT amount.</xs:documentation>
+                      </xs:annotation>
+                    </xsd:element>
+                    <xsd:element name="basketitems">
+                      <xsd:complexType>
+                        <xsd:choice maxOccurs="unbounded">
+                          <xsd:element name="basketitem" minOccurs="0" maxOccurs="1">
+                            <xs:annotation>
+                              <xs:documentation>The basketitem class holds information on an item in the basket.</xs:documentation>
+                            </xs:annotation>
+                            <xsd:complexType>
+                              <xsd:choice maxOccurs="unbounded">
+                                <xsd:element name="productname" type="xsd:string" minOccurs="0" maxOccurs="1">
+                                  <xs:annotation>
+                                    <xs:documentation>Merchants product name.</xs:documentation>
+                                  </xs:annotation>
+                                </xsd:element>
+                                <xsd:element name="productcode" type="xsd:string" minOccurs="0" maxOccurs="1">
+                                  <xs:annotation>
+                                    <xs:documentation>Merchants product code.</xs:documentation>
+                                  </xs:annotation>
+                                </xsd:element>
+                                <xsd:element name="quantity" type="xsd:unsignedByte">
+                                  <xs:annotation>
+                                    <xs:documentation>Quantity.</xs:documentation>
+                                  </xs:annotation>
+                                </xsd:element>
+                                <xsd:element name="unitamount" type="xsd:decimal" minOccurs="1" maxOccurs="1">
+                                  <xs:annotation>
+                                    <xs:documentation>Amount for a single unit.</xs:documentation>
+                                  </xs:annotation>
+                                </xsd:element>
+                                <xsd:element name="lineamount" type="xsd:decimal" minOccurs="1" maxOccurs="1">
+                                  <xs:annotation>
+                                    <xs:documentation>Line amount.</xs:documentation>
+                                  </xs:annotation>
+                                </xsd:element>
+                                <xsd:element name="vatrate" type="xsd:decimal" minOccurs="1" maxOccurs="1">
+                                  <xs:annotation>
+                                    <xs:documentation>VAT rate.</xs:documentation>
+                                  </xs:annotation>
+                                </xsd:element>
+                                <xsd:element name="vatamount" type="xsd:decimal" minOccurs="1" maxOccurs="1">
+                                  <xs:annotation>
+                                    <xs:documentation>VAT amount.</xs:documentation>
+                                  </xs:annotation>
+                                </xsd:element>
+                              </xsd:choice>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:choice>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:choice>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="deliveryedit" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>Allow editing of delivery address.</xs:documentation>
+                </xs:annotation>
+              </xsd:element>
+            </xsd:choice>
+          </xsd:complexType>
+        </xsd:element>
+		<xsd:element name="aad" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              AAD Class
+            </xs:documentation>
+            <xs:documentation>
+              Please note: AAD details will only be utilised if the card scheme and eft account in use both support AAD
+            </xs:documentation>
+          </xs:annotation>
+          <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+              <xsd:element name="surname" type="xs:string" minOccurs="0" maxOccurs="1" />
+              <xsd:element name="postcode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+              <xsd:element name="accountnumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+              <xsd:element name="dob" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>
+                    e.g. for 31st December 2020: 31122020.
+                  </xs:documentation>
+                </xs:annotation>
+                <xsd:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="8"/>
+                  </xs:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+            </xsd:choice>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="payerauth" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Payerauth Class
+            </xs:documentation>
+            <xs:documentation>Please note: Payer Authentication details are only to be supplied with the EFT Request for charge only transactions.
+            </xs:documentation>
+          </xs:annotation>
+          <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+              <xsd:element name="authenticationstatus" type="PayerAuthAuthenticationStatus" minOccurs="0" maxOccurs="1"/>
+              <xsd:element name="atsdata" type="xs:string" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>PayerAuth data from authorisation only transaction.</xs:documentation>
+                </xs:annotation>
+              </xsd:element>
+              <xsd:element name="authenticationcavv" type="xs:string" minOccurs="0" maxOccurs="1" />
+              <xsd:element name="authenticationeci" type="ECIIndicator" minOccurs="0" maxOccurs="1"/>
+              <xsd:element name="payerauthrequestid" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            </xsd:choice>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:all>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="address">
+    <xsd:choice maxOccurs="unbounded">
+      <xsd:element name="address1" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="address2" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="town" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="county" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="postcode" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="country" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="countrycode" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:simpleType name="PayerAuthAuthenticationStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Y"/>
+      <xs:enumeration value="N"/>
+      <xs:enumeration value="U"/>
+      <xs:enumeration value="A"/>
+      <xs:enumeration value=""/>
+    </xs:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CaptureMethod">
+    <xs:restriction base="xs:integer">
+      <xs:annotation>
+        <xs:documentation>2 – Keyed Cardholder Not Present Mail Order, 11 – Keyed Cardholder Not Present Telephone Order, 
+          12 – Keyed Cardholder Not Present E-Commerce Order.
+        </xs:documentation>
+      </xs:annotation>
+      <xs:enumeration value="2"/>   
+      <xs:enumeration value="11"/>
+      <xs:enumeration value="12"/>
+    </xs:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ProcessingIdentifier">
+    <xs:restriction base="xs:integer">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+    </xs:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="ECIIndicator">
+        <xs:restriction base="xs:positiveInteger">
+            <xs:enumeration value="01"/>
+            <xs:enumeration value="02"/>
+            <xs:enumeration value="05"/>
+            <xs:enumeration value="06"/>
+        </xs:restriction>
+    </xsd:simpleType>
+</xs:schema>

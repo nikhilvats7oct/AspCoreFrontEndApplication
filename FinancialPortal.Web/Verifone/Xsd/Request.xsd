@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           attributeFormDefault="qualified"
+           elementFormDefault="unqualified"
+           xmlns:CO="urn:MyNamespace"
+            targetNamespace="urn:MyNamespace" >
+
+  <xs:simpleType name="merchantReference">
+ <xs:restriction base="xs:string">
+            <xs:maxLength value="255"/>
+          </xs:restriction>
+        </xs:simpleType>
+  <xs:simpleType name="returnUrl">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="template">
+    <xs:all>
+      <xsd:element name="merchanttemplateid" type="xsd:decimal" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="languagetemplateid" type="CO:languageTemplateId" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="merchant">
+    <xs:all>
+      <xsd:element name="merchantid" type="xsd:decimal" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="systemguid" minOccurs="1" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="64"></xs:maxLength>
+          </xs:restriction>
+        </xs:simpleType>
+      </xsd:element>
+    </xs:all>
+  </xs:complexType>
+  <xsd:simpleType name="javascriptEnabled">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Y"/>
+      <xs:enumeration value="N"/>
+      <xs:enumeration value="U"/>
+    </xs:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="languageTemplateId">
+    <xs:restriction base="xs:decimal">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+    </xs:restriction>
+  </xsd:simpleType>
+</xs:schema>

@@ -1,0 +1,104 @@
+﻿@using FinancialPortal.Web.Helpers
+@using FinancialPortal.Web.Models.Interfaces
+@using FinancialPortal.Web.Settings
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.AspNetCore.Http.Extensions
+@inject PortalSetting PortalSetting;
+@inject CmsEndpoints CmsEndpoint;
+@inject IHostingEnvironment HostingEnvironment;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        dataLayer = [];
+        window.CMS_URL = '@CmsEndpoint.HomePage';
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>@ViewBag.Title - Lowell Payment Portal</title>
+    <link rel="stylesheet" href="@Url.Content("~/css/main.css")">
+
+    <partial name="Partials/Favicon" />
+</head>
+<body>
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=@PortalSetting.GTMContainer" height="0" width="0" style="display: none; visibility: hidden"></iframe>
+    </noscript>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <partial name="Partials/Header-logged-in" />
+    }
+    else
+    {
+        <partial name="Partials/Header" />
+    }
+
+    @if (IsSectionDefined("ErrorContainer"))
+    {
+        <div class="container-fluid no-gutters p-4 p-md-0 error-container">
+            <div class="container error-banner-container">
+                @RenderSection("ErrorContainer", false)
+            </div>
+        </div>
+    }
+
+    <main id="app" class="jw-wrapper">
+        <div class="js-cookie-text">
+            <div class="cookie-info">We use cookies on this website. Some of these cookies are essential to make our website work. We have also placed some non-essential cookies on your device to remember your cookie preferences and to help improve our website. You can click Cookie preferences to change your cookie preferences and find out more about how we use cookies. If you don’t change your cookie preferences, we will assume you’re happy to continue.</div>
+            <div class="cookie-learn-link">#</div>
+            <div class="cookie-learn-text">Cookie preferences</div>
+            <div class="cookie-dismiss">Accept cookies</div>
+        </div>
+        @RenderBody()
+    </main>
+
+    <partial name="Partials/Footer" />
+
+    <script src="@Url.Content("~/js/main.min.js")"></script>
+    <script src="@Url.Content("~/js/additionalscript-min.js")"></script>
+
+    @{
+        var displayUrl = string.Empty;
+
+        try
+        {
+            displayUrl = Context?.Request?.GetDisplayUrl() ?? "https://portal.lowell.co.uk";
+        }
+        catch (Exception)
+        {
+            displayUrl = "https://portal.lowell.co.uk";
+        }
+    }
+
+    @if (!displayUrl.Contains("localhost"))
+    {
+        <partial name="Partials/CookieConsent" />
+    }
+
+    @if (Model is IGtmEventRaisingVm)
+    {
+        var events = ((IGtmEventRaisingVm)Model).GtmEvents;
+
+        <script>
+        @foreach (var gtm_event in events)
+        {
+            gtm_event.account_ref = string.IsNullOrEmpty(gtm_event.account_ref) ? null : HashData.Sha256(gtm_event.account_ref, PortalSetting.ShaSalt);
+            gtm_event.guid = string.IsNullOrEmpty(gtm_event.guid) ? null : HashData.Sha256(gtm_event.guid, PortalSetting.ShaSalt);
+
+            <text>
+                dataLayer.push(
+                    @Html.Raw(JsonConvert.SerializeObject(gtm_event, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore})));
+            </text>
+        }
+        </script>
+    }
+
+    @RenderSection("scripts", false)
+
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<postdata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <api>2</api>
+  <merchantid>1000001060</merchantid>
+  <requesttype>eftrequest</requesttype>
+  <requestdata>
+    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;eftrequest xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+    &lt;merchant&gt;
+    &lt;merchantid&gt;1000001060&lt;/merchantid&gt;
+    &lt;systemguid&gt;2EDB35C2-3D7E-4257-838D-FB95A1BC8A3C&lt;/systemguid&gt;
+    &lt;/merchant&gt;
+    &lt;merchantreference&gt;100156033_cf4062bbc77b46398293c28c00da4e9dea0c4e37&lt;/merchantreference&gt;
+    &lt;returnurl&gt;http://lsldigital.refactored.lowellgroup.co.uk/payments/one-off-payment/one-off-payment-confirmation/&lt;/returnurl&gt;
+    &lt;template&gt;
+    &lt;merchanttemplateid&gt;100000000000000630&lt;/merchanttemplateid&gt;
+    &lt;languagetemplateid&gt;1&lt;/languagetemplateid&gt;
+    &lt;/template&gt;
+    &lt;capturemethod&gt;12&lt;/capturemethod&gt;
+    &lt;processingidentifier&gt;1&lt;/processingidentifier&gt;
+    &lt;accountid&gt;140012590&lt;/accountid&gt;
+    &lt;transactionvalue&gt;25&lt;/transactionvalue&gt;
+    &lt;authcode /&gt;
+
+    &lt;tokenexpirationdate&gt;29112021&lt;/tokenexpirationdate&gt;
+    &lt;registertoken&gt;false&lt;/registertoken&gt;
+    &lt;starpan /&gt;
+    &lt;allowedpaymentschemes&gt;6,11,49,2&lt;/allowedpaymentschemes&gt;
+    &lt;allowedpaymentmethods&gt;1&lt;/allowedpaymentmethods&gt;
+    &lt;description&gt;Payment to Lowell account 100156033&lt;/description&gt;
+    &lt;showorderconfirmation&gt;false&lt;/showorderconfirmation&gt;
+    &lt;showpaymentresult&gt;true&lt;/showpaymentresult&gt;
+    &lt;customer&gt;
+    &lt;firstname&gt;&lt;/firstname&gt;
+    &lt;lastname&gt;&lt;/lastname&gt;
+    &lt;email&gt;&lt;/email&gt;
+    &lt;address&gt;
+    &lt;address1&gt;&lt;/address1&gt;
+    &lt;postcode&gt;TW50JW&lt;/postcode&gt;
+    &lt;address2&gt;&lt;/address2&gt;
+    &lt;town&gt;&lt;/town&gt;
+    &lt;county&gt;&lt;/county&gt;
+    &lt;country&gt;United Kingdom&lt;/country&gt;
+    &lt;countrycode&gt;826&lt;/countrycode&gt;
+    &lt;/address&gt;
+    &lt;basket&gt;
+    &lt;totalamount&gt;25&lt;/totalamount&gt;
+    &lt;shippingamount&gt;0.0&lt;/shippingamount&gt;
+    &lt;vatamount&gt;0.0&lt;/vatamount&gt;
+    &lt;basketitems&gt;
+    &lt;basketitem&gt;
+    &lt;productname&gt;Payment to Lowell account 100156033&lt;/productname&gt;
+    &lt;productcode&gt;100156033&lt;/productcode&gt;
+    &lt;quantity&gt;1&lt;/quantity&gt;
+    &lt;unitamount&gt;25&lt;/unitamount&gt;
+    &lt;lineamount&gt;25&lt;/lineamount&gt;
+    &lt;vatrate&gt;0&lt;/vatrate&gt;
+    &lt;vatamount&gt;0&lt;/vatamount&gt;
+    &lt;/basketitem&gt;
+    &lt;/basketitems&gt;
+    &lt;/basket&gt;
+    &lt;deliveryedit&gt;false&lt;/deliveryedit&gt;
+    &lt;/customer&gt;
+    &lt;processCPC&gt;false&lt;/processCPC&gt;
+    &lt;hideBillingDetails&gt;false&lt;/hideBillingDetails&gt;
+    &lt;hideDeliveryDetails&gt;true&lt;/hideDeliveryDetails&gt;
+    &lt;hidepaymentresultsuccess&gt;true&lt;/hidepaymentresultsuccess&gt;
+    &lt;enableUpdateToken&gt;false&lt;/enableUpdateToken&gt;
+    &lt;enableRedFraudCheck&gt;false&lt;/enableRedFraudCheck&gt;
+
+    &lt;/eftrequest&gt;
+  </requestdata>
+  <keyname />
+</postdata>

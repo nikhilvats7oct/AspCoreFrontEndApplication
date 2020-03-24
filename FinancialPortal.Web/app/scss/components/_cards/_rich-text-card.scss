@@ -1,0 +1,12 @@
+.rich-text {
+    @include card-styling();
+    color: inherit;
+
+    p:last-of-type {
+        margin-bottom: 0;
+    }
+
+    ul {
+        color: inherit;
+    }
+}

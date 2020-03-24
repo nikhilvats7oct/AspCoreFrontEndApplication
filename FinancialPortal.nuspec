@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>FinancialPortal</id>
+    <version>1.0.0</version>
+    <authors>Lowell</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Financial Portal</description>
+    <language>en-GB</language>
+  </metadata>
+  <files>
+    <file src="FinancialPortal.Web\bin\Release\netcoreapp2.2\win10-x64\publish\**\*.*"/>
+  </files>
+</package>

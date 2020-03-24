@@ -1,0 +1,48 @@
+﻿@model FinancialPortal.Web.ViewModels.SuccessfulOneOffPaymentVm
+
+@{
+    ViewBag.Title = "One off payment complete";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>Thank you. </h2>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="step">
+                            <div class="step__number step__number--active">1</div>
+                            <div class="step__number step__number--active">2</div>
+                            <div class="step__number step__number--active">3</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="step">
+                            <div class="step__number step__number--active">1</div>
+                            <div class="step__number step__number--active">2</div>
+                            <div class="step__number step__number--active">3</div>
+                            <div class="step__number step__number--active">4</div>
+                        </div>
+                    }
+
+                    <p>Your payment of @Model.PaymentInfo.PaymentAmount has been made to @Model.ClientName.</p>
+                    <p>This will appear on your bank statement as LP1.<br/> It’ll take around 2 working days for the account to be updated. You’ll also receive written confirmation. It can take up to 50 days for your credit file to be updated.</p>
+
+                    @if (Model.UserLoggedIn)
+                    {
+                        <a href="@Url.Action("Index", "MyAccounts")" class="btn btn--primary">Back to My Accounts<i class="jw-icon-arrow"></i></a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Index", "Home")" class="btn btn--primary">Back to Homepage<i class="jw-icon-arrow"></i></a>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

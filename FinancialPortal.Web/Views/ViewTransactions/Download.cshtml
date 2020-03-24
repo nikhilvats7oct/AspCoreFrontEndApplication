@@ -1,0 +1,61 @@
+﻿@model FinancialPortal.Web.ViewModels.PdfViewModel
+@{
+    Layout = "~/Views/Shared/_DownloadLayout.cshtml"; ;
+}
+
+<style>
+    .table--transactions {
+        border-spacing: 0 0px;
+    }
+</style>
+<div class="container">
+
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="content-wrapper">
+                <div class="content__block">
+                    <h2>@Model.AccountName</h2>
+                    <h4>Balance: @string.Format("{0:C}", Model.AccountBalance)</h4>
+                    <p class="highlight">Our reference: <span class="bold">@Model.AccountReference</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                @if (Model.PaymentDetails != null)
+                {
+                    <table class="table table--transactions">
+                        <tbody>
+                            <tr>
+                                <td>Date</td>
+                                <td>Description</td>
+                                <td>Amount</td>
+                                <td>Balance</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            @foreach (var item in Model.PaymentDetails)
+                            {
+                                <tr>
+                                    <td>@item.DateText</td>
+                                    <td>@item.Description</td>
+                                    <td>@@item.AmountText</td>
+                                    <td>Balance: @item.RollingBalanceText</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <hr class="light" />
+        </div>
+    </div>
+</div>
